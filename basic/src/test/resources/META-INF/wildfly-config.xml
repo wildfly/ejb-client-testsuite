@@ -1,0 +1,8 @@
+<configuration>
+    <worker xmlns="urn:xnio:3.5">
+        <worker-name value="default"/>
+        <outbound-bind-addresses>
+            <bind-address bind-address="127.0.0.3"  match="0.0.0.0/0"/>
+        </outbound-bind-addresses>
+    </worker>
+</configuration>

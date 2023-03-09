@@ -29,10 +29,15 @@
         <relativePath/>
     </parent>
 
-    <artifactId>ejb-client-testsuite</artifactId>
+    <groupId>org.wildfly</groupId>
+    <artifactId>ejb-client-testsuite-parent</artifactId>
     <version>1.0.0.Final-SNAPSHOT</version>
     <name>EJB Client Testsuite: Parent</name>
     <description>EJB Client Testsuite: Parent Aggregator</description>
     <packaging>pom</packaging>
+
+    <modules>
+        <module>basic</module>
+    </modules>
 
 </project>

@@ -1,0 +1,603 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+
+    <groupId>org.jboss</groupId>
+    <artifactId>ejb-client-tests-shaded-jar</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>jar</packaging>
+
+    <properties>
+        <maven.compiler.target>11</maven.compiler.target>
+        <maven.compiler.source>11</maven.compiler.source>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+        <version.arquillian>1.7.0.Alpha13</version.arquillian>
+        <version.byteman>4.0.18</version.byteman>
+        <version.jakartaee-api>9.1.0</version.jakartaee-api>
+        <version.junit>4.13.2</version.junit>
+        <version.log4j>1.2.17</version.log4j>
+        <version.jboss-ejb3-ext-api>2.3.0.Final</version.jboss-ejb3-ext-api>
+        <version.shrinkwrap.resolvers>3.1.4</version.shrinkwrap.resolvers>
+        <version.xom>1.3.7</version.xom>
+
+        <version.plugin.antrun>1.8</version.plugin.antrun>
+        <version.plugin.clean>3.1.0</version.plugin.clean>
+        <version.plugin.compiler>3.8.1</version.plugin.compiler>
+        <version.plugin.dependency>3.3.0</version.plugin.dependency>
+        <version.plugin.enforcer>3.0.0-M2</version.plugin.enforcer>
+        <version.plugin.install>3.0.0-M1</version.plugin.install>
+        <version.plugin.jar>3.1.2</version.plugin.jar>
+        <version.plugin.surefire>3.0.0-M7</version.plugin.surefire>
+        <version.plugin.wildfly>2.0.1.Final</version.plugin.wildfly>
+
+        <!-- before you update arquillian-container version, consider to update wf-core-launcher version as well
+             and be sure that wf-core-launcher version works correctly with new arquillian-container -->
+        <version.arquillian-container>5.0.0.Alpha6</version.arquillian-container>
+        <!-- the following version needs to be >= than version used in arquillian-container dependency -->
+        <version.wf.core>19.0.0.Final</version.wf.core>
+
+        <!-- "user" means auth using a password, "local" means local auth -->
+        <authentication.type>user</authentication.type>
+        <!-- http-remoting | https-remoting | remoting -->
+        <connector>http-remoting</connector>
+        <context.type>wildfly-naming-client</context.type>
+        <byteman.args>
+            -javaagent:${org.jboss.byteman:byteman:jar}=script:${project.basedir}/byteman/bytemanscript.btm,prop:org.jboss.byteman.transform.all=true,sys:${org.jboss.byteman:byteman:jar},boot:${org.jboss.byteman:byteman:jar}
+        </byteman.args>
+        <security.manager.client.args/>
+        <!-- This value will become "-secmgr" if security.manager.server profile is active.
+            Otherwise, we need to provide at least a dummy something, because this value
+            can't be empty -->
+        <security.manager.server.args>-Ddummy=dummy</security.manager.server.args>
+        <server.startup.timeout>120</server.startup.timeout>
+        <server.zip>${project.build.directory}/server.zip</server.zip>
+        <server.home>${project.build.directory}/dist</server.home>
+        <server.jvm.jpms.args>--add-exports=java.desktop/sun.awt=ALL-UNNAMED --add-exports=java.naming/com.sun.jndi.ldap=ALL-UNNAMED --add-opens=java.base/java.lang=ALL-UNNAMED --add-opens=java.base/java.lang.invoke=ALL-UNNAMED --add-opens=java.base/java.lang.reflect=ALL-UNNAMED --add-opens=java.base/java.io=ALL-UNNAMED --add-opens=java.base/java.security=ALL-UNNAMED --add-opens=java.base/java.util=ALL-UNNAMED --add-opens=java.base/java.util.concurrent=ALL-UNNAMED --add-opens=java.management/javax.management=ALL-UNNAMED --add-opens=java.naming/javax.naming=ALL-UNNAMED</server.jvm.jpms.args>
+        <client.jvm.jpms.args>--add-exports=java.desktop/sun.awt=ALL-UNNAMED --add-opens=java.base/java.lang=ALL-UNNAMED --add-opens=java.base/java.lang.invoke=ALL-UNNAMED --add-opens=java.base/java.lang.reflect=ALL-UNNAMED --add-opens=java.base/java.io=ALL-UNNAMED --add-opens=java.base/java.security=ALL-UNNAMED --add-opens=java.base/java.util=ALL-UNNAMED --add-opens=java.base/java.util.concurrent=ALL-UNNAMED --add-opens=java.management/javax.management=ALL-UNNAMED --add-opens=java.naming/javax.naming=ALL-UNNAMED</client.jvm.jpms.args>
+        <server.jvm.args></server.jvm.args>
+
+        <jboss.config.file>standalone-full.xml</jboss.config.file>
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.jboss.arquillian</groupId>
+                <artifactId>arquillian-bom</artifactId>
+                <version>${version.arquillian}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.jboss.shrinkwrap.resolver</groupId>
+            <artifactId>shrinkwrap-resolver-api</artifactId>
+            <version>${version.shrinkwrap.resolvers}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.shrinkwrap.resolver</groupId>
+            <artifactId>shrinkwrap-resolver-spi</artifactId>
+            <version>${version.shrinkwrap.resolvers}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.shrinkwrap.resolver</groupId>
+            <artifactId>shrinkwrap-resolver-api-maven</artifactId>
+            <version>${version.shrinkwrap.resolvers}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.shrinkwrap.resolver</groupId>
+            <artifactId>shrinkwrap-resolver-spi-maven</artifactId>
+            <version>${version.shrinkwrap.resolvers}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.shrinkwrap.resolver</groupId>
+            <artifactId>shrinkwrap-resolver-impl-maven</artifactId>
+            <version>${version.shrinkwrap.resolvers}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.shrinkwrap.resolver</groupId>
+            <artifactId>shrinkwrap-resolver-impl-maven-archive</artifactId><!-- Check https://issues.jboss.org/browse/SHRINKRES-238 first if start seeing any problem here -->
+            <version>${version.shrinkwrap.resolvers}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>${version.junit}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>jakarta.platform</groupId>
+            <artifactId>jakarta.jakartaee-api</artifactId>
+            <version>${version.jakartaee-api}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.arquillian.junit</groupId>
+            <artifactId>arquillian-junit-container</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.arquillian.protocol</groupId>
+            <artifactId>arquillian-protocol-servlet-jakarta</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.shrinkwrap</groupId>
+            <artifactId>shrinkwrap-impl-base</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.wildfly.arquillian</groupId>
+            <artifactId>wildfly-arquillian-container-managed</artifactId>
+            <version>${version.arquillian-container}</version>
+            <scope>test</scope>
+            <exclusions>     <!-- we want to use xnio from EJB client bom -->
+                <exclusion>
+                    <artifactId>xnio-api</artifactId>
+                    <groupId>org.jboss.xnio</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>xnio-nio</artifactId>
+                    <groupId>org.jboss.xnio</groupId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.wildfly.arquillian</groupId>
+                    <artifactId>wildfly-arquillian-protocol-jmx</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.wildfly.client</groupId>
+                    <artifactId>wildfly-client-config</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.wildfly.common</groupId>
+                    <artifactId>wildfly-common</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.jboss.xnio</groupId>
+                    <artifactId>xnio-api</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.jboss.xnio</groupId>
+                    <artifactId>xnio-nio</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.jboss.threads</groupId>
+                    <artifactId>jboss-threads</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>io.undertow</groupId>
+                    <artifactId>undertow-core</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.wildfly.security</groupId>
+                    <artifactId>wildfly-elytron</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.wildfly.core</groupId>
+            <artifactId>wildfly-controller</artifactId>
+            <version>${version.wf.core}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+            <version>${version.log4j}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.ejb3</groupId>
+            <artifactId>jboss-ejb3-ext-api</artifactId>
+            <version>${version.jboss-ejb3-ext-api}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>xom</groupId>
+            <artifactId>xom</artifactId>
+            <version>${version.xom}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.byteman</groupId>
+            <artifactId>byteman</artifactId>
+            <version>${version.byteman}</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>${version.plugin.surefire}</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+
+        <plugins>
+            <plugin>
+                <groupId>org.wildfly.plugins</groupId>
+                <artifactId>wildfly-maven-plugin</artifactId>
+                <version>${version.plugin.wildfly}</version>
+                <executions>
+                    <execution>
+                        <id>configure-server</id>
+                        <phase>process-test-resources</phase>
+                        <goals>
+                            <goal>start</goal>
+                            <goal>execute-commands</goal>
+                            <goal>shutdown</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <jbossHome>${server.home}</jbossHome>
+                    <server-config>${jboss.config.file}</server-config>
+                    <startupTimeout>${server.startup.timeout}</startupTimeout>
+                    <scripts>
+                        <script>${project.basedir}/setup/configure-self-remote-outbound-connection-elytron.cli</script>
+                        <script>${project.basedir}/setup/configure-logging.cli</script>
+                        <script>${project.basedir}/setup/prepare-jms-destinations.cli</script>
+                        <script>${project.basedir}/setup/setup-elytron.cli</script>
+                        <script>${project.basedir}/setup/prepare-http-invoker-elytron.cli</script>
+                        <script>${project.basedir}/setup/prepare-https-connector-elytron.cli</script>
+                        <script>${project.basedir}/setup/prepare-remoting-connector-elytron.cli</script>
+                        <script>${project.basedir}/setup/prepare-remoting-ssl-connector-elytron.cli</script>
+                        <script>${project.basedir}/setup/allow-all-remote-connectors-ejb.cli</script>
+                    </scripts>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>${version.plugin.dependency}</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>properties</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-enforcer-plugin</artifactId>
+                <version>${version.plugin.enforcer}</version>
+                <executions>
+                    <execution>
+                        <id>enforce-maven</id>
+                        <goals>
+                            <goal>enforce</goal>
+                        </goals>
+                        <configuration>
+                            <rules>
+                                <requireMavenVersion>
+                                    <version>3.5</version>
+                                </requireMavenVersion>
+                            </rules>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+    <profiles>
+
+        <profile>
+            <id>prepare</id>
+            <activation>
+                <property>
+                    <name>prepare</name>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <version>${version.plugin.antrun}</version>
+                        <executions>
+                            <execution>
+                                <id>get-and-unzip-runtime-from-url</id>
+                                <phase>generate-test-resources</phase>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                                <configuration>
+                                    <target>
+                                        <echo message="Downloading and unzipping the runtime distribution."/>
+                                        <get src="${server.zip.url}"
+                                             dest="${server.zip}"/>
+                                        <unzip src="${server.zip}"
+                                               dest="${server.home}">
+                                            <cutdirsmapper dirs="1"/>
+                                        </unzip>
+                                    </target>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-install-plugin</artifactId>
+                        <version>${version.plugin.install}</version>
+                        <executions>
+                            <execution>
+                                <id>install-jboss-client-jar</id>
+                                <phase>generate-test-resources</phase>
+                                <goals>
+                                    <goal>install-file</goal>
+                                </goals>
+                                <configuration>
+                                    <file>${server.home}/bin/client/jboss-client.jar</file>
+                                    <pomFile>${project.basedir}/pom-for-jboss-client-from-server.xml</pomFile>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>default-install</id>
+                                <phase>none</phase>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-compiler-plugin</artifactId>
+                        <version>${version.plugin.compiler}</version>
+                        <executions>
+                            <execution>
+                                <id>default-testCompile</id>
+                                <phase>none</phase>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <profile>
+            <id>testrun</id>
+            <activation>
+                <property>
+                    <name>!prepare</name>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-compiler-plugin</artifactId>
+                        <version>${version.plugin.compiler}</version>
+                        <executions>
+                            <execution>
+                                <id>default-testCompile</id>
+                                <configuration>
+                                    <testExcludes>
+                                        <testExclude>**/*EJBCLIENT2.java</testExclude>
+                                        <testExclude>**/*MavenDependencyTestCase.java</testExclude>
+                                        <testExclude>**/*ClientInterceptorAddedViaServiceLoaderTestCase.java</testExclude>
+                                    </testExcludes>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-enforcer-plugin</artifactId>
+                        <version>${version.plugin.enforcer}</version>
+                        <executions>
+                            <execution>
+                                <id>enforce-properties</id>
+                                <goals>
+                                    <goal>enforce</goal>
+                                </goals>
+                                <configuration>
+                                    <rules>
+                                        <requireProperty>
+                                            <property>server.home</property>
+                                            <message>-Dserver.home must be specified (path to server distribution)</message>
+                                        </requireProperty>
+                                        <requireProperty>
+                                            <property>authentication.type</property>
+                                            <regex>(user|local)</regex>
+                                            <message>-Dauthentication.type must be either "user" or "local"</message>
+                                        </requireProperty>
+                                        <requireProperty>
+                                            <property>context.type</property>
+                                            <regex>(global|scoped|wildfly-naming-client)</regex>
+                                            <message>Specify EJB client context type (property named context.type).
+                                                Allowed values: global, scoped, wildfly-naming-client
+                                            </message>
+                                        </requireProperty>
+                                        <requireProperty>
+                                            <property>connector</property>
+                                            <regex>(http-remoting|https-remoting|remoting|remoting-ssl|http|https)</regex>
+                                            <message>-Dconnector must be "http-remoting", "https-remoting",
+                                                "remoting", "http" or "https"
+                                            </message>
+                                        </requireProperty>
+                                    </rules>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <configuration>
+                            <systemProperties>
+                                <connector>${connector}</connector>
+                                <javax.net.ssl.trustStore>${project.basedir}/files/ssl/client.keystore
+                                </javax.net.ssl.trustStore>
+                                <javax.net.ssl.keyStore>${project.basedir}/files/ssl/client.keystore
+                                </javax.net.ssl.keyStore>
+                                <javax.net.ssl.trustStorePassword>abcdef</javax.net.ssl.trustStorePassword>
+                                <javax.net.ssl.keyStorePassword>abcdef</javax.net.ssl.keyStorePassword>
+                                <authentication.type>${authentication.type}</authentication.type>
+                                <server.jvm.args>${server.jvm.args} ${server.jvm.jpms.args}</server.jvm.args>
+                                <groupId.ejb.client.bom>shaded-jar</groupId.ejb.client.bom>
+                                <arquillian.launch>${arquillian.launch}</arquillian.launch>
+                                <jboss.config.file>${jboss.config.file}</jboss.config.file>
+                                <server.home>${server.home}</server.home>
+                                <legacy>false</legacy>
+                                <security.manager.server.args>${security.manager.server.args}</security.manager.server.args>
+                            </systemProperties>
+                            <argLine>    <!-- byteman needs to hook into boot-classloader's classes because we exploit java.util.zip.Deflater in CompressionTestCase! -->
+                                ${byteman.args} ${security.manager.client.args} ${client.jvm.jpms.args} -Dlauncher.skip.jpms.properties=true
+                            </argLine>
+                        </configuration>
+                    </plugin>
+
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <version>${version.plugin.antrun}</version>
+                        <executions>
+                            <execution>
+                                <id>copy-files-to-server</id>
+                                <phase>process-test-resources</phase>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                                <configuration>
+                                    <target>
+                                        <echo message="Copying necessary file to server distribution."/>
+                                        <copy file="${project.basedir}/files/ssl/server.keystore"
+                                              overwrite="true"
+                                              verbose="true"
+                                              tofile="${server.home}/standalone/configuration/server.keystore"/>
+                                        <copy todir="${server.home}/standalone/configuration/" verbose="true"
+                                              overwrite="true">
+                                            <fileset dir="${project.basedir}/files/user"/>
+                                        </copy>
+                                        <copy todir="${server.home}/modules/" verbose="true" overwrite="true">
+                                            <fileset dir="${project.basedir}/files/modules"/>
+                                        </copy>
+                                    </target>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+
+                    <!-- create the EJB JAR for the 'my-awesome-ejb-module' module -->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-jar-plugin</artifactId>
+                        <version>${version.plugin.jar}</version>
+                        <executions>
+                            <execution>
+                                <id>create-my-awesome-ejb-module</id>
+                                <goals>
+                                    <goal>jar</goal>
+                                </goals>
+                                <phase>generate-test-resources</phase>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <outputDirectory>${project.basedir}/files/modules/my-awesome-ejb-module/main
+                            </outputDirectory>
+                            <includes>
+                                <include>ejbjar/*</include>
+                            </includes>
+                            <finalName>ejbmodule</finalName>
+                        </configuration>
+                    </plugin>
+
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-clean-plugin</artifactId>
+                        <version>${version.plugin.clean}</version>
+                        <configuration>
+                            <filesets>
+                                <fileset>
+                                    <directory>${project.basedir}/files/modules/my-awesome-ejb-module/main</directory>
+                                    <includes>
+                                        <include>**/*.jar</include>
+                                    </includes>
+                                    <followSymlinks>false</followSymlinks>
+                                </fileset>
+                            </filesets>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+            <dependencies>
+                <dependency>
+                    <groupId>org.jboss.ejb-client-tests</groupId>
+                    <artifactId>jboss-client</artifactId>
+                    <version>1.0.0</version>
+                    <type>jar</type>
+                </dependency>
+            </dependencies>
+        </profile>
+
+        <profile>
+            <id>debugServer</id>
+            <properties>
+                <server.jvm.args>-Xrunjdwp:transport=dt_socket,address=8787,server=y,suspend=y</server.jvm.args>
+            </properties>
+        </profile>
+
+        <profile>
+            <id>skipTestCompile</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-compiler-plugin</artifactId>
+                        <version>${version.plugin.compiler}</version>
+                        <executions>
+                            <execution>
+                                <id>default-testCompile</id>
+                                <phase>none</phase>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <!-- enable security manager on the client side (active by default) -->
+        <profile>
+            <id>security-manager-client</id>
+            <activation>
+                <!--<activeByDefault>true</activeByDefault>-->
+                <!-- activeByDefault doesn't work for some reason - in that case the property
+                     overridings in this profile don't take effect.. so let's use a bit of a hack -->
+                <file><missing>THIS_FILE_WILL_NEVER_EXIST</missing></file>
+            </activation>
+            <properties>
+                <security.manager.client.args>-Djava.security.manager
+                    -Djava.security.policy=${project.build.testOutputDirectory}/permit.policy
+                    -Djava.security.debug=failure</security.manager.client.args>
+            </properties>
+        </profile>
+
+        <!-- Enable the Security Manager on the server side -->
+        <profile>
+            <id>security-manager-server</id>
+            <properties>
+                <security.manager.server.args>-secmgr</security.manager.server.args>
+            </properties>
+        </profile>
+
+    </profiles>
+
+</project>

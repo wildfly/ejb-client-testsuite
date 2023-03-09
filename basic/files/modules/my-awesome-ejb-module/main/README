@@ -1,0 +1,2 @@
+The jar for this module is created in the generate-test-resources phase by maven-jar-plugin.
+It is used by AnnotationIndexTestCase.

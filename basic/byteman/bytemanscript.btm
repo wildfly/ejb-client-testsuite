@@ -1,0 +1,20 @@
+RULE COUNT_COMPRESSED_INBOUND_MESSAGES_EJBCLIENT4x
+CLASS java.util.zip.Inflater
+METHOD <init>
+AT ENTRY
+IF org.wildfly.ejbclient.testsuite.integration.basic.compression.CompressionTestCase.ENABLED.get()
+   AND !callerEquals("java.lang.ClassLoader.loadClass", true, true, 25)
+DO
+   System.out.println("BYTEMAN INVOKED! A compressed response was recognized.");
+   org.wildfly.ejbclient.testsuite.integration.basic.compression.CompressionTestCase.COMPRESSED_INCOMING_MESSAGES_COUNT.incrementAndGet();
+ENDRULE
+
+RULE COUNT_COMPRESSED_OUTBOUNDMESSAGES
+CLASS java.util.zip.Deflater
+METHOD <init>(int,boolean)
+AT ENTRY
+IF org.wildfly.ejbclient.testsuite.integration.basic.compression.CompressionTestCase.ENABLED.get()
+DO
+    System.out.println("BYTEMAN INVOKED! A compressed request was recognized.");
+    org.wildfly.ejbclient.testsuite.integration.basic.compression.CompressionTestCase.COMPRESSED_OUTGOING_MESSAGES_COUNT.incrementAndGet();
+ENDRULE

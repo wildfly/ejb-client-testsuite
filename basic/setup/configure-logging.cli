@@ -1,0 +1,66 @@
+echo "Configuring logging"
+
+# console handler
+/subsystem=logging/console-handler=CONSOLE:change-log-level(level=TRACE)
+/subsystem=logging/console-handler=CONSOLE:undefine-attribute(name=named-formatter)
+/subsystem=logging/console-handler=CONSOLE:write-attribute(name=formatter, value="SERVER: %K{level}%d{HH:mm:ss,SSS} %-5p [%c] (%t) %s%E%n")
+
+# other handlers as needed
+if (outcome == failed) of /subsystem=logging/logger=org.jboss.as.ejb3:read-resource
+    /subsystem=logging/logger=org.jboss.as.ejb3:add(level=DEBUG)
+end-if
+
+if (outcome == failed) of /subsystem=logging/logger=org.jboss.remoting3:read-resource
+    /subsystem=logging/logger=org.jboss.remoting3:add(level=DEBUG)
+end-if
+
+if (outcome == failed) of /subsystem=logging/logger=org.xnio:read-resource
+    /subsystem=logging/logger=org.xnio:add(level=DEBUG)
+end-if
+
+if (outcome == failed) of /subsystem=logging/logger=org.jboss.ejb:read-resource
+    /subsystem=logging/logger=org.jboss.ejb:add(level=DEBUG)
+end-if
+
+if (outcome == failed) of /subsystem=logging/logger=io.undertow:read-resource
+    /subsystem=logging/logger=io.undertow:add(level=DEBUG)
+end-if
+
+if (outcome == failed) of /subsystem=logging/logger=org.wildfly.security:read-resource
+    /subsystem=logging/logger=org.wildfly.security:add(level=DEBUG)
+end-if
+
+if (outcome == failed) of /subsystem=logging/logger=org.jboss.remoting:read-resource
+    /subsystem=logging/logger=org.jboss.remoting:add(level=DEBUG)
+end-if
+
+
+# WrongProtocolLoggingTestCase sometimes logs message with invalid XML character that gets to surefire report after, that could cause issues
+# This block replaces that message
+if (outcome == failed) of /subsystem=logging/console-handler=INVALID_STRING:read-resource
+    /subsystem=logging/console-handler=INVALID_STRING:add
+end-if
+/subsystem=logging/console-handler=INVALID_STRING:undefine-attribute(name=named-formatter)
+/subsystem=logging/console-handler=INVALID_STRING:write-attribute(name=formatter, value="SERVER: %K{level}%d{HH:mm:ss,SSS} %-5p [%c] (%t) UT005014: Failed to parse request: io.undertow.util.BadRequestException: STACK TRACE HAS BEAN REMOVED, it could contain invalid XML character%n")
+/subsystem=logging/console-handler=INVALID_STRING:undefine-attribute(name="filter-spec")
+/subsystem=logging/console-handler=INVALID_STRING:write-attribute(name="filter-spec", value="match(\"UT005014\")")
+
+if (outcome == failed) of /subsystem=logging/console-handler=OTHER:read-resource
+    /subsystem=logging/console-handler=OTHER:add
+end-if
+/subsystem=logging/console-handler=OTHER:undefine-attribute(name=named-formatter)
+/subsystem=logging/console-handler=OTHER:write-attribute(name=formatter, value="SERVER: %K{level}%d{HH:mm:ss,SSS} %-5p [%c] (%t) %s%E%n")
+/subsystem=logging/console-handler=OTHER:undefine-attribute(name="filter-spec")
+/subsystem=logging/console-handler=OTHER:write-attribute(name="filter-spec", value="not(match(\"UT005014\"))")
+
+
+if (outcome == failed) of /subsystem=logging/logger=io.undertow.request.io:read-resource
+    /subsystem=logging/logger=io.undertow.request.io:add(level=DEBUG)
+    /subsystem=logging/logger=io.undertow.request.io:add-handler(name="INVALID_STRING")
+    /subsystem=logging/logger=io.undertow.request.io:add-handler(name="OTHER")
+    /subsystem=logging/logger=io.undertow.request.io:write-attribute(name="use-parent-handlers", value="false")
+end-if
+
+
+
+echo "Done with logging configuration"

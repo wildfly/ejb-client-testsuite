@@ -1,0 +1,37 @@
+echo "Configuring HTTPS connector"
+
+# create server keystore
+if (outcome == failed) of /subsystem=elytron/key-store=serverkeystore:read-resource
+    /subsystem=elytron/key-store=serverkeystore:add(path=server.keystore, relative-to=jboss.server.config.dir, credential-reference={clear-text=123456}, type=JKS)
+end-if
+
+# create key manager
+if (outcome == failed) of /subsystem=elytron/key-manager=keymanager:read-resource
+    /subsystem=elytron/key-manager=keymanager:add(key-store=serverkeystore, credential-reference={clear-text=123456})
+end-if
+
+# create trust manager
+if (outcome == failed) of /subsystem=elytron/trust-manager=trustmanager:read-resource
+    /subsystem=elytron/trust-manager=trustmanager:add(key-store=serverkeystore)
+end-if
+
+# create server SSL context for the undertow https connector using the created key+trust managers
+if (outcome == failed) of /subsystem=elytron/server-ssl-context=ssl:read-resource
+   /subsystem=elytron/server-ssl-context=ssl:add(trust-manager=trustmanager, key-manager=keymanager, need-client-auth=true)
+end-if
+
+# apply the server SSL context to the undertow https connector
+batch
+/subsystem=undertow/server=default-server/https-listener=https:write-attribute(name=ssl-context,value=ssl)
+run-batch
+
+
+# create remoting https connector bound to the undertow https connector
+if (outcome == failed) of /subsystem=remoting/http-connector=https-remoting-connector:read-resource
+    /subsystem=remoting/http-connector=https-remoting-connector:add(connector-ref=https, sasl-authentication-factory=application-sasl-authentication-nolocal)
+end-if
+
+if (outcome == success) of /core-service=management/security-realm=ApplicationRealm/server-identity=ssl:read-resource
+    echo "Server by default uses an auto-generated self-signed SSL certificate for ApplicationRealm, we need to get rid of this"
+    /core-service=management/security-realm=ApplicationRealm/server-identity=ssl:remove
+end-if

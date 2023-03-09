@@ -1,0 +1,4 @@
+if (outcome == failed) of /subsystem=messaging-activemq/server=default/jms-queue=ejbtest:read-resource
+    /subsystem=messaging-activemq/server=default/jms-queue=ejbtest:add(entries=["java:jboss/exported/queue/ejbtest"])
+end-if
+

@@ -1,0 +1,15 @@
+if (outcome == failed) of /socket-binding-group=standard-sockets/remote-destination-outbound-socket-binding=self-remote-ejb-socket:read-resource
+    /socket-binding-group=standard-sockets/remote-destination-outbound-socket-binding=self-remote-ejb-socket:add(host=localhost, port=8080)
+end-if
+
+if (outcome == failed) of /subsystem=elytron/authentication-configuration=self-auth-cfg:read-resource
+    /subsystem=elytron/authentication-configuration=self-auth-cfg:add(sasl-mechanism-selector="DIGEST-MD5 !JBOSS-LOCAL-USER", credential-reference={clear-text="weAreAwesome2015!"}, authentication-name=joe, realm=ApplicationRealm)
+end-if
+
+if (outcome == failed) of /subsystem=elytron/authentication-context=self-auth-ctx:read-resource
+    /subsystem=elytron/authentication-context=self-auth-ctx:add(match-rules=[{authentication-configuration=self-auth-cfg}])
+end-if
+
+if (outcome == failed) of /subsystem=remoting/remote-outbound-connection=self-remote-ejb-connection:read-resource
+    /subsystem=remoting/remote-outbound-connection=self-remote-ejb-connection:add(authentication-context=self-auth-ctx, outbound-socket-binding-ref=self-remote-ejb-socket)
+end-if

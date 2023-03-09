@@ -1,0 +1,14 @@
+echo "Configuring bare remoting connector"
+
+if (outcome == failed) of /socket-binding-group=standard-sockets/socket-binding=remoting:read-resource
+    /socket-binding-group=standard-sockets/socket-binding=remoting:add(port=4447)
+end-if
+
+if (outcome == failed) of /subsystem=remoting/connector=remoting-connector:read-resource
+    /subsystem=remoting/connector=remoting-connector:add(socket-binding=remoting, sasl-authentication-factory=application-sasl-authentication)
+end-if
+
+if (outcome == success) of /core-service=management/security-realm=ApplicationRealm/server-identity=ssl:read-resource
+    echo "Server by default uses an auto-generated self-signed SSL certificate for ApplicationRealm, we need to get rid of this"
+    /core-service=management/security-realm=ApplicationRealm/server-identity=ssl:remove
+end-if

@@ -1,0 +1,34 @@
+echo "Configuring remoting+SSL connector"
+
+# create server keystore
+if (outcome == failed) of /subsystem=elytron/key-store=remoting-ssl-key-store:read-resource
+    /subsystem=elytron/key-store=remoting-ssl-key-store:add(path=server.keystore, relative-to=jboss.server.config.dir, credential-reference={clear-text=123456}, type=JKS)
+end-if
+
+# create key manager
+if (outcome == failed) of /subsystem=elytron/key-manager=remoting-ssl-key-manager:read-resource
+    /subsystem=elytron/key-manager=remoting-ssl-key-manager:add(key-store=remoting-ssl-key-store, credential-reference={clear-text=123456})
+end-if
+
+# create trust manager
+if (outcome == failed) of /subsystem=elytron/trust-manager=remoting-ssl-trust-manager:read-resource
+    /subsystem=elytron/trust-manager=remoting-ssl-trust-manager:add(key-store=remoting-ssl-key-store)
+end-if
+
+# create server SSL context for the undertow https connector using the created key+trust managers
+if (outcome == failed) of /subsystem=elytron/server-ssl-context=remoting-ssl-context:read-resource
+   /subsystem=elytron/server-ssl-context=remoting-ssl-context:add(trust-manager=remoting-ssl-trust-manager, key-manager=remoting-ssl-key-manager, need-client-auth=true)
+end-if
+
+if (outcome == failed) of /socket-binding-group=standard-sockets/socket-binding=remoting-ssl-sb:read-resource
+    /socket-binding-group=standard-sockets/socket-binding=remoting-ssl-sb:add(port=4448)
+end-if
+
+if (outcome == failed) of /subsystem=remoting/connector=remoting-ssl-connector:read-resource
+    /subsystem=remoting/connector=remoting-ssl-connector:add(socket-binding=remoting-ssl-sb, sasl-authentication-factory=application-sasl-authentication, ssl-context=remoting-ssl-context)
+end-if
+
+if (outcome == success) of /core-service=management/security-realm=ApplicationRealm/server-identity=ssl:read-resource
+    echo "Server by default uses an auto-generated self-signed SSL certificate for ApplicationRealm, we need to get rid of this"
+    /core-service=management/security-realm=ApplicationRealm/server-identity=ssl:remove
+end-if

@@ -1,0 +1,26 @@
+<jboss-cli xmlns="urn:jboss:cli:2.0">
+
+    <default-protocol use-legacy-override="true">http-remoting</default-protocol>
+
+    <!-- The default controller to connect to when 'connect' command is executed w/o arguments -->
+    <default-controller>
+        <protocol>http-remoting</protocol>
+        <host>localhost</host>
+        <port>9990</port>
+    </default-controller>
+
+    <validate-operation-requests>true</validate-operation-requests>
+
+    <!-- Command and operation history log configuration -->
+    <history>
+        <enabled>false</enabled>
+    </history>
+
+    <!-- whether to resolve system properties specified as command argument or operation parameter values
+                  in the CLI VM before sending the operation requests to the controller -->
+    <resolve-parameter-values>true</resolve-parameter-values>
+
+    <!-- Whether to write info and error messages to the terminal output -->
+    <silent>false</silent>
+
+</jboss-cli>

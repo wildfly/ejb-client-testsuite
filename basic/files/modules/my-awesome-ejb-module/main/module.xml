@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module xmlns="urn:jboss:module:1.1" name="my-awesome-ejb-module">
+
+    <resources>
+        <resource-root path="ejbmodule.jar"/>
+    </resources>
+
+    <dependencies>
+        <module name="javax.annotation.api"/>
+        <module name="javax.api"/>
+        <module name="javax.ejb.api"/>
+        <module name="javax.transaction.api"/>
+        <module name="sun.jdk"/>
+    </dependencies>
+
+</module>

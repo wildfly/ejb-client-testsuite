@@ -1,0 +1,6 @@
+// "Permit All" policy for Java Security Manager
+// usage:
+// JAVA_OPTS="$JAVA_OPTS -Djava.security.manager -Djava.security.policy==/home/jcacek/test/permit.policy -Djava.security.debug=failure"
+grant {
+    permission java.security.AllPermission;
+};
