@@ -6,6 +6,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.container.test.api.RunAsClient;
 import org.jboss.arquillian.junit.Arquillian;
+import org.junit.Ignore;
 import org.wildfly.ejbclient.testsuite.integration.basic.utils.jndi.InitialContextDirectory;
 import org.wildfly.ejbclient.testsuite.integration.basic.utils.ConnectorType;
 import org.wildfly.ejbclient.testsuite.integration.basic.utils.EJBClientContextType;
@@ -26,6 +27,8 @@ import org.junit.runner.RunWith;
  */
 @RunWith(Arquillian.class)
 @RunAsClient
+@Ignore
+//fix depends on BYTEMAN-428
 public class CompressionTestCase {
 
     public static final String ARCHIVE_NAME = "compression-test";
