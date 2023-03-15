@@ -23,22 +23,16 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>org.jboss</groupId>
-        <artifactId>jboss-parent</artifactId>
-        <version>39</version>
-        <relativePath/>
+        <groupId>org.wildfly</groupId>
+        <artifactId>ejb-client-testsuite-parent</artifactId>
+        <version>1.0.0.Final-SNAPSHOT</version>
     </parent>
 
     <groupId>org.wildfly</groupId>
-    <artifactId>ejb-client-testsuite-parent</artifactId>
+    <artifactId>ejb-client-testsuite-snapshots</artifactId>
     <version>1.0.0.Final-SNAPSHOT</version>
     <name>EJB Client Testsuite: Parent</name>
     <description>EJB Client Testsuite: Parent Aggregator</description>
-    <packaging>pom</packaging>
-
-    <modules>
-        <module>snapshots</module>
-        <module>basic</module>
-    </modules>
+    <packaging>jar</packaging>
 
 </project>
