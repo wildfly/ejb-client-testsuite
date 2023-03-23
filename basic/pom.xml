@@ -17,41 +17,6 @@
     <packaging>jar</packaging>
 
     <properties>
-        <maven.compiler.target>11</maven.compiler.target>
-        <maven.compiler.source>11</maven.compiler.source>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-
-        <groupId.ee.bom>org.wildfly.bom</groupId.ee.bom>
-        <artifactId.ee.bom>wildfly-ee</artifactId.ee.bom>
-        <version.ee.bom>27.0.1.Final</version.ee.bom>
-        <groupId.ejb.client.bom>org.wildfly</groupId.ejb.client.bom>
-        <version.ejb.client.bom>27.0.1.Final</version.ejb.client.bom>
-
-        <version.arquillian-bom>1.7.0.Alpha13</version.arquillian-bom>
-        <version.byteman>4.0.18</version.byteman>
-        <version.jakartaee-api>9.1.0</version.jakartaee-api>
-        <version.junit>4.13.2</version.junit>
-        <version.log4j>1.2.17</version.log4j>
-        <version.shrinkwrap.resolvers>3.1.4</version.shrinkwrap.resolvers>
-        <version.xom>1.3.2</version.xom>
-
-        <version.plugin.antrun>1.8</version.plugin.antrun>
-        <version.plugin.antrun.ant>1.8.1</version.plugin.antrun.ant>
-        <version.plugin.antrun.contrib>1.0b3</version.plugin.antrun.contrib>
-        <version.plugin.clean>3.1.0</version.plugin.clean>
-        <version.plugin.compiler>3.8.1</version.plugin.compiler>
-        <version.plugin.dependency>3.3.0</version.plugin.dependency>
-        <version.plugin.enforcer>3.0.0-M2</version.plugin.enforcer>
-        <version.plugin.jacoco>0.7.9</version.plugin.jacoco>
-        <version.plugin.jar>3.1.2</version.plugin.jar>
-        <version.plugin.surefire>3.0.0-M7</version.plugin.surefire>
-        <version.plugin.wildfly>2.0.1.Final</version.plugin.wildfly>
-
-        <!-- before you update arquillian-container version, consider to update wf-core-launcher version as well
-             and be sure that wf-core-launcher version works correctly with new arquillian-container -->
-        <version.arquillian-container>5.0.0.Alpha6</version.arquillian-container>
-        <!-- the following version needs to be >= than version used in arquillian-container dependency -->
-        <version.wf.core>19.0.0.Final</version.wf.core>
 
         <!-- "user" means auth using a password, "local" means local auth -->
         <authentication.type>user</authentication.type>
@@ -75,77 +40,62 @@
         <jboss.config.file>standalone-full.xml</jboss.config.file>
     </properties>
 
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>${groupId.ee.bom}</groupId>
-                <artifactId>${artifactId.ee.bom}</artifactId>
-                <version>${version.ee.bom}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.jboss.arquillian</groupId>
-                <artifactId>arquillian-bom</artifactId>
-                <version>${version.arquillian-bom}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
-
     <dependencies>
         <dependency>
-            <groupId>${groupId.ejb.client.bom}</groupId>
-            <artifactId>${artifactId.ejb.client.bom}</artifactId>
-            <type>pom</type>
+            <groupId>org.jboss</groupId>
+            <artifactId>jboss-ejb-client</artifactId>
+            <!-- FIXME -->
+            <version>5.0.3.Final</version>
+        </dependency>
+        <dependency>
+            <groupId>org.wildfly.wildfly-http-client</groupId>
+            <artifactId>wildfly-http-ejb-client</artifactId>
+            <!-- FIXME -->
+            <version>2.0.3.Final-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.jboss.ejb3</groupId>
+            <artifactId>jboss-ejb3-ext-api</artifactId>
         </dependency>
         <dependency>
             <groupId>org.jboss.shrinkwrap.resolver</groupId>
             <artifactId>shrinkwrap-resolver-api</artifactId>
-            <version>${version.shrinkwrap.resolvers}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.jboss.shrinkwrap.resolver</groupId>
             <artifactId>shrinkwrap-resolver-spi</artifactId>
-            <version>${version.shrinkwrap.resolvers}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.jboss.shrinkwrap.resolver</groupId>
             <artifactId>shrinkwrap-resolver-api-maven</artifactId>
-            <version>${version.shrinkwrap.resolvers}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.jboss.shrinkwrap.resolver</groupId>
             <artifactId>shrinkwrap-resolver-spi-maven</artifactId>
-            <version>${version.shrinkwrap.resolvers}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.jboss.shrinkwrap.resolver</groupId>
             <artifactId>shrinkwrap-resolver-impl-maven</artifactId>
-            <version>${version.shrinkwrap.resolvers}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.jboss.shrinkwrap.resolver</groupId>
             <artifactId>shrinkwrap-resolver-impl-maven-archive</artifactId><!-- Check https://issues.jboss.org/browse/SHRINKRES-238 first if start seeing any problem here -->
-            <version>${version.shrinkwrap.resolvers}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>${version.junit}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>jakarta.platform</groupId>
             <artifactId>jakarta.jakartaee-api</artifactId>
-            <version>${version.jakartaee-api}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -166,7 +116,6 @@
         <dependency>
             <groupId>org.wildfly.arquillian</groupId>
             <artifactId>wildfly-arquillian-container-managed</artifactId>
-            <version>${version.arquillian-container}</version>
             <scope>test</scope>
             <exclusions>     <!-- we want to use xnio from EJB client bom -->
                 <exclusion>
@@ -186,44 +135,46 @@
         <dependency>
             <groupId>org.wildfly.core</groupId>
             <artifactId>wildfly-controller</artifactId>
-            <version>${version.wf.core}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>log4j</groupId>
             <artifactId>log4j</artifactId>
-            <version>${version.log4j}</version>
         </dependency>
         <dependency>
             <groupId>xom</groupId>
             <artifactId>xom</artifactId>
-            <version>${version.xom}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.jboss.byteman</groupId>
             <artifactId>byteman</artifactId>
-            <version>${version.byteman}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.wildfly.security</groupId>
+            <artifactId>wildfly-elytron</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.wildfly.security</groupId>
+            <artifactId>wildfly-elytron-auth-server-deprecated</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.wildfly.security</groupId>
+            <artifactId>wildfly-elytron-realm</artifactId>
             <scope>test</scope>
         </dependency>
     </dependencies>
 
     <build>
-        <pluginManagement>
-            <plugins>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-surefire-plugin</artifactId>
-                    <version>${version.plugin.surefire}</version>
-                </plugin>
-            </plugins>
-        </pluginManagement>
 
         <plugins>
             <plugin>
                 <groupId>org.wildfly.plugins</groupId>
                 <artifactId>wildfly-maven-plugin</artifactId>
-                <version>${version.plugin.wildfly}</version>
                 <executions>
                     <execution>
                         <id>configure-server</id>
@@ -255,7 +206,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
-                <version>${version.plugin.dependency}</version>
                 <executions>
                     <execution>
                         <goals>
@@ -267,7 +217,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-enforcer-plugin</artifactId>
-                <version>${version.plugin.enforcer}</version>
                 <executions>
                     <execution>
                         <id>enforce-maven</id>
@@ -332,7 +281,6 @@
                         <javax.net.ssl.keyStorePassword>abcdef</javax.net.ssl.keyStorePassword>
                         <authentication.type>${authentication.type}</authentication.type>
                         <server.jvm.args>${server.jvm.args} ${server.jvm.jpms.args}</server.jvm.args>
-                        <groupId.ejb.client.bom>${groupId.ejb.client.bom}</groupId.ejb.client.bom>
                         <artifactId.ejb.client.bom>${artifactId.ejb.client.bom}</artifactId.ejb.client.bom>
                         <version.ejb.client.bom>${version.ejb.client.bom}</version.ejb.client.bom>
                         <arquillian.launch>${arquillian.launch}</arquillian.launch>
@@ -353,7 +301,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-antrun-plugin</artifactId>
-                <version>${version.plugin.antrun}</version>
                 <executions>
                     <execution>
                         <id>copy-files-to-server</id>
@@ -385,7 +332,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
-                <version>${version.plugin.jar}</version>
                 <executions>
                     <execution>
                         <id>create-my-awesome-ejb-module</id>
@@ -408,7 +354,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-clean-plugin</artifactId>
-                <version>${version.plugin.clean}</version>
                 <configuration>
                     <filesets>
                         <fileset>
@@ -441,7 +386,6 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-compiler-plugin</artifactId>
-                        <version>${version.plugin.compiler}</version>
                         <executions>
                             <execution>
                                 <id>default-testCompile</id>
@@ -472,7 +416,6 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-compiler-plugin</artifactId>
-                        <version>${version.plugin.compiler}</version>
                         <executions>
                             <execution>
                                 <id>default-testCompile</id>
@@ -503,7 +446,6 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-compiler-plugin</artifactId>
-                        <version>${version.plugin.compiler}</version>
                         <executions>
                             <execution>
                                 <id>default-testCompile</id>
@@ -554,7 +496,6 @@
                     <!-- generate HTML report after the TS -->
                     <plugin>
                         <artifactId>maven-antrun-plugin</artifactId>
-                        <version>${version.plugin.antrun}</version>
                         <executions>
                             <execution>
                                 <id>generate-jacoco-html-report</id>
@@ -577,7 +518,6 @@
                             <dependency>
                                 <groupId>ant-contrib</groupId>
                                 <artifactId>ant-contrib</artifactId>
-                                <version>${version.plugin.antrun.contrib}</version>
                                 <exclusions>
                                     <exclusion>
                                         <groupId>ant</groupId>
@@ -588,14 +528,12 @@
                             <dependency>
                                 <groupId>org.apache.ant</groupId>
                                 <artifactId>ant-nodeps</artifactId>
-                                <version>${version.plugin.antrun.ant}</version>
                             </dependency>
                         </dependencies>
                     </plugin>
                     <plugin>
                         <groupId>org.jacoco</groupId>
                         <artifactId>jacoco-maven-plugin</artifactId>
-                        <version>${version.plugin.jacoco}</version>
                         <executions>
                             <execution>
                                 <id>merge-jacoco-reports</id>
