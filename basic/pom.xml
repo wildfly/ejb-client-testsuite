@@ -44,19 +44,29 @@
         <dependency>
             <groupId>org.jboss</groupId>
             <artifactId>jboss-ejb-client</artifactId>
-            <!-- FIXME -->
-            <version>5.0.3.Final</version>
+            <version>EJB-CLIENT-TESTSUITE</version>
         </dependency>
         <dependency>
             <groupId>org.wildfly.wildfly-http-client</groupId>
             <artifactId>wildfly-http-ejb-client</artifactId>
-            <!-- FIXME -->
-            <version>2.0.3.Final-SNAPSHOT</version>
+            <version>EJB-CLIENT-TESTSUITE</version>
         </dependency>
+
 
         <dependency>
             <groupId>org.jboss.ejb3</groupId>
             <artifactId>jboss-ejb3-ext-api</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.threads</groupId>
+            <artifactId>jboss-threads</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.wildfly.common</groupId>
+            <artifactId>wildfly-common</artifactId>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.jboss.shrinkwrap.resolver</groupId>

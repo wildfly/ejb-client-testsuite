@@ -6,7 +6,9 @@ HTTP_CLIENT_REPOSITORY = "https://github.com/wildfly/wildfly-http-client"
 HTTP_CLIENT_VERSION_NAME = "version.org.wildfly.http-client"
 WILDFLY_NAME = "wildfly"
 WILDFLY_REPOSITORY = "https://github.com/wildfly/wildfly"
+HEAD_VERSION = "EJB-CLIENT-TESTSUITE"
 MVN_BUILD_OPTIONS = "-DskipTests=true"
+
 
 TARGET_DIR = new File("target")
 if (!TARGET_DIR.exists()) {
@@ -15,18 +17,19 @@ if (!TARGET_DIR.exists()) {
 
 def ejbClientDir = new File(TARGET_DIR, EJB_CLIENT_NAME)
 cloneProject(EJB_CLIENT_REPOSITORY)
+setProjectVersion(HEAD_VERSION, ejbClientDir)
 buildProject(ejbClientDir)
-def ejbClientVersion = getProjectVersion(ejbClientDir)
 
 def httpClientDir = new File(TARGET_DIR, HTTP_CLIENT_NAME)
 cloneProject(HTTP_CLIENT_REPOSITORY)
+setProjectVersion(HEAD_VERSION, httpClientDir)
 buildProject(httpClientDir)
-def httpClientVersion = getProjectVersion(httpClientDir)
 
 def wildfyDir = new File(TARGET_DIR, WILDFLY_NAME)
 cloneProject(WILDFLY_REPOSITORY)
-changeDependencyVersion(EJB_CLIENT_VERSION_NAME, ejbClientVersion, wildfyDir)
-changeDependencyVersion(HTTP_CLIENT_VERSION_NAME, httpClientVersion, wildfyDir)
+//setProjectVersion(HEAD_VERSION, wildfyDir)
+changeDependencyVersion(EJB_CLIENT_VERSION_NAME, HEAD_VERSION, wildfyDir)
+changeDependencyVersion(HTTP_CLIENT_VERSION_NAME, HEAD_VERSION, wildfyDir)
 buildProject(wildfyDir)
 
 
@@ -49,11 +52,8 @@ def buildProject(projectDir) {
     executeCmd("mvn clean install ${MVN_BUILD_OPTIONS}", null, projectDir, true)
 }
 
-def getProjectVersion(projectDir) {
-    def execution = "mvn help:evaluate -Dexpression=project.version -q -DforceStdout".execute(null, projectDir)
-    def result = new StringBuilder()
-    execution.waitForProcessOutput(result, System.err)
-    return result.toString()
+def setProjectVersion(version, projectDir) {
+    executeCmd("mvn versions:set -DgenerateBackupPoms=false -DnewVersion=${version}", null, projectDir, false)
 }
 
 def changeDependencyVersion(versionProperty, newVersion, projectDir) {
