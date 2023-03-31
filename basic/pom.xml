@@ -330,6 +330,7 @@
                                     <fileset dir="${project.basedir}/files/user"/>
                                 </copy>
                                 <copy todir="${server.home}/modules/" verbose="true" overwrite="true">
+                                    <fileset dir="${project.basedir}/target/modules"/>
                                     <fileset dir="${project.basedir}/files/modules"/>
                                 </copy>
                             </target>
@@ -352,7 +353,7 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <outputDirectory>${project.basedir}/files/modules/my-awesome-ejb-module/main
+                    <outputDirectory>${project.basedir}/target/modules/my-awesome-ejb-module/main
                     </outputDirectory>
                     <includes>
                         <include>ejbjar/*</include>
@@ -367,7 +368,7 @@
                 <configuration>
                     <filesets>
                         <fileset>
-                            <directory>${project.basedir}/files/modules/my-awesome-ejb-module/main</directory>
+                            <directory>${project.basedir}/target/modules/my-awesome-ejb-module/main</directory>
                             <includes>
                                 <include>**/*.jar</include>
                             </includes>
