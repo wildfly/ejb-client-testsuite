@@ -12,7 +12,7 @@ WILDFLY_NAME = "wildfly"
 WILDFLY_REPOSITORY = "https://github.com/wildfly/wildfly"
 WILDFLY_REPOSITORY_PROPERTY = "wildfly.repository"
 WILDFLY_BRANCH_PROPERTY = "wildfly.branch"
-HEAD_VERSION = "EJB-CLIENT-TESTSUITE"
+TESTSUITE_VERSION = "EJB-CLIENT-TESTSUITE"
 MVN_BUILD_OPTIONS = "-DskipTests=true"
 
 
@@ -23,19 +23,21 @@ if (!TARGET_DIR.exists()) {
 
 def ejbClientDir = new File(TARGET_DIR, EJB_CLIENT_NAME)
 cloneProject(EJB_CLIENT_REPOSITORY_PROPERTY, EJB_CLIENT_BRANCH_PROPERTY, EJB_CLIENT_DEFAULT_REPOSITORY)
-setProjectVersion(HEAD_VERSION, ejbClientDir)
+setProjectVersion(TESTSUITE_VERSION, ejbClientDir)
 buildProject(ejbClientDir)
 
 def httpClientDir = new File(TARGET_DIR, HTTP_CLIENT_NAME)
 cloneProject(HTTP_CLIENT_REPOSITORY_PROPERTY, HTTP_CLIENT_BRANCH_PROPERTY, HTTP_CLIENT_REPOSITORY)
-setProjectVersion(HEAD_VERSION, httpClientDir)
+setProjectVersion(TESTSUITE_VERSION, httpClientDir)
 buildProject(httpClientDir)
 
-def wildfyDir = new File(TARGET_DIR, WILDFLY_NAME)
+def wildFlyDir = new File(TARGET_DIR, WILDFLY_NAME)
 cloneProject(WILDFLY_REPOSITORY_PROPERTY, WILDFLY_BRANCH_PROPERTY, WILDFLY_REPOSITORY)
-changeDependencyVersion(EJB_CLIENT_VERSION_NAME, HEAD_VERSION, wildfyDir)
-changeDependencyVersion(HTTP_CLIENT_VERSION_NAME, HEAD_VERSION, wildfyDir)
-buildProject(wildfyDir)
+changeDependencyVersion(EJB_CLIENT_VERSION_NAME, TESTSUITE_VERSION, wildFlyDir)
+changeDependencyVersion(HTTP_CLIENT_VERSION_NAME, TESTSUITE_VERSION, wildFlyDir)
+buildProject(wildFlyDir)
+renameWildFlyBuildDirectory(getProjectVersion(wildFlyDir), wildFlyDir)
+
 
 
 def executeCmd(command, env, dir, verbose) {
@@ -63,8 +65,20 @@ def setProjectVersion(version, projectDir) {
     executeCmd("mvn versions:set -DgenerateBackupPoms=false -DnewVersion=${version}", null, projectDir, false)
 }
 
+def getProjectVersion(projectDir) {
+    def execution = "mvn help:evaluate -Dexpression=project.version -q -DforceStdout".execute(null, projectDir)
+    def result = new StringBuilder()
+    execution.waitForProcessOutput(result, System.err)
+    return result.toString().split(System.lineSeparator())[0];
+}
+
 def changeDependencyVersion(versionProperty, newVersion, projectDir) {
     executeCmd("mvn versions:set-property -Dproperty=${versionProperty} -DnewVersion=${newVersion}", null, projectDir, false)
+}
+
+def renameWildFlyBuildDirectory(wildflyVersion, File wildflyDir) {
+    def wildFlyBuildDir = new File(wildflyDir, "build/target")
+    executeCmd("mv wildfly-${wildflyVersion} wildfly-${TESTSUITE_VERSION}", null, wildFlyBuildDir, false)
 }
 
 

@@ -19,6 +19,7 @@
     <properties>
 
         <!-- "user" means auth using a password, "local" means local auth -->
+        <server.home>${project.basedir}/../snapshots/target/wildfly/build/target/wildfly-EJB-CLIENT-TESTSUITE</server.home>
         <authentication.type>user</authentication.type>
         <!-- http-remoting | https-remoting | remoting -->
         <connector>http-remoting</connector>
@@ -249,21 +250,17 @@
                         <configuration>
                             <rules>
                                 <requireProperty>
-                                    <property>server.home</property>
-                                    <message>-Dserver.home must be specified (path to server distribution)</message>
-                                </requireProperty>
-                                <requireProperty>
                                     <property>authentication.type</property>
                                     <regex>(user|local)</regex>
                                     <message>-Dauthentication.type must be either "user" or "local"</message>
                                 </requireProperty>
-                                <requireProperty>
-                                    <property>context.type</property>
-                                    <regex>(global|scoped|wildfly-naming-client)</regex>
-                                    <message>Specify EJB client context type (property named context.type).
-                                        Allowed values: global, scoped, wildfly-naming-client
-                                    </message>
-                                </requireProperty>
+<!--                                <requireProperty>-->
+<!--                                    <property>context.type</property>-->
+<!--                                    <regex>(global|scoped|wildfly-naming-client)</regex>-->
+<!--                                    <message>Specify EJB client context type (property named context.type).-->
+<!--                                        Allowed values: global, scoped, wildfly-naming-client-->
+<!--                                    </message>-->
+<!--                                </requireProperty>-->
                                 <requireProperty>
                                     <property>connector</property>
                                     <regex>(http-remoting|https-remoting|remoting|remoting-ssl|http|https)</regex>
@@ -282,6 +279,7 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <configuration>
                     <systemProperties>
+                        <server.home>${server.home}</server.home>
                         <connector>${connector}</connector>
                         <javax.net.ssl.trustStore>${project.basedir}/files/ssl/client.keystore
                         </javax.net.ssl.trustStore>
@@ -383,15 +381,10 @@
 
     <profiles>
         <profile>
-            <id>nonlegacy</id>
+            <id>default</id>
             <properties>
-                <artifactId.ejb.client.bom>wildfly-ejb-client-bom</artifactId.ejb.client.bom>
+                <context.type>global</context.type>
             </properties>
-            <activation>
-                <property>
-                    <name>!legacy</name>
-                </property>
-            </activation>
             <build>
                 <plugins>
                     <plugin>
@@ -400,42 +393,6 @@
                         <executions>
                             <execution>
                                 <id>default-testCompile</id>
-                                <configuration>
-                                    <testExcludes>
-                                        <testExclude>**/*EJBCLIENT2.java</testExclude>
-                                    </testExcludes>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-
-        <profile>
-            <id>legacy</id>
-            <properties>
-                <artifactId.ejb.client.bom>wildfly-ejb-client-legacy-bom</artifactId.ejb.client.bom>
-            </properties>
-            <activation>
-                <property>
-                    <name>legacy</name>
-                </property>
-            </activation>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-compiler-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <id>default-testCompile</id>
-                                <configuration>
-                                    <testExcludes>
-                                        <testExclude>**/*EJBCLIENT4.java</testExclude>
-                                        <testExclude>**/*MavenDependencyTestCase.java</testExclude>
-                                    </testExcludes>
-                                </configuration>
                             </execution>
                         </executions>
                     </plugin>
