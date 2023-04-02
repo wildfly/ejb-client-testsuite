@@ -21,9 +21,6 @@
         <!-- "user" means auth using a password, "local" means local auth -->
         <server.home>${project.basedir}/../snapshots/target/wildfly/build/target/wildfly-EJB-CLIENT-TESTSUITE</server.home>
         <authentication.type>user</authentication.type>
-        <!-- http-remoting | https-remoting | remoting -->
-        <connector>http-remoting</connector>
-        <context.type>wildfly-naming-client</context.type>
         <byteman.args>
             -javaagent:${org.jboss.byteman:byteman:jar}=script:${project.basedir}/byteman/bytemanscript.btm,prop:org.jboss.byteman.transform.all=true,sys:${org.jboss.byteman:byteman:jar},boot:${org.jboss.byteman:byteman:jar}
         </byteman.args>
@@ -225,62 +222,14 @@
                     </execution>
                 </executions>
             </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-enforcer-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>enforce-maven</id>
-                        <goals>
-                            <goal>enforce</goal>
-                        </goals>
-                        <configuration>
-                            <rules>
-                                <requireMavenVersion>
-                                    <version>3.5</version>
-                                </requireMavenVersion>
-                            </rules>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>enforce-properties</id>
-                        <goals>
-                            <goal>enforce</goal>
-                        </goals>
-                        <configuration>
-                            <rules>
-                                <requireProperty>
-                                    <property>authentication.type</property>
-                                    <regex>(user|local)</regex>
-                                    <message>-Dauthentication.type must be either "user" or "local"</message>
-                                </requireProperty>
-<!--                                <requireProperty>-->
-<!--                                    <property>context.type</property>-->
-<!--                                    <regex>(global|scoped|wildfly-naming-client)</regex>-->
-<!--                                    <message>Specify EJB client context type (property named context.type).-->
-<!--                                        Allowed values: global, scoped, wildfly-naming-client-->
-<!--                                    </message>-->
-<!--                                </requireProperty>-->
-                                <requireProperty>
-                                    <property>connector</property>
-                                    <regex>(http-remoting|https-remoting|remoting|remoting-ssl|http|https)</regex>
-                                    <message>-Dconnector must be "http-remoting", "https-remoting",
-                                        "remoting", "http" or "https"
-                                    </message>
-                                </requireProperty>
-                            </rules>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <configuration>
+                    <skip>true</skip>
                     <systemProperties>
                         <server.home>${server.home}</server.home>
-                        <connector>${connector}</connector>
                         <javax.net.ssl.trustStore>${project.basedir}/files/ssl/client.keystore
                         </javax.net.ssl.trustStore>
                         <javax.net.ssl.keyStore>${project.basedir}/files/ssl/client.keystore
@@ -304,6 +253,34 @@
                         <include>**/*TestCase*.java</include>
                     </includes>
                 </configuration>
+                <executions>
+                    <execution>
+                        <id>remoting--wildfly-naming-client</id>
+                        <goals>
+                            <goal>test</goal>
+                        </goals>
+                        <configuration>
+                            <skip>false</skip>
+                            <systemProperties>
+                                <connector>remoting</connector>
+                                <context.type>wildfly-naming-client</context.type>
+                            </systemProperties>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>remoting--global</id>
+                        <goals>
+                            <goal>test</goal>
+                        </goals>
+                        <configuration>
+                            <skip>false</skip>
+                            <systemProperties>
+                                <connector>remoting</connector>
+                                <context.type>global</context.type>
+                            </systemProperties>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
 
             <plugin>
@@ -383,7 +360,8 @@
         <profile>
             <id>default</id>
             <properties>
-                <context.type>global</context.type>
+                <connector>http-remoting</connector>
+                <context.type>wildfly-naming-client</context.type>
             </properties>
             <build>
                 <plugins>
