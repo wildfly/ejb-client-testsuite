@@ -1,0 +1,136 @@
+<?xml version="1.0"?>
+<arquillian xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xmlns="http://jboss.org/schema/arquillian"
+            xsi:schemaLocation="http://jboss.org/schema/arquillian http://jboss.org/schema/arquillian/arquillian_1_0.xsd">
+
+    <defaultProtocol type="Servlet 5.0"/>
+
+
+    <engine>
+        <property name="deploymentExportPath">target/arquillian-export</property>
+    </engine>
+
+    <group qualifier="manual-mode">
+        <container qualifier="node1" mode="manual" default="false">
+            <configuration>
+                <property name="jbossHome">${node1.jbossHome}</property>
+                <property name="serverConfig">standalone.xml</property>
+                <property name="startupTimeoutInSeconds">${server.startup.timeout:120}</property>
+                <property name="allowConnectingToRunningServer">false</property>
+                <property name="javaVmArguments">${server.vm.arguments} ${jacoco.args.node1: }</property>
+                <property name="jbossArguments">
+                    -Djboss.node.name=node1
+                    -b ${node1.address}
+                    -bmanagement=${node1.address}
+                    -bprivate=${node1.address}
+                </property>
+                <property name="managementAddress">${node1.address}</property>
+                <property name="managementPort">${node1.management-port}</property>
+            </configuration>
+        </container>
+
+        <container qualifier="node2" mode="manual" default="false">
+            <configuration>
+                <property name="jbossHome">${node2.jbossHome}</property>
+                <property name="serverConfig">standalone.xml</property>
+                <property name="startupTimeoutInSeconds">${server.startup.timeout:120}</property>
+                <property name="allowConnectingToRunningServer">false</property>
+                <property name="javaVmArguments">${server.vm.arguments} ${jacoco.args.node2: }</property>
+                <property name="jbossArguments">
+                    -Djboss.node.name=node2
+                    -b ${node2.address}
+                    -bmanagement=${node2.address}
+                    -bprivate=${node2.address}
+                    -Djboss.socket.binding.port-offset=100
+                </property>
+                <property name="managementAddress">${node2.address}</property>
+                <property name="managementPort">${node2.management-port}</property>
+            </configuration>
+        </container>
+
+        <container qualifier="cluster1-node1" mode="manual" default="false">
+            <configuration>
+                <property name="jbossHome">${cluster1-node1.jbossHome}</property>
+                <property name="serverConfig">standalone-ha.xml</property>
+                <property name="startupTimeoutInSeconds">${server.startup.timeout:120}</property>
+                <property name="allowConnectingToRunningServer">false</property>
+                <property name="javaVmArguments">${server.vm.arguments} ${jacoco.args.cluster1-node1: }
+                </property>
+                <property name="jbossArguments">
+                    -Djboss.node.name=cluster1-node1
+                    -b ${cluster1-node1.address}
+                    -bmanagement=${cluster1-node1.address}
+                    -bprivate=${cluster1-node1.address}
+                    -Djboss.default.multicast.address=${cluster1.multicast-address}
+                    -Djboss.socket.binding.port-offset=200
+                </property>
+                <property name="managementAddress">${cluster1-node1.address}</property>
+                <property name="managementPort">${cluster1-node1.management-port}</property>
+            </configuration>
+        </container>
+
+        <container qualifier="cluster1-node2" mode="manual" default="false">
+            <configuration>
+                <property name="jbossHome">${cluster1-node2.jbossHome}</property>
+                <property name="serverConfig">standalone-ha.xml</property>
+                <property name="startupTimeoutInSeconds">${server.startup.timeout:120}</property>
+                <property name="allowConnectingToRunningServer">false</property>
+                <property name="javaVmArguments">${server.vm.arguments} ${jacoco.args.cluster1-node2: }
+                </property>
+                <property name="jbossArguments">
+                    -Djboss.node.name=cluster1-node2
+                    -b ${cluster1-node2.address}
+                    -bmanagement=${cluster1-node2.address}
+                    -bprivate=${cluster1-node2.address}
+                    -Djboss.default.multicast.address=${cluster1.multicast-address}
+                    -Djboss.socket.binding.port-offset=300
+                </property>
+                <property name="managementAddress">${cluster1-node2.address}</property>
+                <property name="managementPort">${cluster1-node2.management-port}</property>
+            </configuration>
+        </container>
+
+        <container qualifier="cluster2-node1" mode="manual" default="false">
+            <configuration>
+                <property name="jbossHome">${cluster2-node1.jbossHome}</property>
+                <property name="serverConfig">standalone-ha.xml</property>
+                <property name="startupTimeoutInSeconds">${server.startup.timeout:120}</property>
+                <property name="allowConnectingToRunningServer">false</property>
+                <property name="javaVmArguments">${server.vm.arguments} ${jacoco.args.cluster2-node1: }
+                </property>
+                <property name="jbossArguments">
+                    -Djboss.node.name=cluster2-node1
+                    -b ${cluster2-node1.address}
+                    -bmanagement=${cluster2-node1.address}
+                    -bprivate=${cluster2-node1.address}
+                    -Djboss.default.multicast.address=${cluster2.multicast-address}
+                    -Djboss.socket.binding.port-offset=400
+                </property>
+                <property name="managementAddress">${cluster2-node1.address}</property>
+                <property name="managementPort">${cluster2-node1.management-port}</property>
+            </configuration>
+        </container>
+
+        <container qualifier="cluster2-node2" mode="manual" default="false">
+            <configuration>
+                <property name="jbossHome">${cluster2-node2.jbossHome}</property>
+                <property name="serverConfig">standalone-ha.xml</property>
+                <property name="startupTimeoutInSeconds">${server.startup.timeout:120}</property>
+                <property name="allowConnectingToRunningServer">false</property>
+                <property name="javaVmArguments">${server.vm.arguments} ${jacoco.args.cluster2-node2: }
+                </property>
+                <property name="jbossArguments">
+                    -Djboss.node.name=cluster2-node2
+                    -b ${cluster2-node2.address}
+                    -bmanagement=${cluster2-node2.address}
+                    -bprivate=${cluster2-node2.address}
+                    -Djboss.default.multicast.address=${cluster2.multicast-address}
+                    -Djboss.socket.binding.port-offset=500
+                </property>
+                <property name="managementAddress">${cluster2-node2.address}</property>
+                <property name="managementPort">${cluster2-node2.management-port}</property>
+            </configuration>
+        </container>
+    </group>
+
+</arquillian>

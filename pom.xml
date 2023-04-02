@@ -39,6 +39,7 @@
     <modules>
         <module>snapshots</module>
         <module>basic</module>
+        <module>multinode</module>
     </modules>
 
     <properties>

@@ -1,0 +1,7 @@
+<configuration>
+    <jboss-ejb-client xmlns="urn:jboss:wildfly-client-ejb:3.0">
+        <connections>
+            <connection uri="remote+http://[${cluster1-node1.address}]:${cluster1-node1.application-port}"/>
+        </connections>
+    </jboss-ejb-client>
+</configuration>

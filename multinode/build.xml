@@ -1,0 +1,45 @@
+<!--
+   Ant buildfile for generating JaCoCo HTML reports from JaCoCo execution files.
+   This is used automatically from Maven if you run the TS with -Pjacoco profile.
+-->
+<project xmlns:jacoco="antlib:org.jacoco.ant" name="JaCoCo Report - EJB Multi Server Test Suite">
+    <taskdef uri="antlib:org.jacoco.ant" resource="org/jacoco/ant/antlib.xml">
+        <classpath path="jacoco/jacocoant.jar"/>
+    </taskdef>
+    <property name="report.target.dir" location="target/jacoco/"/>
+    <target name="report">
+        <jacoco:report>
+            <executiondata>
+                <file file="target/jacoco-node1.exec"/>
+                <file file="target/jacoco-node2.exec"/>
+                <file file="target/jacoco-cluster1-node1.exec"/>
+                <file file="target/jacoco-cluster1-node2.exec"/>
+                <file file="target/jacoco-cluster2-node1.exec"/>
+                <file file="target/jacoco-cluster2-node2.exec"/>
+            </executiondata>
+            <structure name="JaCoCo Test Coverage Report - EJB Multi Server Test Suite">
+                <classfiles>
+                    <!-- path to modules directory of one EAP distribution (it does not matter which one) -->
+                    <fileset dir="${modules.path}">
+                        <!-- The files from EAP distro for which want code coverage report generated -->
+                        <include name="**/wildfly-ejb3*.jar"/>
+                    </fileset>
+                </classfiles>
+                <!-- source files, if available -->
+                <!--
+                                <sourcefiles encoding="UTF-8">
+                                    <fileset dir="/home/jmartisk/Workspace/jsr352/jberet-core/src/main/java">
+                                        <include name="**/*.java"/>
+                                    </fileset>
+                                    <fileset dir="/home/jmartisk/Workspace/jboss-eap7/batch/extension-jberet/src/main/java">
+                                        <include name="**/*.java"/>
+                                    </fileset>
+                                </sourcefiles>
+                -->
+            </structure>
+            <html destdir="${report.target.dir}"/>
+            <csv destfile="${report.target.dir}/report.csv"/>
+            <xml destfile="${report.target.dir}/report.xml"/>
+        </jacoco:report>
+    </target>
+</project>

@@ -1,0 +1,26 @@
+<configuration>
+    <!-- FIXME why is this element completely ignored? for a workaround,
+         FIXME I used a programmatic authentication context for the time being -->
+   <!-- <authentication-client xmlns="urn:elytron:1.0">
+        <providers>
+            <use-service-loader/>
+        </providers>
+        <authentication-rules>
+            <rule use-configuration="default"/>
+        </authentication-rules>
+        <authentication-configurations>
+            <configuration name="default">
+                <sasl-mechanism-selector selector="DIGEST-MD5"/>
+                <set-user-name name="joe"/>   
+                <credentials>                       
+                      <clear-password password="joeIsAwesome2013!"/>
+                </credentials>
+            </configuration>
+        </authentication-configurations>
+    </authentication-client>-->
+    <jboss-ejb-client xmlns="urn:jboss:wildfly-client-ejb:3.0">
+        <connections>
+            <connection uri="remote+http://${node1.address}:${node1.application-port}"/>
+        </connections>
+    </jboss-ejb-client>
+</configuration>
