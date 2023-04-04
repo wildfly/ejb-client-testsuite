@@ -84,6 +84,18 @@
         <version.arquillian-container>5.0.0.Alpha6</version.arquillian-container>
         <!-- the following version needs to be >= than version used in arquillian-container dependency -->
         <version.wf.core>19.0.0.Final</version.wf.core>
+
+        <!-- MULTINODE -->
+
+        <maven.test.failure.ignore>true</maven.test.failure.ignore>
+
+        <version.arquillian-container>5.0.0.Alpha3</version.arquillian-container>
+        <version.arquillian.protocol>1.7.0.Alpha11</version.arquillian.protocol>
+        <version.creaper>1.6.1</version.creaper>
+        <version.jakartaee-api>9.1.0</version.jakartaee-api>
+
+        <version.plugin.groovy>2.1.1</version.plugin.groovy>
+        <version.plugin.groovy.groovy>2.4.21</version.plugin.groovy.groovy>
     </properties>
 
     <dependencyManagement>
@@ -252,6 +264,40 @@
                 <groupId>xom</groupId>
                 <artifactId>xom</artifactId>
                 <version>${version.xom}</version>
+            </dependency>
+
+            <!-- MULTINODE -->
+
+            <dependency>
+                <groupId>org.wildfly.arquillian</groupId>
+                <artifactId>wildfly-arquillian-common</artifactId>
+                <version>${version.arquillian-container}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wildfly.core</groupId>
+                <artifactId>wildfly-launcher</artifactId>
+                <version>${version.wf.core}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wildfly.extras.creaper</groupId>
+                <artifactId>creaper-core</artifactId>
+                <version>${version.creaper}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wildfly.extras.creaper</groupId>
+                <artifactId>creaper-commands</artifactId>
+                <version>${version.creaper}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wildfly.core</groupId>
+                <artifactId>wildfly-cli</artifactId>
+                <version>${version.wf.core}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.jboss.ejb3</groupId>
+                <artifactId>jboss-ejb3-ext-api</artifactId>
+                <version>${version.jboss.ejb3-ext-api}</version>
             </dependency>
         </dependencies>
 

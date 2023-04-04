@@ -4,50 +4,17 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
+
     <parent>
         <groupId>org.wildfly</groupId>
         <artifactId>ejb-client-testsuite-parent</artifactId>
         <version>1.0.0.Final-SNAPSHOT</version>
     </parent>
 
-    <artifactId>multinode</artifactId>
-    <version>1.0.0.Final-SNAPSHOT</version>
+    <artifactId>ejb-client-testsuite-multinode</artifactId>
     <packaging>jar</packaging>
 
     <properties>
-        <maven.compiler.target>11</maven.compiler.target>
-        <maven.compiler.source>11</maven.compiler.source>
-        <maven.test.failure.ignore>true</maven.test.failure.ignore>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-
-        <groupId.ee.bom>org.wildfly.bom</groupId.ee.bom>
-        <artifactId.ee.bom>wildfly-ee</artifactId.ee.bom>
-        <version.ee.bom>27.0.1.Final</version.ee.bom>
-        <groupId.ejb.client.bom>org.wildfly</groupId.ejb.client.bom>
-        <artifactId.ejb.client.bom>wildfly-ejb-client-bom</artifactId.ejb.client.bom>
-        <version.ejb.client.bom>27.0.1.Final</version.ejb.client.bom>
-
-        <version.arquillian-bom>1.7.0.Alpha11</version.arquillian-bom>
-        <version.arquillian-container>5.0.0.Alpha3</version.arquillian-container>
-        <version.arquillian.protocol>1.7.0.Alpha11</version.arquillian.protocol>
-        <version.creaper>1.6.1</version.creaper>
-        <version.jakartaee-api>9.1.0</version.jakartaee-api>
-        <version.junit>4.13.2</version.junit>
-        <version.log4j>1.2.17</version.log4j>
-        <version.wf.core>19.0.1.Final</version.wf.core>
-
-        <version.plugin.antrun>1.8</version.plugin.antrun>
-        <version.plugin.antrun.ant>1.8.1</version.plugin.antrun.ant>
-        <version.plugin.antrun.contrib>1.0b3</version.plugin.antrun.contrib>
-        <version.plugin.compiler>3.8.1</version.plugin.compiler>
-        <version.plugin.enforcer>3.0.0-M2</version.plugin.enforcer>
-        <version.plugin.groovy>2.1.1</version.plugin.groovy>
-        <version.plugin.groovy.groovy>3.0.10</version.plugin.groovy.groovy>
-        <version.plugin.jacoco>0.7.9</version.plugin.jacoco>
-        <version.plugin.jar>3.1.2</version.plugin.jar>
-        <version.plugin.surefire>3.0.0-M3</version.plugin.surefire>
-
-
         <!-- Path to server zip archive, has to be specified at command line -->
         <server.zip/>
         <!-- VM arguments for server instances -->
@@ -146,7 +113,6 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-antrun-plugin</artifactId>
-                        <version>${version.plugin.antrun}</version>
                         <executions>
                             <execution>
                                 <id>generate-jacoco-html-report</id>
@@ -172,7 +138,6 @@
                             <dependency>
                                 <groupId>ant-contrib</groupId>
                                 <artifactId>ant-contrib</artifactId>
-                                <version>${version.plugin.antrun.contrib}</version>
                                 <exclusions>
                                     <exclusion>
                                         <groupId>ant</groupId>
@@ -183,14 +148,12 @@
                             <dependency>
                                 <groupId>org.apache.ant</groupId>
                                 <artifactId>ant-nodeps</artifactId>
-                                <version>${version.plugin.antrun.ant}</version>
                             </dependency>
                         </dependencies>
                     </plugin>
                     <plugin>
                         <groupId>org.jacoco</groupId>
                         <artifactId>jacoco-maven-plugin</artifactId>
-                        <version>${version.plugin.jacoco}</version>
                         <executions>
                             <execution>
                                 <id>merge-jacoco-reports</id>
@@ -217,37 +180,27 @@
         </profile>
     </profiles>
 
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>${groupId.ee.bom}</groupId>
-                <artifactId>${artifactId.ee.bom}</artifactId>
-                <version>${version.ee.bom}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.jboss.arquillian</groupId>
-                <artifactId>arquillian-bom</artifactId>
-                <version>${version.arquillian-bom}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
-
     <dependencies>
         <dependency>
-            <groupId>${groupId.ejb.client.bom}</groupId>
-            <artifactId>${artifactId.ejb.client.bom}</artifactId>
-            <type>pom</type>
+            <groupId>org.jboss</groupId>
+            <artifactId>jboss-ejb-client</artifactId>
+            <version>EJB-CLIENT-TESTSUITE</version>
         </dependency>
+        <dependency>
+            <groupId>org.wildfly.wildfly-http-client</groupId>
+            <artifactId>wildfly-http-ejb-client</artifactId>
+            <version>EJB-CLIENT-TESTSUITE</version>
+        </dependency>
+
         <!-- Related to tested server -->
         <dependency>
             <groupId>jakarta.platform</groupId>
             <artifactId>jakarta.jakartaee-api</artifactId>
-            <version>${version.jakartaee-api}</version>
             <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.wildfly</groupId>
+            <artifactId>wildfly-naming-client</artifactId>
         </dependency>
 
         <!-- Arquillian related -->
@@ -264,13 +217,11 @@
         <dependency>
             <groupId>org.jboss.arquillian.protocol</groupId>
             <artifactId>arquillian-protocol-servlet-jakarta</artifactId>
-            <version>${version.arquillian.protocol}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.wildfly.arquillian</groupId>
             <artifactId>wildfly-arquillian-container-managed</artifactId>
-            <version>${version.arquillian-container}</version>
             <scope>test</scope>
             <exclusions>
                 <exclusion>
@@ -282,19 +233,16 @@
         <dependency>
             <groupId>org.wildfly.arquillian</groupId>
             <artifactId>wildfly-arquillian-common</artifactId>
-            <version>${version.arquillian-container}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.wildfly.core</groupId>
             <artifactId>wildfly-launcher</artifactId>
-            <version>${version.wf.core}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.wildfly.core</groupId>
             <artifactId>wildfly-controller</artifactId>
-            <version>${version.wf.core}</version>
             <scope>test</scope>
         </dependency>
 
@@ -302,30 +250,25 @@
         <dependency>
             <groupId>org.wildfly.extras.creaper</groupId>
             <artifactId>creaper-core</artifactId>
-            <version>${version.creaper}</version>
         </dependency>
         <dependency>
             <groupId>org.wildfly.extras.creaper</groupId>
             <artifactId>creaper-commands</artifactId>
-            <version>${version.creaper}</version>
         </dependency>
         <dependency><!-- We need to override creaper's wildfly-cli to be able to work with latest container -->
             <groupId>org.wildfly.core</groupId>
             <artifactId>wildfly-cli</artifactId>
-            <version>${version.wf.core}</version>
         </dependency>
 
         <!-- Other -->
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>${version.junit}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>log4j</groupId>
             <artifactId>log4j</artifactId>
-            <version>${version.log4j}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -349,7 +292,6 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-compiler-plugin</artifactId>
-                    <version>${version.plugin.compiler}</version>
                 </plugin>
             </plugins>
         </pluginManagement>
@@ -357,7 +299,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-enforcer-plugin</artifactId>
-                <version>${version.plugin.enforcer}</version>
                 <executions>
                     <execution>
                         <id>enforce-maven</id>
@@ -393,7 +334,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>${version.plugin.surefire}</version>
                 <configuration>
                     <forkCount>1</forkCount>
                     <reuseForks>false</reuseForks>
@@ -455,7 +395,6 @@
             <plugin>
                 <groupId>org.codehaus.gmaven</groupId>
                 <artifactId>groovy-maven-plugin</artifactId>
-                <version>${version.plugin.groovy}</version>
                 <executions>
                     <execution>
                         <id>unzip-server</id>
@@ -487,26 +426,8 @@
                         </configuration>
                     </execution>
                 </executions>
-                <dependencies>
-                    <dependency>
-                        <groupId>org.codehaus.groovy</groupId>
-                        <artifactId>groovy-all</artifactId>
-                        <version>${version.plugin.groovy.groovy}</version>
-                        <type>pom</type>
-                    </dependency>
-                </dependencies>
             </plugin>
         </plugins>
     </build>
-
-    <repositories>
-        <repository>
-            <id>mead-eap80-build</id>
-            <name>MEAD EAP8.0 build</name>
-            <url>
-                https://download.eng.bos.redhat.com/brewroot/repos/jb-eap-8.0-maven-build/latest/maven/
-            </url>
-        </repository>
-    </repositories>
 
 </project>
