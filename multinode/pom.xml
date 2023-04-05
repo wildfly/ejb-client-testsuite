@@ -16,7 +16,7 @@
 
     <properties>
         <!-- Path to server zip archive, has to be specified at command line -->
-        <server.zip/>
+        <server.zip>${project.basedir}/../snapshots/target/wildfly/build/target/wildfly-EJB-CLIENT-TESTSUITE.zip</server.zip>
         <!-- VM arguments for server instances -->
         <server.vm.arguments>-Xmx512M -Djava.net.preferIPv4Stack=true</server.vm.arguments>
         <server.jvm.jpms.args>--add-exports=java.desktop/sun.awt=ALL-UNNAMED --add-exports=java.naming/com.sun.jndi.ldap=ALL-UNNAMED --add-opens=java.base/java.lang=ALL-UNNAMED --add-opens=java.base/java.lang.invoke=ALL-UNNAMED --add-opens=java.base/java.lang.reflect=ALL-UNNAMED --add-opens=java.base/java.io=ALL-UNNAMED --add-opens=java.base/java.security=ALL-UNNAMED --add-opens=java.base/java.util=ALL-UNNAMED --add-opens=java.base/java.util.concurrent=ALL-UNNAMED --add-opens=java.management/javax.management=ALL-UNNAMED --add-opens=java.naming/javax.naming=ALL-UNNAMED</server.jvm.jpms.args>
@@ -313,21 +313,6 @@
                             </rules>
                         </configuration>
                     </execution>
-                    <execution>
-                        <id>enforce-properties</id>
-                        <goals>
-                            <goal>enforce</goal>
-                        </goals>
-                        <configuration>
-                            <rules>
-                                <requireProperty>
-                                    <property>server.zip</property>
-                                    <regex>.+</regex>
-                                    <message>-Dserver.zip must be specified (path to ZIP file with server distribution)</message>
-                                </requireProperty>
-                            </rules>
-                        </configuration>
-                    </execution>
                 </executions>
             </plugin>
 
@@ -338,6 +323,7 @@
                     <forkCount>1</forkCount>
                     <reuseForks>false</reuseForks>
                     <systemPropertyVariables>
+                        <server.zip>${server.zip}</server.zip>
                         <node1.jbossHome>${directory.node1}</node1.jbossHome>
                         <node1.address>${node1.address}</node1.address>
                         <node1.application-port>${node1.application-port}</node1.application-port>

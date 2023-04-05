@@ -79,6 +79,7 @@ def changeDependencyVersion(versionProperty, newVersion, projectDir) {
 def renameWildFlyBuildDirectory(wildflyVersion, File wildflyDir) {
     def wildFlyBuildDir = new File(wildflyDir, "build/target")
     executeCmd("mv wildfly-${wildflyVersion} wildfly-${TESTSUITE_VERSION}", null, wildFlyBuildDir, false)
+    executeCmd("mv wildfly-${wildflyVersion}.zip wildfly-${TESTSUITE_VERSION}.zip", null, wildFlyBuildDir, false)
 }
 
 
