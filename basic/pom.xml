@@ -12,7 +12,8 @@
 
 
     <groupId>org.jboss</groupId>
-    <artifactId>ejb-client-tests</artifactId>
+    <artifactId>ejb-client-testsuite-basic</artifactId>
+    <name>EJB Client Testsuite: Basic</name>
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
