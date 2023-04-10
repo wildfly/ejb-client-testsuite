@@ -31,8 +31,7 @@
     <groupId>org.wildfly</groupId>
     <artifactId>ejb-client-testsuite-snapshots</artifactId>
     <version>1.0.0.Final-SNAPSHOT</version>
-    <name>EJB Client Testsuite: Parent</name>
-    <description>EJB Client Testsuite: Parent Aggregator</description>
+    <name>EJB Client Testsuite: Snapshots</name>
     <packaging>jar</packaging>
 
     <build>
