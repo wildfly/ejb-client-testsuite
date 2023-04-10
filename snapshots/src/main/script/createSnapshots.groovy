@@ -16,7 +16,7 @@ TESTSUITE_VERSION = "EJB-CLIENT-TESTSUITE"
 MVN_BUILD_OPTIONS = "-DskipTests=true"
 
 
-TARGET_DIR = new File("target")
+TARGET_DIR = new File((String)properties['target.dir'])
 if (!TARGET_DIR.exists()) {
     TARGET_DIR.mkdir();
 }

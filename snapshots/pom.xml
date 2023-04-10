@@ -48,6 +48,9 @@
                         </goals>
                         <configuration>
                             <source>${project.basedir}/src/main/script/createSnapshots.groovy</source>
+                            <properties>
+                                <target.dir>${project.basedir}/target</target.dir>
+                            </properties>
                         </configuration>
                     </execution>
                 </executions>
