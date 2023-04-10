@@ -12,6 +12,7 @@
     </parent>
 
     <artifactId>ejb-client-testsuite-multinode</artifactId>
+    <name>EJB Client Testsuite: Multinode</name>
     <packaging>jar</packaging>
 
     <properties>
