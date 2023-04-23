@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<arquillian xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xmlns="http://jboss.org/schema/arquillian"
+            xsi:schemaLocation="http://jboss.org/schema/arquillian http://jboss.org/schema/arquillian/arquillian_1_0.xsd">
+
+    <defaultProtocol type="Servlet 3.0"/>
+
+
+    <engine>
+        <property name="deploymentExportPath">target/arquillian-export</property>
+    </engine>
+
+    <group qualifier="wildfly-cluster">
+
+        <container qualifier="container1" default="true" mode="manual" managed="false">
+            <configuration>
+                <property name="managementAddress">${node1.managementAddress}</property>
+                <property name="managementPort">${node1.managementPort:9990}</property>
+                <property name="jbossHome">${node1.jbossHome}</property>
+                <property name="javaVmArguments">-Xdebug -Djboss.node.name=node1 -Djava.net.preferIPv4Stack=true -Xmx1024m</property>
+                <property name="serverConfig">${jboss.server.config.file.name:standalone-ha.xml}</property>
+            </configuration>
+        </container>
+
+        <container qualifier="container2" default="false" mode="manual" managed="false">
+            <configuration>
+                <property name="managementAddress">${node2.managementAddress}</property>
+                <property name="managementPort">${node2.managementPort:10090}</property>
+                <property name="jbossHome">${node2.jbossHome}</property>
+                <property name="javaVmArguments">-Djboss.node.name=node2 -Djava.net.preferIPv4Stack=true -Xmx1024m -Djboss.socket.binding.port-offset=${node2.portOffset:100}</property>
+                <property name="serverConfig">${jboss.server.config.file.name:standalone-ha.xml}</property>
+            </configuration>
+        </container>
+
+    </group>
+
+</arquillian>

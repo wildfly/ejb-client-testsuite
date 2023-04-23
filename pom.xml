@@ -241,6 +241,11 @@
                 <version>${version.wf.core}</version>
             </dependency>
             <dependency>
+                <groupId>org.wildfly.core</groupId>
+                <artifactId>wildfly-protocol</artifactId>
+                <version>${version.wf.core}</version>
+            </dependency>
+            <dependency>
                 <groupId>org.wildfly.security</groupId>
                 <artifactId>wildfly-elytron</artifactId>
                 <version>${version.org.wildfly.security.elytron}</version>
@@ -298,6 +303,19 @@
                 <groupId>org.jboss.ejb3</groupId>
                 <artifactId>jboss-ejb3-ext-api</artifactId>
                 <version>${version.jboss.ejb3-ext-api}</version>
+            </dependency>
+
+            <!-- TIMERS -->
+
+            <dependency>
+                <groupId>org.jboss.arquillian.core</groupId>
+                <artifactId>arquillian-core-api</artifactId>
+                <version>${version.arquillian}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.jboss.arquillian.protocol</groupId>
+                <artifactId>arquillian-protocol-servlet</artifactId>
+                <version>${version.arquillian}</version>
             </dependency>
         </dependencies>
 
