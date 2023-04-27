@@ -17,14 +17,16 @@
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
 
+        <server.zip>${project.basedir}/../snapshots/target/wildfly/build/target/wildfly-EJB-CLIENT-TESTSUITE.zip</server.zip>
+
         <version.eap.bom>7.1.0.GA-redhat-8</version.eap.bom>
         <version.creaper>1.6.1</version.creaper>
         
         <!--Node settings-->
         <node1.contextPath>http://127.0.0.1:8080</node1.contextPath>
         <node2.contextPath>http://127.0.0.1:8180</node2.contextPath>
-        <node1.jbossHome></node1.jbossHome>
-        <node2.jbossHome></node2.jbossHome>
+        <node1.jbossHome>${project.basedir}/target/node1</node1.jbossHome>
+        <node2.jbossHome>${project.basedir}/target/node2</node2.jbossHome>
         <node1.managementAddress>127.0.0.1</node1.managementAddress>
         <node1.managementPort>9990</node1.managementPort>
         <node2.managementAddress>127.0.0.1</node2.managementAddress>
@@ -122,6 +124,38 @@
         </testResources>
         
         <plugins>
+            <!-- prepare server distributions before running the test -->
+            <plugin>
+                <groupId>org.codehaus.gmaven</groupId>
+                <artifactId>groovy-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>unzip-server</id>
+                        <phase>process-test-sources</phase>
+                        <goals>
+                            <goal>execute</goal>
+                        </goals>
+                        <configuration>
+                            <source>
+                                if (!Boolean.getBoolean("skipUnzipServer")) {
+                                    def ant = new AntBuilder()
+                                    for(node in ["${node1.jbossHome}",
+                                                 "${node2.jbossHome}",
+                                    ]) {
+                                        if(!new File("$node").exists()) {
+                                            ant.unzip(src: "${server.zip}",
+                                                    dest: "$node",
+                                                    overwrite: "true"){ cutdirsmapper(dirs:"1") }
+                                        } else {
+                                            println "Not unzipping server zip into $node, because the directory already exists"
+                                        }
+                                    }
+                                }
+                            </source>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
