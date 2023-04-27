@@ -35,6 +35,13 @@
         <node2.portOffset>100</node2.portOffset>
         <node1.multicastAddress>230.0.0.4</node1.multicastAddress>
         <node2.multicastAddress>230.0.0.4</node2.multicastAddress>
+
+        <!-- default test parameters -->
+        <stepSize>50</stepSize>
+        <timerSchedule>1000</timerSchedule>
+        <testLength>30</testLength>
+        <stepDelay>5</stepDelay>
+        <maxExecutionDelay>500</maxExecutionDelay>
         
     </properties>
 
