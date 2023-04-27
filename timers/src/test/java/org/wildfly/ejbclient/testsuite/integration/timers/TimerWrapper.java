@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jboss.qa.ejb.timers;
+package org.wildfly.ejbclient.testsuite.integration.timers;
 
 import java.io.Serializable;
 import java.util.ArrayList;
