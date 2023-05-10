@@ -59,7 +59,7 @@
         <version.io.undertow>2.1.1.Final</version.io.undertow>
 
         <version.jboss.ejb3-ext-api>2.3.0.Final</version.jboss.ejb3-ext-api>
-        <version.org.jboss.byteman>4.0.18</version.org.jboss.byteman>
+        <version.org.jboss.byteman>4.0.21</version.org.jboss.byteman>
         <version.org.jboss.marshalling>2.1.1.Final</version.org.jboss.marshalling>
         <version.org.jboss.threads>2.3.3.Final</version.org.jboss.threads>
         <version.org.wildfly.common>1.5.1.Final</version.org.wildfly.common>
