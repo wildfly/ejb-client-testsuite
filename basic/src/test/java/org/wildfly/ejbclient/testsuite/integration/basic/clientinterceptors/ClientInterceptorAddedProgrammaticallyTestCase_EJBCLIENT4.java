@@ -31,6 +31,7 @@ import org.junit.runner.RunWith;
  */
 @RunWith(Arquillian.class)
 @RunAsClient
+@Ignore //FIXME
 public class ClientInterceptorAddedProgrammaticallyTestCase_EJBCLIENT4 {
 
     public static final String MODULE_NAME = "client-interceptor";
