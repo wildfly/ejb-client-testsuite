@@ -41,16 +41,10 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.jboss</groupId>
-            <artifactId>jboss-ejb-client</artifactId>
-            <version>EJB-CLIENT-TESTSUITE</version>
+            <groupId>${groupId.ejb.client.bom}</groupId>
+            <artifactId>${artifactId.ejb.client.bom}</artifactId>
+            <type>pom</type>
         </dependency>
-        <dependency>
-            <groupId>org.wildfly.wildfly-http-client</groupId>
-            <artifactId>wildfly-http-ejb-client</artifactId>
-            <version>EJB-CLIENT-TESTSUITE</version>
-        </dependency>
-
 
         <dependency>
             <groupId>org.jboss.ejb3</groupId>
@@ -147,8 +141,8 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>log4j</groupId>
-            <artifactId>log4j</artifactId>
+            <groupId>ch.qos.reload4j</groupId>
+            <artifactId>reload4j</artifactId>
         </dependency>
         <dependency>
             <groupId>xom</groupId>
@@ -229,7 +223,7 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <configuration>
                     <skip>true</skip>
-                    <systemProperties>
+                    <systemPropertyVariables>
                         <server.home>${server.home}</server.home>
                         <javax.net.ssl.trustStore>${project.basedir}/files/ssl/client.keystore
                         </javax.net.ssl.trustStore>
@@ -243,10 +237,9 @@
                         <version.ejb.client.bom>${version.ejb.client.bom}</version.ejb.client.bom>
                         <arquillian.launch>${arquillian.launch}</arquillian.launch>
                         <jboss.config.file>${jboss.config.file}</jboss.config.file>
-                        <legacy>${legacy}</legacy>
                         <security.manager.server.args>${security.manager.server.args}</security.manager.server.args>
                         <sun.java.command>${sun.java.command}</sun.java.command>
-                    </systemProperties>
+                    </systemPropertyVariables>
                     <argLine>    <!-- byteman needs to hook into boot-classloader's classes because we exploit java.util.zip.Deflater in CompressionTestCase! -->
                         ${byteman.args} ${surefireplugin.jacoco.args} ${security.manager.client.args} ${client.jvm.jpms.args} -Dlauncher.skip.jpms.properties=true
                     </argLine>
@@ -262,10 +255,10 @@
                         </goals>
                         <configuration>
                             <skip>false</skip>
-                            <systemProperties>
+                            <systemPropertyVariables>
                                 <connector>remoting</connector>
                                 <context.type>wildfly-naming-client</context.type>
-                            </systemProperties>
+                            </systemPropertyVariables>
                         </configuration>
                     </execution>
                     <execution>
@@ -275,10 +268,10 @@
                         </goals>
                         <configuration>
                             <skip>false</skip>
-                            <systemProperties>
+                            <systemPropertyVariables>
                                 <connector>remoting</connector>
                                 <context.type>global</context.type>
-                            </systemProperties>
+                            </systemPropertyVariables>
                         </configuration>
                     </execution>
                 </executions>
@@ -326,6 +319,10 @@
                             <goal>jar</goal>
                         </goals>
                         <phase>generate-test-resources</phase>
+                    </execution>
+                    <execution>
+                        <id>default-jar</id>
+                        <phase>none</phase>
                     </execution>
                 </executions>
                 <configuration>
@@ -451,13 +448,13 @@
                                     <goal>run</goal>
                                 </goals>
                                 <configuration>
-                                    <tasks>
+                                    <target>
                                         <taskdef resource="net/sf/antcontrib/antcontrib.properties"
                                                  classpathref="maven.plugin.classpath"/>
                                         <ant antfile="${project.basedir}/build.xml">
                                             <target name="report"/>
                                         </ant>
-                                    </tasks>
+                                    </target>
                                 </configuration>
                             </execution>
                         </executions>
@@ -471,10 +468,6 @@
                                         <artifactId>ant</artifactId>
                                     </exclusion>
                                 </exclusions>
-                            </dependency>
-                            <dependency>
-                                <groupId>org.apache.ant</groupId>
-                                <artifactId>ant-nodeps</artifactId>
                             </dependency>
                         </dependencies>
                     </plugin>

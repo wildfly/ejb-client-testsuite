@@ -49,11 +49,11 @@ import static org.wildfly.ejbclient.testsuite.integration.basic.utils.TestEnviro
  * @author Jan Martiska
  */
 @SuppressWarnings("unused")
-public class InitialContextDirectoryGlobal_EJBCLIENT4 extends InitialContextDirectory {
+public class InitialContextDirectoryGlobal extends InitialContextDirectory {
 
     private static volatile boolean alreadyConfigured = false;
 
-    public InitialContextDirectoryGlobal_EJBCLIENT4() throws NamingException, URISyntaxException,
+    public InitialContextDirectoryGlobal() throws NamingException, URISyntaxException,
             IOException {
         if(!alreadyConfigured) {
             System.setProperty("org.jboss.ejb.client.view.annotation.scan.enabled",

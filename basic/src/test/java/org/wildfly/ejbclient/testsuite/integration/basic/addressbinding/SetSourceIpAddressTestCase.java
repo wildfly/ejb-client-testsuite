@@ -51,16 +51,10 @@ import java.io.IOException;
 
 @RunWith(Arquillian.class)
 @RunAsClient
-public class SetSourceIpAddressTestCase_EJBCLIENT4 {
+public class SetSourceIpAddressTestCase {
 
     public static final String SERVER_ARCHIVE_NAME = "source-ip-address-server";
     public static final String CLIENT_ARCHIVE_NAME = "source-ip-address-client";
-
-    @BeforeClass
-    public static void prerequisities() throws IOException {
-        // doesn't work for legacy client
-        Assume.assumeFalse(TestEnvironment.isLegacyEjbClient());
-    }
 
     @Deployment(name = SERVER_ARCHIVE_NAME, testable = false, order = 1)
     public static JavaArchive serverDeployment() {

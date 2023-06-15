@@ -38,25 +38,16 @@
 |                           |           |of the server on port 8787. Note that this really debugs
 |                           |           |the *server* JVM. If you need to debug the test's (client's) JVM,
 |                           |           |use `-Dmaven.surefire.debug`
-|                           |           |
-| legacy                    |false      |If specified, the TS will use the "legacy EJB client".
-|                           |           |See the details bellow.
-
-Legacy bom file was introduced in [WFLY-8707](https://issues.redhat.com/browse/WFLY-8707).
-Generally there are two versions of EJB client those are not source-compatible
-and some classes in this TS are compilable only with EJB client 3.x (legacy client) while some others only with 5.x.
-Activating the legacy profile tells Maven to skip compilation of classes which are not compilable with the
-requested EJB client version.
 
 ### Examples how to run the TS
 
 ```
-mvn clean -Dserver.home=/tmp/wildfly-27.0.1.Final test -Dtest=WrongProtocolLoggingTestCase
+mvn clean -Dserver.home=/tmp/wildfly-28.0.0.Beta1 test -Dtest=WrongProtocolLoggingTestCase
 ```
 
 ```
 mvn clean -Dconnector=http-remoting -Dcontext.type=wildfly-naming-client -Dauthentication.type=user \
-  -Dserver.home=/tmp/wildfly-27.0.1.Final test -Dtest=AnnotationIndexTestCase
+  -Dserver.home=/tmp/wildfly-28.0.0.Beta1 test -Dtest=AnnotationIndexTestCase
 ```
 
 ## How to run TS with jboss-client.jar from server distribution
@@ -71,8 +62,8 @@ mvn -f pom-wildfly-client.xml clean install -Dprepare -Dserver.zip.url=url/to/zi
 
 Examples:
 ```
-mvn -f pom-wildfly-client.xml clean install -Dprepare -Dserver.zip.url=file:///path/to/wildfly-27.0.1.Final.zip
-mvn -f pom-wildfly-client.xml clean install -Dprepare -Dserver.zip.url=https://github.com/wildfly/wildfly/releases/download/27.0.1.Final/wildfly-27.0.1.Final.zip
+mvn -f pom-wildfly-client.xml clean install -Dprepare -Dserver.zip.url=file:///path/to/wildfly-28.0.0.Beta1.zip
+mvn -f pom-wildfly-client.xml clean install -Dprepare -Dserver.zip.url=https://github.com/wildfly/wildfly/releases/download/28.0.0.Beta1/wildfly-28.0.0.Beta1.zip
 ```
 
 ### Start the TS

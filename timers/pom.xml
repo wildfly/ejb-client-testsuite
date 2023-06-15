@@ -20,7 +20,7 @@
         <server.zip>${project.basedir}/../snapshots/target/wildfly/build/target/wildfly-EJB-CLIENT-TESTSUITE.zip</server.zip>
 
         <version.eap.bom>7.1.0.GA-redhat-8</version.eap.bom>
-        <version.creaper>1.6.1</version.creaper>
+        <version.creaper>2.0.2</version.creaper>
         
         <!--Node settings-->
         <node1.contextPath>http://127.0.0.1:8080</node1.contextPath>

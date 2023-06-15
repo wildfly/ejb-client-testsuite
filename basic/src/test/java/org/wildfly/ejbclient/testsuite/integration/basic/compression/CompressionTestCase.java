@@ -119,10 +119,6 @@ public class CompressionTestCase {
 
     @Test
     public void checkResponseCompression_disabled() throws Exception {
-        //TODO
-        Assume.assumeFalse("Issues with JDK11 + old client + global context",
-                System.getProperty("java.specification.version").equals("11") &&
-                TestEnvironment.isLegacyEjbClient() && TestEnvironment.getContextType().equals(EJBClientContextType.GLOBAL));
         try (InitialContextDirectory directory = new InitialContextDirectory.Supplier().get()) {
             final BeanCompressingNothingRemote bean = directory
                     .lookupStateless(ARCHIVE_NAME, BeanCompressingNothing.class, BeanCompressingNothingRemote.class);
@@ -175,10 +171,6 @@ public class CompressionTestCase {
 
     @Test
     public void checkResponseCompression_onlyRequest() throws Exception {
-        //TODO
-        Assume.assumeFalse("Issues with JDK11 + old client + global context",
-                System.getProperty("java.specification.version").equals("11") &&
-                        TestEnvironment.isLegacyEjbClient() && TestEnvironment.getContextType().equals(EJBClientContextType.GLOBAL));
         try (InitialContextDirectory directory = new InitialContextDirectory.Supplier().get()) {
             final BeanCompressingRequestRemote bean = directory
                     .lookupStateless(ARCHIVE_NAME, BeanCompressingRequest.class, BeanCompressingRequestRemote.class);
