@@ -36,13 +36,6 @@
     <description>EJB Client Testsuite: Parent Aggregator</description>
     <packaging>pom</packaging>
 
-    <modules>
-        <module>snapshots</module>
-        <module>basic</module>
-        <module>multinode</module>
-        <module>timers</module>
-    </modules>
-
     <properties>
         <maven.compiler.target>11</maven.compiler.target>
         <maven.compiler.source>11</maven.compiler.source>
@@ -51,10 +44,10 @@
 
         <groupId.ee.bom>org.wildfly.bom</groupId.ee.bom>
         <artifactId.ee.bom>wildfly-ee</artifactId.ee.bom>
-        <version.ee.bom>28.0.0.Beta1</version.ee.bom>
+        <version.ee.bom>EJB-CLIENT-TESTSUITE</version.ee.bom>
         <groupId.ejb.client.bom>org.wildfly</groupId.ejb.client.bom>
         <artifactId.ejb.client.bom>wildfly-ejb-client-bom</artifactId.ejb.client.bom>
-        <version.ejb.client.bom>28.0.0.Beta1</version.ejb.client.bom>
+        <version.ejb.client.bom>EJB-CLIENT-TESTSUITE</version.ejb.client.bom>
 
         <version.arquillian>1.7.0.Alpha14</version.arquillian>
         <version.jakartaee-api>10.0.0</version.jakartaee-api>
@@ -66,15 +59,10 @@
 
         <version.io.undertow>2.1.1.Final</version.io.undertow>
 
-<!--        <version.jboss.ejb3-ext-api>2.3.0.Final</version.jboss.ejb3-ext-api>-->
         <version.org.jboss.byteman>4.0.21</version.org.jboss.byteman>
-        <version.org.jboss.marshalling>2.1.1.Final</version.org.jboss.marshalling>
-        <version.org.jboss.threads>2.3.3.Final</version.org.jboss.threads>
         <version.org.wildfly.common>1.5.1.Final</version.org.wildfly.common>
         <version.org.wildfly.discovery>1.2.1.Final</version.org.wildfly.discovery>
-        <version.org.wildfly.naming.client>1.0.12.Final</version.org.wildfly.naming.client>
         <version.org.wildfly.security.elytron>2.0.0.Final</version.org.wildfly.security.elytron>
-        <version.org.wildfly.transaction-client>2.0.1.Final</version.org.wildfly.transaction-client>
 
         <version.plugin.antrun>3.1.0</version.plugin.antrun>
         <version.plugin.antrun.ant>1.8.1</version.plugin.antrun.ant>
@@ -95,7 +83,6 @@
         <version.wf.core>20.0.0.Final</version.wf.core>
 
         <!-- MULTINODE -->
-
         <maven.test.failure.ignore>true</maven.test.failure.ignore>
         <version.arquillian.protocol>1.7.0.Alpha11</version.arquillian.protocol>
         <version.creaper>2.0.2</version.creaper>
@@ -103,73 +90,80 @@
         <version.plugin.groovy>2.1.1</version.plugin.groovy>
     </properties>
 
+
+    <!-- define maven modules, all test modules are activated by default -->
+    <profiles>
+        <profile>
+            <id>prepare</id>
+            <activation>
+                <property>
+                    <name>specificModule</name>
+                    <value>prepare</value>
+                </property>
+            </activation>
+            <modules>
+                <module>snapshots</module>
+            </modules>
+        </profile>
+        <profile>
+            <id>default-modules</id>
+            <activation>
+                <property>
+                    <name>!specificModule</name>
+                </property>
+            </activation>
+            <modules>
+                <module>basic</module>
+                <module>multinode</module>
+                <module>timers</module>
+            </modules>
+        </profile>
+        <profile>
+            <id>basic-module-only</id>
+            <activation>
+                <property>
+                    <name>specificModule</name>
+                    <value>basic</value>
+                </property>
+            </activation>
+            <modules>
+                <module>basic</module>
+            </modules>
+        </profile>
+        <profile>
+            <id>multinode-module-only</id>
+            <activation>
+                <property>
+                    <name>specificModule</name>
+                    <value>multinode</value>
+                </property>
+            </activation>
+            <modules>
+                <module>multinode</module>
+            </modules>
+        </profile>
+        <profile>
+            <id>timers-module-only</id>
+            <activation>
+                <property>
+                    <name>specificModule</name>
+                    <value>timers</value>
+                </property>
+            </activation>
+            <modules>
+                <module>timers</module>
+            </modules>
+        </profile>
+    </profiles>
+
     <dependencyManagement>
         <dependencies>
-            <dependency>
-                <groupId>${groupId.ee.bom}</groupId>
-                <artifactId>${artifactId.ee.bom}</artifactId>
-                <version>${version.ee.bom}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.jboss.arquillian</groupId>
-                <artifactId>arquillian-bom</artifactId>
-                <version>${version.arquillian}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-
-            <dependency>
-                <groupId>io.undertow</groupId>
-                <artifactId>undertow-core</artifactId>
-                <version>${version.io.undertow}</version>
-            </dependency>
-
 
             <dependency>
                 <groupId>junit</groupId>
                 <artifactId>junit</artifactId>
                 <version>${version.junit}</version>
             </dependency>
-<!--            <dependency>-->
-<!--                <groupId>org.jboss.ejb3</groupId>-->
-<!--                <artifactId>jboss-ejb3-ext-api</artifactId>-->
-<!--                <version>${version.jboss.ejb3-ext-api}</version>-->
-<!--            </dependency>-->
-            <dependency>
-                <groupId>org.jboss.marshalling</groupId>
-                <artifactId>jboss-marshalling-river</artifactId>
-                <version>${version.org.jboss.marshalling}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.jboss.threads</groupId>
-                <artifactId>jboss-threads</artifactId>
-                <version>${version.org.jboss.threads}</version>
-            </dependency>
-<!--            <dependency>-->
-<!--                <groupId>org.wildfly.common</groupId>-->
-<!--                <artifactId>wildfly-common</artifactId>-->
-<!--                <version>${version.org.wildfly.common}</version>-->
-<!--            </dependency>-->
-<!--            <dependency>-->
-<!--                <groupId>org.wildfly.discovery</groupId>-->
-<!--                <artifactId>wildfly-discovery-client</artifactId>-->
-<!--                <version>${version.org.wildfly.discovery}</version>-->
-<!--            </dependency>-->
-            <dependency>
-                <groupId>org.wildfly</groupId>
-                <artifactId>wildfly-naming-client</artifactId>
-                <version>${version.org.wildfly.naming.client}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.wildfly.transaction</groupId>
-                <artifactId>wildfly-transaction-client</artifactId>
-                <version>${version.org.wildfly.transaction-client}</version>
-            </dependency>
-
-
-
 
             <!-- BYTEMAN -->
             <dependency>
@@ -197,16 +191,6 @@
                 <scope>test</scope>
             </dependency>
             <!-- BASIC -->
-<!--            <dependency>-->
-<!--                <groupId>org.jboss.arquillian.junit</groupId>-->
-<!--                <artifactId>arquillian-junit-container</artifactId>-->
-<!--                <version>${version.arquillian}</version>-->
-<!--            </dependency>-->
-<!--            <dependency>-->
-<!--                <groupId>org.jboss.arquillian.protocol</groupId>-->
-<!--                <artifactId>arquillian-protocol-servlet-jakarta</artifactId>-->
-<!--                <version>${version.arquillian}</version>-->
-<!--            </dependency>-->
             <dependency>
                 <groupId>org.jboss.shrinkwrap.resolver</groupId>
                 <artifactId>shrinkwrap-resolver-api</artifactId>
@@ -363,6 +347,5 @@
             </plugins>
         </pluginManagement>
     </build>
-
 
 </project>
