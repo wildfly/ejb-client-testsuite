@@ -59,7 +59,7 @@ buildProject(wildFlyDir, "-Dts.noSmoke")
 renameWildFlyBuildDirectory(getProjectVersion(wildFlyDir), wildFlyDir)
 
 def bomDir = new File(TARGET_DIR, BOMS_NAME)
-cloneProject(BOMS_REPOSITORY_PROPERTY, BOMS_BRANCH_PROPERTY, BOMS_REPOSITORY)
+cloneProject(BOMS_REPOSITORY_PROPERTY, BOMS_BRANCH_PROPERTY, BOMS_REPOSITORY, BOMS_NAME)
 setProjectVersion(TESTSUITE_VERSION, bomDir)
 changeDependencyVersion("version.server", getProjectVersion(wildFlyDir), bomDir)
 buildProject(bomDir)
