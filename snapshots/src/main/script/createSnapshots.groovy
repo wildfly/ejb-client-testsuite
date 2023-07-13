@@ -42,17 +42,17 @@ if (!TARGET_DIR.exists()) {
 }
 
 def ejbClientDir = new File(TARGET_DIR, EJB_CLIENT_NAME)
-cloneProject(EJB_CLIENT_REPOSITORY_PROPERTY, EJB_CLIENT_BRANCH_PROPERTY, EJB_CLIENT_DEFAULT_REPOSITORY)
+cloneProject(EJB_CLIENT_REPOSITORY_PROPERTY, EJB_CLIENT_BRANCH_PROPERTY, EJB_CLIENT_DEFAULT_REPOSITORY, EJB_CLIENT_NAME)
 setProjectVersion(TESTSUITE_VERSION, ejbClientDir)
 buildProject(ejbClientDir)
 
 def httpClientDir = new File(TARGET_DIR, HTTP_CLIENT_NAME)
-cloneProject(HTTP_CLIENT_REPOSITORY_PROPERTY, HTTP_CLIENT_BRANCH_PROPERTY, HTTP_CLIENT_REPOSITORY)
+cloneProject(HTTP_CLIENT_REPOSITORY_PROPERTY, HTTP_CLIENT_BRANCH_PROPERTY, HTTP_CLIENT_REPOSITORY, HTTP_CLIENT_NAME)
 setProjectVersion(TESTSUITE_VERSION, httpClientDir)
 buildProject(httpClientDir)
 
 def wildFlyDir = new File(TARGET_DIR, WILDFLY_NAME)
-cloneProject(WILDFLY_REPOSITORY_PROPERTY, WILDFLY_BRANCH_PROPERTY, WILDFLY_REPOSITORY)
+cloneProject(WILDFLY_REPOSITORY_PROPERTY, WILDFLY_BRANCH_PROPERTY, WILDFLY_REPOSITORY, WILDFLY_NAME)
 changeDependencyVersion(EJB_CLIENT_VERSION_NAME, TESTSUITE_VERSION, wildFlyDir)
 changeDependencyVersion(HTTP_CLIENT_VERSION_NAME, TESTSUITE_VERSION, wildFlyDir)
 buildProject(wildFlyDir, "-Dts.noSmoke")
@@ -76,10 +76,10 @@ def executeCmd(command, env, dir, verbose) {
     }
 }
 
-def cloneProject(String repositoryProperty, String branchProperty, String defaultRepository) {
+def cloneProject(String repositoryProperty, String branchProperty, String defaultRepository, String projectName) {
     def repository = System.getProperty(repositoryProperty, defaultRepository)
     def branch = System.getProperty(branchProperty, "main")
-    executeCmd("git clone -b ${branch}  --depth=1 --single-branch ${repository}", null, TARGET_DIR, true)
+    executeCmd("git clone -b ${branch}  --depth=1 --single-branch ${repository} ${projectName}", null, TARGET_DIR, true)
 }
 
 def buildProject(projectDir, extraOptions = "") {
