@@ -36,122 +36,134 @@
     <description>EJB Client Testsuite: Parent Aggregator</description>
     <packaging>pom</packaging>
 
-    <modules>
-        <module>snapshots</module>
-        <module>basic</module>
-        <module>multinode</module>
-        <module>timers</module>
-    </modules>
-
     <properties>
         <maven.compiler.target>11</maven.compiler.target>
         <maven.compiler.source>11</maven.compiler.source>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-        <version.arquillian>1.7.0.Alpha13</version.arquillian>
-        <version.jakartaee-api>9.1.0</version.jakartaee-api>
+
+        <groupId.ee.bom>org.wildfly.bom</groupId.ee.bom>
+        <artifactId.ee.bom>wildfly-ee</artifactId.ee.bom>
+        <version.ee.bom>EJB-CLIENT-TESTSUITE</version.ee.bom>
+        <groupId.ejb.client.bom>org.wildfly</groupId.ejb.client.bom>
+        <artifactId.ejb.client.bom>wildfly-ejb-client-bom</artifactId.ejb.client.bom>
+        <version.ejb.client.bom>EJB-CLIENT-TESTSUITE</version.ejb.client.bom>
+
+        <version.arquillian>1.7.0.Alpha14</version.arquillian>
+        <version.jakartaee-api>10.0.0</version.jakartaee-api>
         <version.junit>4.13.2</version.junit>
-        <version.log4j>1.2.17</version.log4j>
+        <version.reload4j>1.2.25</version.reload4j>
         <version.shrinkwrap>1.2.6</version.shrinkwrap>
         <version.shrinkwrap.resolvers>3.1.4</version.shrinkwrap.resolvers>
-        <version.xom>1.3.2</version.xom>
+        <version.xom>1.3.8</version.xom>
 
         <version.io.undertow>2.1.1.Final</version.io.undertow>
 
-        <version.jboss.ejb3-ext-api>2.3.0.Final</version.jboss.ejb3-ext-api>
         <version.org.jboss.byteman>4.0.21</version.org.jboss.byteman>
-        <version.org.jboss.marshalling>2.1.1.Final</version.org.jboss.marshalling>
-        <version.org.jboss.threads>2.3.3.Final</version.org.jboss.threads>
         <version.org.wildfly.common>1.5.1.Final</version.org.wildfly.common>
         <version.org.wildfly.discovery>1.2.1.Final</version.org.wildfly.discovery>
-        <version.org.wildfly.naming.client>1.0.12.Final</version.org.wildfly.naming.client>
         <version.org.wildfly.security.elytron>2.0.0.Final</version.org.wildfly.security.elytron>
-        <version.org.wildfly.transaction-client>2.0.1.Final</version.org.wildfly.transaction-client>
 
-        <version.plugin.antrun>1.8</version.plugin.antrun>
+        <version.plugin.antrun>3.1.0</version.plugin.antrun>
         <version.plugin.antrun.ant>1.8.1</version.plugin.antrun.ant>
         <version.plugin.antrun.contrib>1.0b3</version.plugin.antrun.contrib>
-        <version.plugin.clean>3.1.0</version.plugin.clean>
-        <version.plugin.compiler>3.8.1</version.plugin.compiler>
-        <version.plugin.dependency>3.3.0</version.plugin.dependency>
-        <version.plugin.enforcer>3.0.0-M2</version.plugin.enforcer>
+        <version.plugin.clean>3.2.0</version.plugin.clean>
+        <version.plugin.compiler>3.11.0</version.plugin.compiler>
+        <version.plugin.dependency>3.5.0</version.plugin.dependency>
+        <version.plugin.enforcer>3.3.0</version.plugin.enforcer>
         <version.plugin.jacoco>0.7.9</version.plugin.jacoco>
-        <version.plugin.jar>3.1.2</version.plugin.jar>
-        <version.plugin.surefire>3.0.0-M7</version.plugin.surefire>
-        <version.plugin.wildfly>2.0.1.Final</version.plugin.wildfly>
+        <version.plugin.jar>3.3.0</version.plugin.jar>
+        <version.plugin.surefire>3.0.0</version.plugin.surefire>
+        <version.plugin.wildfly>4.0.0.Final</version.plugin.wildfly>
 
         <!-- before you update arquillian-container version, consider to update wf-core-launcher version as well
          and be sure that wf-core-launcher version works correctly with new arquillian-container -->
         <version.arquillian-container>5.0.0.Alpha6</version.arquillian-container>
         <!-- the following version needs to be >= than version used in arquillian-container dependency -->
-        <version.wf.core>19.0.0.Final</version.wf.core>
+        <version.wf.core>20.0.0.Final</version.wf.core>
 
         <!-- MULTINODE -->
-
         <maven.test.failure.ignore>true</maven.test.failure.ignore>
-
-        <version.arquillian-container>5.0.0.Alpha3</version.arquillian-container>
         <version.arquillian.protocol>1.7.0.Alpha11</version.arquillian.protocol>
-        <version.creaper>1.6.1</version.creaper>
-        <version.jakartaee-api>9.1.0</version.jakartaee-api>
+        <version.creaper>2.0.2</version.creaper>
 
         <version.plugin.groovy>2.1.1</version.plugin.groovy>
-        <version.plugin.groovy.groovy>2.4.21</version.plugin.groovy.groovy>
     </properties>
+
+
+    <!-- define maven modules, all test modules are activated by default -->
+    <profiles>
+        <profile>
+            <id>prepare</id>
+            <activation>
+                <property>
+                    <name>specificModule</name>
+                    <value>prepare</value>
+                </property>
+            </activation>
+            <modules>
+                <module>snapshots</module>
+            </modules>
+        </profile>
+        <profile>
+            <id>default-modules</id>
+            <activation>
+                <property>
+                    <name>!specificModule</name>
+                </property>
+            </activation>
+            <modules>
+                <module>basic</module>
+                <module>multinode</module>
+                <module>timers</module>
+            </modules>
+        </profile>
+        <profile>
+            <id>basic-module-only</id>
+            <activation>
+                <property>
+                    <name>specificModule</name>
+                    <value>basic</value>
+                </property>
+            </activation>
+            <modules>
+                <module>basic</module>
+            </modules>
+        </profile>
+        <profile>
+            <id>multinode-module-only</id>
+            <activation>
+                <property>
+                    <name>specificModule</name>
+                    <value>multinode</value>
+                </property>
+            </activation>
+            <modules>
+                <module>multinode</module>
+            </modules>
+        </profile>
+        <profile>
+            <id>timers-module-only</id>
+            <activation>
+                <property>
+                    <name>specificModule</name>
+                    <value>timers</value>
+                </property>
+            </activation>
+            <modules>
+                <module>timers</module>
+            </modules>
+        </profile>
+    </profiles>
 
     <dependencyManagement>
         <dependencies>
-
-            <dependency>
-                <groupId>io.undertow</groupId>
-                <artifactId>undertow-core</artifactId>
-                <version>${version.io.undertow}</version>
-            </dependency>
-
 
             <dependency>
                 <groupId>junit</groupId>
                 <artifactId>junit</artifactId>
                 <version>${version.junit}</version>
             </dependency>
-            <dependency>
-                <groupId>org.jboss.ejb3</groupId>
-                <artifactId>jboss-ejb3-ext-api</artifactId>
-                <version>${version.jboss.ejb3-ext-api}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.jboss.marshalling</groupId>
-                <artifactId>jboss-marshalling-river</artifactId>
-                <version>${version.org.jboss.marshalling}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.jboss.threads</groupId>
-                <artifactId>jboss-threads</artifactId>
-                <version>${version.org.jboss.threads}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.wildfly.common</groupId>
-                <artifactId>wildfly-common</artifactId>
-                <version>${version.org.wildfly.common}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.wildfly.discovery</groupId>
-                <artifactId>wildfly-discovery-client</artifactId>
-                <version>${version.org.wildfly.discovery}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.wildfly</groupId>
-                <artifactId>wildfly-naming-client</artifactId>
-                <version>${version.org.wildfly.naming.client}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.wildfly.transaction</groupId>
-                <artifactId>wildfly-transaction-client</artifactId>
-                <version>${version.org.wildfly.transaction-client}</version>
-            </dependency>
-
-
-
 
             <!-- BYTEMAN -->
             <dependency>
@@ -179,16 +191,6 @@
                 <scope>test</scope>
             </dependency>
             <!-- BASIC -->
-            <dependency>
-                <groupId>org.jboss.arquillian.junit</groupId>
-                <artifactId>arquillian-junit-container</artifactId>
-                <version>${version.arquillian}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.jboss.arquillian.protocol</groupId>
-                <artifactId>arquillian-protocol-servlet-jakarta</artifactId>
-                <version>${version.arquillian}</version>
-            </dependency>
             <dependency>
                 <groupId>org.jboss.shrinkwrap.resolver</groupId>
                 <artifactId>shrinkwrap-resolver-api</artifactId>
@@ -262,9 +264,9 @@
                 <version>${version.org.wildfly.security.elytron}</version>
             </dependency>
             <dependency>
-                <groupId>log4j</groupId>
-                <artifactId>log4j</artifactId>
-                <version>${version.log4j}</version>
+                <groupId>ch.qos.reload4j</groupId>
+                <artifactId>reload4j</artifactId>
+                <version>${version.reload4j}</version>
             </dependency>
             <dependency>
                 <groupId>xom</groupId>
@@ -300,12 +302,6 @@
                 <version>${version.wf.core}</version>
             </dependency>
 
-            <dependency>
-                <groupId>org.jboss.ejb3</groupId>
-                <artifactId>jboss-ejb3-ext-api</artifactId>
-                <version>${version.jboss.ejb3-ext-api}</version>
-            </dependency>
-
             <!-- TIMERS -->
 
             <dependency>
@@ -330,9 +326,26 @@
                     <artifactId>groovy-maven-plugin</artifactId>
                     <version>${version.plugin.groovy}</version>
                 </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>${version.plugin.surefire}</version>
+                    <configuration>
+                        <forkNode implementation="org.apache.maven.plugin.surefire.extensions.SurefireForkNodeFactory"/>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>${version.plugin.compiler}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.wildfly.plugins</groupId>
+                    <artifactId>wildfly-maven-plugin</artifactId>
+                    <version>${version.plugin.wildfly}</version>
+                </plugin>
             </plugins>
         </pluginManagement>
     </build>
-
 
 </project>

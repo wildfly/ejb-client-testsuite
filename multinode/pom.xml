@@ -122,7 +122,7 @@
                                     <goal>run</goal>
                                 </goals>
                                 <configuration>
-                                    <tasks>
+                                    <target>
                                         <taskdef resource="net/sf/antcontrib/antcontrib.properties"
                                                  classpathref="maven.plugin.classpath"/>
                                         <!-- making path to tested JARs referenceable in build.xml -->
@@ -131,7 +131,7 @@
                                         <ant antfile="${project.basedir}/build.xml">
                                             <target name="report"/>
                                         </ant>
-                                    </tasks>
+                                    </target>
                                 </configuration>
                             </execution>
                         </executions>
@@ -145,10 +145,6 @@
                                         <artifactId>ant</artifactId>
                                     </exclusion>
                                 </exclusions>
-                            </dependency>
-                            <dependency>
-                                <groupId>org.apache.ant</groupId>
-                                <artifactId>ant-nodeps</artifactId>
                             </dependency>
                         </dependencies>
                     </plugin>
@@ -181,16 +177,30 @@
         </profile>
     </profiles>
 
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>${groupId.ee.bom}</groupId>
+                <artifactId>${artifactId.ee.bom}</artifactId>
+                <version>${version.ee.bom}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.jboss.arquillian</groupId>
+                <artifactId>arquillian-bom</artifactId>
+                <version>${version.arquillian}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
     <dependencies>
         <dependency>
-            <groupId>org.jboss</groupId>
-            <artifactId>jboss-ejb-client</artifactId>
-            <version>EJB-CLIENT-TESTSUITE</version>
-        </dependency>
-        <dependency>
-            <groupId>org.wildfly.wildfly-http-client</groupId>
-            <artifactId>wildfly-http-ejb-client</artifactId>
-            <version>EJB-CLIENT-TESTSUITE</version>
+            <groupId>${groupId.ejb.client.bom}</groupId>
+            <artifactId>${artifactId.ejb.client.bom}</artifactId>
+            <type>pom</type>
         </dependency>
 
         <!-- Related to tested server -->
@@ -198,10 +208,6 @@
             <groupId>jakarta.platform</groupId>
             <artifactId>jakarta.jakartaee-api</artifactId>
             <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.wildfly</groupId>
-            <artifactId>wildfly-naming-client</artifactId>
         </dependency>
 
         <!-- Arquillian related -->
@@ -268,8 +274,8 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>log4j</groupId>
-            <artifactId>log4j</artifactId>
+            <groupId>ch.qos.reload4j</groupId>
+            <artifactId>reload4j</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>

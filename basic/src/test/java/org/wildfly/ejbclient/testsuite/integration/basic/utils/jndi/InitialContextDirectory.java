@@ -19,6 +19,7 @@ package org.wildfly.ejbclient.testsuite.integration.basic.utils.jndi;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
+import org.wildfly.ejbclient.testsuite.integration.basic.utils.jndi.InitialContextDirectoryGlobal;
 import org.wildfly.ejbclient.testsuite.integration.basic.utils.EJBClientContextType;
 import org.wildfly.ejbclient.testsuite.integration.basic.utils.TestEnvironment;
 
@@ -34,21 +35,8 @@ public abstract class InitialContextDirectory implements AutoCloseable {
             final EJBClientContextType type = TestEnvironment.getContextType();
             try {
                 switch (type) {
-                case GLOBAL: {
-                    try {
-                        final Class<?> clazz = Class.forName(
-                                "org.wildfly.ejbclient.testsuite.integration.basic.utils.jndi.InitialContextDirectoryGlobal_EJBCLIENT4");
-                        return (InitialContextDirectory)clazz.newInstance();
-                    } catch(ClassNotFoundException cnfe) {
-                        try {
-                            final Class<?> clazz = Class.forName(
-                                    "org.wildfly.ejbclient.testsuite.integration.basic.utils.jndi.InitialContextDirectoryGlobal_EJBCLIENT2");
-                            return (InitialContextDirectory)clazz.newInstance();
-                        } catch(ClassNotFoundException cnfe2) {
-                            throw new Error("No implementation class of global EJB client context was found");
-                        }
-                    }
-                }
+                case GLOBAL:
+                    return new InitialContextDirectoryGlobal();
                 case SCOPED:
                     return new InitialContextDirectoryScoped();
                 case WILDFLY_NAMING_CLIENT:

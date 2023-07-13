@@ -30,6 +30,7 @@ import jakarta.transaction.UserTransaction;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.container.test.api.RunAsClient;
 import org.jboss.arquillian.junit.Arquillian;
+import org.jboss.ejb.client.EJBClient;
 import org.wildfly.ejbclient.testsuite.integration.basic.utils.jndi.InitialContextDirectory;
 import org.wildfly.ejbclient.testsuite.integration.basic.utils.EJBClientContextType;
 import org.wildfly.ejbclient.testsuite.integration.basic.utils.TestEnvironment;
@@ -41,14 +42,13 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.wildfly.naming.client.WildFlyInitialContextFactory;
 
 /**
  * @author Jan Martiska
  */
 @RunWith(Arquillian.class)
 @RunAsClient
-public class TransactionTestCase_usingNewAPIFrom_EJBCLIENT4 {
+public class TransactionDeprecatedApiTestCase {
 
     public static final String DEPLOYMENT_NAME = "transaction-test";
 
@@ -79,23 +79,14 @@ public class TransactionTestCase_usingNewAPIFrom_EJBCLIENT4 {
     public void testCommit()
             throws NamingException, SystemException, NotSupportedException, HeuristicRollbackException,
             HeuristicMixedException, RollbackException {
-
-        InitialContext ctxWithAffinity = null;
-        try {
-            ctxWithAffinity = getContextWithAffinity();
-            final UserTransaction tx = (UserTransaction)ctxWithAffinity.lookup("txn:UserTransaction");
-            try(final InitialContextDirectory ctx = new InitialContextDirectory.Supplier().get()) {
-                final TransactionalBeanRemote bean = ctx
-                        .lookupStateless(DEPLOYMENT_NAME, TransactionalBean.class, TransactionalBeanRemote.class);
-                tx.begin();
-                bean.createPerson();
-                tx.commit();
-                Assert.assertEquals("There should be a person in the DB, the transaction was committed", 1, bean.getPersonList().size());
-            }
-        } finally {
-            if (ctxWithAffinity != null) {
-                ctxWithAffinity.close();
-            }
+        final UserTransaction tx = EJBClient.getUserTransaction(TestEnvironment.NODE_NAME);
+        try(final InitialContextDirectory ctx = new InitialContextDirectory.Supplier().get()) {
+            final TransactionalBeanRemote bean = ctx
+                    .lookupStateless(DEPLOYMENT_NAME, TransactionalBean.class, TransactionalBeanRemote.class);
+            tx.begin();
+            bean.createPerson();
+            tx.commit();
+            Assert.assertEquals("There should be a person in the DB, the transaction was committed", 1, bean.getPersonList().size());
         }
     }
 
@@ -103,33 +94,14 @@ public class TransactionTestCase_usingNewAPIFrom_EJBCLIENT4 {
     public void testRollback()
             throws NamingException, SystemException, NotSupportedException, HeuristicRollbackException,
             HeuristicMixedException, RollbackException {
-
-        InitialContext ctxWithAffinity = null;
-        try {
-            ctxWithAffinity = getContextWithAffinity();
-            final UserTransaction tx = (UserTransaction)ctxWithAffinity.lookup("txn:UserTransaction");
-            try(final InitialContextDirectory ctx = new InitialContextDirectory.Supplier().get()) {
-                final TransactionalBeanRemote bean = ctx
-                        .lookupStateless(DEPLOYMENT_NAME, TransactionalBean.class, TransactionalBeanRemote.class);
-                tx.begin();
-                bean.createPerson();
-                tx.rollback();
-                Assert.assertTrue("There should be nothing in the DB, the transaction was rolled back", bean.getPersonList().isEmpty());
-            }
-        } finally {
-            if (ctxWithAffinity != null) {
-                ctxWithAffinity.close();
-            }
+        final UserTransaction tx = EJBClient.getUserTransaction(TestEnvironment.NODE_NAME);
+        try(final InitialContextDirectory ctx = new InitialContextDirectory.Supplier().get()) {
+            final TransactionalBeanRemote bean = ctx
+                    .lookupStateless(DEPLOYMENT_NAME, TransactionalBean.class, TransactionalBeanRemote.class);
+            tx.begin();
+            bean.createPerson();
+            tx.rollback();
+            Assert.assertTrue("There should be nothing in the DB, the transaction was rolled back", bean.getPersonList().isEmpty());
         }
-    }
-
-    public InitialContext getContextWithAffinity() throws NamingException {
-        Properties props = new Properties();
-        props.put(Context.PROVIDER_URL, TestEnvironment.getConnectorType().getConnectionScheme()
-                + "://127.0.0.1:"
-                + TestEnvironment.getServerPort());
-        props.put(Context.INITIAL_CONTEXT_FACTORY, WildFlyInitialContextFactory.class.getName());
-
-        return new InitialContext(props);
     }
 }

@@ -26,8 +26,6 @@ import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.junit.After;
 import org.junit.Assert;
-import org.junit.Assume;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.wildfly.naming.client.WildFlyInitialContextFactory;
@@ -66,11 +64,6 @@ public class WrongProtocolLoggingTestCase {
         JavaArchive jar = ShrinkWrap.create(JavaArchive.class, DEPLOYMENT_NAME + ".jar");
         jar.addClasses(Hello.class, HelloBean.class);
         return jar;
-    }
-
-    @BeforeClass
-    public static void beforeClass() {
-        Assume.assumeFalse("Legacy client doesn't log wrong protocol, therefor this test case should be skipped", TestEnvironment.isLegacyEjbClient());
     }
 
     @Test

@@ -49,14 +49,14 @@ import org.wildfly.security.sasl.SaslMechanismSelector;
  */
 @RunWith(Arquillian.class)
 @RunAsClient
-public class IdentitySwitchingTestCase_EJBCLIENT4 {
+public class IdentitySwitchingTestCase {
 
     public static final String ARCHIVE_NAME = "identity-switching";
 
     @Deployment
     public static WebArchive deployment() {
         final WebArchive archive = ShrinkWrap.create(WebArchive.class, ARCHIVE_NAME + ".war");
-        archive.addPackage(IdentitySwitchingTestCase_EJBCLIENT4.class.getPackage());
+        archive.addPackage(IdentitySwitchingTestCase.class.getPackage());
         archive.addClasses(WhoAmIRemote.class, WhoAmIBeanStateful.class);
         return archive;
     }

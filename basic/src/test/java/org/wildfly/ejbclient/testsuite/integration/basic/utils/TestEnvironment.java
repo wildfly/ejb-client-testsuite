@@ -40,8 +40,6 @@ public class TestEnvironment {
 
     public static final String NODE_NAME = "node0";
 
-    public static final Boolean legacyEjbClient;
-
     public static final Integer JAVA_VERSION;
 
     static {
@@ -49,7 +47,6 @@ public class TestEnvironment {
         authenticationType = ServerAuthenticationType
                 .valueOf(System.getProperty("authentication.type").toUpperCase());
         contextType = EJBClientContextType.getValue(System.getProperty("context.type"));
-        legacyEjbClient = System.getProperty("legacy").equalsIgnoreCase("true");
 
         // find java version
         String spec = System.getProperty("java.specification.version");
@@ -106,10 +103,6 @@ public class TestEnvironment {
 
     public static EJBClientContextType getContextType() {
         return contextType;
-    }
-
-    public static Boolean isLegacyEjbClient() {
-        return legacyEjbClient;
     }
 
     public static String getRawEJBClientProjectVersion() {

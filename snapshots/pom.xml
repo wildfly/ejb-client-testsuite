@@ -34,6 +34,9 @@
     <name>EJB Client Testsuite: Snapshots</name>
     <packaging>jar</packaging>
 
+    <properties>
+        <surefire.failIfNoSpecifiedTests>false</surefire.failIfNoSpecifiedTests>
+    </properties>
     <build>
         <plugins>
             <plugin>

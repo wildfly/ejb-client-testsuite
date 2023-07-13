@@ -23,6 +23,7 @@ import javax.naming.NamingException;
 
 import org.wildfly.ejbclient.testsuite.integration.basic.utils.ServerAuthenticationType;
 import org.wildfly.ejbclient.testsuite.integration.basic.utils.TestEnvironment;
+import org.wildfly.naming.client.WildFlyInitialContextFactory;
 
 import static org.wildfly.ejbclient.testsuite.integration.basic.utils.ConnectorType.HTTPS;
 import static org.wildfly.ejbclient.testsuite.integration.basic.utils.ConnectorType.HTTPS_REMOTING;
@@ -40,7 +41,7 @@ public class InitialContextDirectoryWildFlyNamingClient extends InitialContextDi
     public InitialContextDirectoryWildFlyNamingClient() throws NamingException {
         System.setProperty("org.jboss.ejb.client.view.annotation.scan.enabled", "true");  // without this, CompressionHint for requests won't work
         Properties env = new Properties();
-        env.put(Context.INITIAL_CONTEXT_FACTORY, "org.jboss.naming.remote.client.InitialContextFactory");
+        env.put(Context.INITIAL_CONTEXT_FACTORY, WildFlyInitialContextFactory.class.getName());
         env.put(Context.PROVIDER_URL, getServerURL());
         env.put("jboss.naming.client.ejb.context", "true");
         env.put("jboss.naming.client.connect.options.org.xnio.Options.SASL_POLICY_NOPLAINTEXT", "true");

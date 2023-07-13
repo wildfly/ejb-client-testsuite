@@ -48,7 +48,7 @@ import org.junit.runner.RunWith;
 @RunWith(Arquillian.class)
 @RunAsClient
 @Ignore //FIXME
-public class ClientInterceptorAddedProgrammaticallyTestCase_EJBCLIENT4 {
+public class ClientInterceptorAddedProgrammaticallyTestCase {
 
     public static final String MODULE_NAME = "client-interceptor";
 
@@ -57,7 +57,7 @@ public class ClientInterceptorAddedProgrammaticallyTestCase_EJBCLIENT4 {
     @Deployment(name = MODULE_NAME, testable = false)
     public static JavaArchive deployment() {
         final JavaArchive jar = ShrinkWrap.create(JavaArchive.class, MODULE_NAME + ".jar");
-        jar.addPackage(ClientInterceptorAddedProgrammaticallyTestCase_EJBCLIENT4.class.getPackage());
+        jar.addPackage(ClientInterceptorAddedProgrammaticallyTestCase.class.getPackage());
         return jar;
     }
 

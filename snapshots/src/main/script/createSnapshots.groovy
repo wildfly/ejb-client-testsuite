@@ -28,6 +28,10 @@ WILDFLY_NAME = "wildfly"
 WILDFLY_REPOSITORY = "https://github.com/wildfly/wildfly"
 WILDFLY_REPOSITORY_PROPERTY = "wildfly.repository"
 WILDFLY_BRANCH_PROPERTY = "wildfly.branch"
+BOMS_NAME = "boms"
+BOMS_REPOSITORY = "https://github.com/wildfly/boms.git"
+BOMS_REPOSITORY_PROPERTY = "boms.repository"
+BOMS_BRANCH_PROPERTY = "boms.branch"
 TESTSUITE_VERSION = "EJB-CLIENT-TESTSUITE"
 MVN_BUILD_OPTIONS = "-DskipTests=true"
 
@@ -51,9 +55,14 @@ def wildFlyDir = new File(TARGET_DIR, WILDFLY_NAME)
 cloneProject(WILDFLY_REPOSITORY_PROPERTY, WILDFLY_BRANCH_PROPERTY, WILDFLY_REPOSITORY)
 changeDependencyVersion(EJB_CLIENT_VERSION_NAME, TESTSUITE_VERSION, wildFlyDir)
 changeDependencyVersion(HTTP_CLIENT_VERSION_NAME, TESTSUITE_VERSION, wildFlyDir)
-buildProject(wildFlyDir)
+buildProject(wildFlyDir, "-Dts.noSmoke")
 renameWildFlyBuildDirectory(getProjectVersion(wildFlyDir), wildFlyDir)
 
+def bomDir = new File(TARGET_DIR, BOMS_NAME)
+cloneProject(BOMS_REPOSITORY_PROPERTY, BOMS_BRANCH_PROPERTY, BOMS_REPOSITORY)
+setProjectVersion(TESTSUITE_VERSION, bomDir)
+changeDependencyVersion("version.server", getProjectVersion(wildFlyDir), bomDir)
+buildProject(bomDir)
 
 
 def executeCmd(command, env, dir, verbose) {
@@ -70,15 +79,15 @@ def executeCmd(command, env, dir, verbose) {
 def cloneProject(String repositoryProperty, String branchProperty, String defaultRepository) {
     def repository = System.getProperty(repositoryProperty, defaultRepository)
     def branch = System.getProperty(branchProperty, "main")
-    executeCmd("git clone -b ${branch} --single-branch ${repository}", null, TARGET_DIR, true)
+    executeCmd("git clone -b ${branch}  --depth=1 --single-branch ${repository}", null, TARGET_DIR, true)
 }
 
-def buildProject(projectDir) {
-    executeCmd("mvn clean install ${MVN_BUILD_OPTIONS}", null, projectDir, true)
+def buildProject(projectDir, extraOptions = "") {
+    executeCmd("mvn --batch-mode clean install ${MVN_BUILD_OPTIONS} ${extraOptions}", null, projectDir, true)
 }
 
 def setProjectVersion(version, projectDir) {
-    executeCmd("mvn versions:set -DgenerateBackupPoms=false -DnewVersion=${version}", null, projectDir, false)
+    executeCmd("mvn --batch-mode versions:set -DgenerateBackupPoms=false -DnewVersion=${version}", null, projectDir, false)
 }
 
 def getProjectVersion(projectDir) {
@@ -89,7 +98,7 @@ def getProjectVersion(projectDir) {
 }
 
 def changeDependencyVersion(versionProperty, newVersion, projectDir) {
-    executeCmd("mvn versions:set-property -Dproperty=${versionProperty} -DnewVersion=${newVersion}", null, projectDir, false)
+    executeCmd("mvn --batch-mode versions:set-property -Dproperty=${versionProperty} -DnewVersion=${newVersion}", null, projectDir, false)
 }
 
 def renameWildFlyBuildDirectory(wildflyVersion, File wildflyDir) {
