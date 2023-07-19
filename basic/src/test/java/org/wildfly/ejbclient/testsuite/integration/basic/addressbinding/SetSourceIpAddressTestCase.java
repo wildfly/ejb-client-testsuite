@@ -113,7 +113,7 @@ public class SetSourceIpAddressTestCase {
 
     @Test
     @InSequence(10)
-    @Ignore //FIXME
+    @Ignore("https://issues.redhat.com/browse/WFLY-18273")
     public void testHostAndPortBindingInContainer() throws Exception {
         try (InitialContextDirectory ctx = new InitialContextDirectory.Supplier().get()) {
             EJBClientRemote ejbClientRemote = ctx.lookupStateful(CLIENT_ARCHIVE_NAME, EJBClient.class, EJBClientRemote.class);
@@ -142,7 +142,7 @@ public class SetSourceIpAddressTestCase {
 
     @Test
     @InSequence(20)
-    @Ignore //FIXME
+    @Ignore("https://issues.redhat.com/browse/WFLY-18273")
     public void testHostBindingInContainer() throws Exception {
         try (InitialContextDirectory ctx = new InitialContextDirectory.Supplier().get()) {
             EJBClientRemote ejbClientRemote = ctx.lookupStateful(CLIENT_ARCHIVE_NAME, EJBClient.class, EJBClientRemote.class);

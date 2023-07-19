@@ -20,6 +20,7 @@
         <version.arquillian-container>5.0.0.Alpha6</version.arquillian-container>
         <version.creaper>2.0.2</version.creaper>
         <version.jakartaee-api>10.0.0</version.jakartaee-api>
+        <version.jboss-ejb3-ext-api>2.3.0.Final</version.jboss-ejb3-ext-api>
         <version.junit>4.13.2</version.junit>
         <version.reload4j>1.2.25</version.reload4j>
 
