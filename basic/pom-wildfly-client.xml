@@ -16,7 +16,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <version.arquillian>1.7.0.Alpha14</version.arquillian>
-        <version.byteman>4.0.20</version.byteman>
+        <version.byteman>4.0.21</version.byteman>
         <version.jakartaee-api>10.0.0</version.jakartaee-api>
         <version.junit>4.13.2</version.junit>
         <version.reload4j>1.2.25</version.reload4j>
