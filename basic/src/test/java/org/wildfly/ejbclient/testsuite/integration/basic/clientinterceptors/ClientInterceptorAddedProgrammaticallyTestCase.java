@@ -47,7 +47,6 @@ import org.junit.runner.RunWith;
  */
 @RunWith(Arquillian.class)
 @RunAsClient
-@Ignore //FIXME
 public class ClientInterceptorAddedProgrammaticallyTestCase {
 
     public static final String MODULE_NAME = "client-interceptor";

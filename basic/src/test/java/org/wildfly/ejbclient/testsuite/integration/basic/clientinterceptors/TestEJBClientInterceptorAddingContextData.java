@@ -52,6 +52,14 @@ public class TestEJBClientInterceptorAddingContextData<T> implements EJBClientIn
         INTERCEPTOR_CALLED.set(true);
         if(ejbClientInvocationContext.getInvokedMethod().getName().equals("returnContextData")) {
             System.out.println(this.getClass().getName() + " handing an invocation");
+            /**
+             *  TODO
+             *  We need to add _key (and not key) to jboss.returned.keys cause server interceptor modifies it that way
+             *  to make sure that we are returning the value actually produced on the server. This is OK, but imho we
+             *  may think about making some modifications here (naming or further comments?) so that the test is more
+             *  self-explanatory for someone who jumps to debug it.
+             */
+            ejbClientInvocationContext.addReturnedContextDataKey("_" + key);
             ejbClientInvocationContext.getContextData().put(key, value);
         }
         ejbClientInvocationContext.sendRequest();
@@ -64,14 +72,20 @@ public class TestEJBClientInterceptorAddingContextData<T> implements EJBClientIn
             return ejbClientInvocationContext.getResult();
         if(ejbClientInvocationContext.getContextData().containsKey("unknown"))
             return null;
+        /**
+         * It is necessary for the result to be calculated before perfoming any checks cause it is getResult methods
+         * that triggers invocation of the code that is responsible for returned context calculation.
+         */
+        Object result = ejbClientInvocationContext.getResult();
         System.out.println(this.getClass().getName() + " handing an invocation result");
         final Object contextDataFromServer = ejbClientInvocationContext.getContextData().get("_" + key);
+
         System.out.println("CONTEXT DATA ON CLIENT SIDE:");
         ejbClientInvocationContext.getContextData().entrySet().forEach(entry -> System.out.println(entry.getKey() + " :: " + entry.getValue()));
         Assert.assertEquals(
                 "[issue WFLY-8449] Context data added by the server should be visible to client", value,
                 contextDataFromServer);
-        return ejbClientInvocationContext.getResult();
+        return result;
     }
 
 }
