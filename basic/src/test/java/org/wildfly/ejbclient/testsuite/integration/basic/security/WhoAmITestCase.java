@@ -22,6 +22,8 @@ import javax.naming.NamingException;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.container.test.api.RunAsClient;
 import org.jboss.arquillian.junit.Arquillian;
+import org.wildfly.ejbclient.testsuite.integration.basic.utils.ConnectorType;
+import org.wildfly.ejbclient.testsuite.integration.basic.utils.EJBClientContextType;
 import org.wildfly.ejbclient.testsuite.integration.basic.utils.jndi.InitialContextDirectory;
 import org.wildfly.ejbclient.testsuite.integration.basic.utils.ServerAuthenticationType;
 import org.wildfly.ejbclient.testsuite.integration.basic.utils.TestEnvironment;
@@ -99,6 +101,38 @@ public class WhoAmITestCase {
         try (final InitialContextDirectory ctx = new InitialContextDirectory.Supplier().get()) {
             final WhoAmIRemote whoami = ctx
                     .lookupStateless(ARCHIVE_NAME, WhoAmIBean.class, WhoAmIRemote.class);
+            Assert.assertFalse("amIInRole should return false for roles which don't exist", whoami.amIInRole("Dunstabzugshaube"));
+        }
+    }
+
+    /**
+     * Regression tests for WEJBHTTP-119
+     *
+     * Similar like isCallerInRole2, EJB prefix is used in case of WILDFLY_NAMING_CLIENT
+     */
+    @Test
+    public void isCallerInRoleNameWithEjbPrefix() throws Exception {
+        Assume.assumeTrue(TestEnvironment.getAuthenticationType().equals(ServerAuthenticationType.USER));
+        Assume.assumeTrue(TestEnvironment.getContextType() == EJBClientContextType.WILDFLY_NAMING_CLIENT); // other context types uses ejb prefix by default
+        try (final InitialContextDirectory ctx = new InitialContextDirectory.Supplier().get()) {
+            final WhoAmIRemote whoami = ctx
+                    .getBean("ejb:/whoami-test/" + WhoAmIBean.class.getSimpleName() + "!" + WhoAmIRemote.class.getCanonicalName(), WhoAmIRemote.class);
+            Assert.assertFalse("amIInRole should return false for roles which don't exist", whoami.amIInRole("Dunstabzugshaube"));
+        }
+    }
+
+    /**
+     * Regression tests for WEJBHTTP-119
+     *
+     * Similar like isCallerInRole2, EJB prefix is not used in case of WILDFLY_NAMING_CLIENT
+     */
+    @Test
+    public void isCallerInRoleNameWithoutEjbPrefix() throws Exception {
+        Assume.assumeTrue(TestEnvironment.getAuthenticationType().equals(ServerAuthenticationType.USER));
+        Assume.assumeTrue(TestEnvironment.getContextType() == EJBClientContextType.WILDFLY_NAMING_CLIENT); // other context types uses ejb prefix by default
+        try (final InitialContextDirectory ctx = new InitialContextDirectory.Supplier().get()) {
+            final WhoAmIRemote whoami = ctx
+                    .getBean("whoami-test/" + WhoAmIBean.class.getSimpleName() + "!" + WhoAmIRemote.class.getCanonicalName(), WhoAmIRemote.class);
             Assert.assertFalse("amIInRole should return false for roles which don't exist", whoami.amIInRole("Dunstabzugshaube"));
         }
     }

@@ -165,7 +165,7 @@ public abstract class InitialContextDirectory implements AutoCloseable {
     }
 
 
-    protected <T> T getBean(String name, Class<T> beanInterface) throws NamingException {
+    public <T> T getBean(String name, Class<T> beanInterface) throws NamingException {
         return beanInterface.cast(this.ctx.lookup(name));
     }
 
