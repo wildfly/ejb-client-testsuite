@@ -29,14 +29,11 @@ import org.wildfly.ejbclient.testsuite.integration.basic.addressbinding.bean.cli
 import org.wildfly.ejbclient.testsuite.integration.basic.addressbinding.bean.client.EJBClientRemote;
 import org.wildfly.ejbclient.testsuite.integration.basic.addressbinding.bean.server.IpSourceAddressReturningBean;
 import org.wildfly.ejbclient.testsuite.integration.basic.addressbinding.bean.server.IpSourceAddressReturningBeanRemote;
-import org.wildfly.ejbclient.testsuite.integration.basic.utils.ConnectorType;
 import org.wildfly.ejbclient.testsuite.integration.basic.utils.ModelUtil;
-import org.wildfly.ejbclient.testsuite.integration.basic.utils.TestEnvironment;
 import org.wildfly.ejbclient.testsuite.integration.basic.utils.management.ManagementOperations;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.junit.Assert;
-import org.junit.Assume;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -86,7 +83,6 @@ public class SetSourceIpAddressTestCase {
     @Test
     @InSequence(2)
     public void testHostBindingStandaloneClient() throws Exception {
-        Assume.assumeFalse("https://issues.redhat.com/browse/WEJBHTTP-108", TestEnvironment.getConnectorType() == ConnectorType.HTTPS);
         try (InitialContextDirectory ctx = new InitialContextDirectory.Supplier().get()) {
             IpSourceAddressReturningBeanRemote addressReturningBean = ctx.lookupStateful(SERVER_ARCHIVE_NAME, IpSourceAddressReturningBean.class, IpSourceAddressReturningBeanRemote.class);
             String sourceAddress = addressReturningBean.getSourceAddress();
