@@ -1,6 +1,6 @@
-# EJB client QA test suite
+# EJB client tests
 
-## How to run TS with bom file
+## How to run tests with bom file
 `mvn test $SYSTEM_PROPERTIES` for `$SYSTEM_PROPERTIES` see below:
 
 
@@ -42,11 +42,11 @@
 ### Examples how to run the TS
 
 ```
-mvn clean -Dserver.home=/tmp/wildfly-28.0.0.Beta1 test -Dtest=WrongProtocolLoggingTestCase
+mvn clean -DspecificModule=basic -Dserver.home=/tmp/wildfly-28.0.0.Beta1 test -Dtest=WrongProtocolLoggingTestCase
 ```
 
 ```
-mvn clean -Dconnector=http-remoting -Dcontext.type=wildfly-naming-client -Dauthentication.type=user \
+mvn clean -DspecificModule=basic -Dconnector=http-remoting -Dcontext.type=wildfly-naming-client -Dauthentication.type=user \
   -Dserver.home=/tmp/wildfly-28.0.0.Beta1 test -Dtest=AnnotationIndexTestCase
 ```
 
@@ -57,13 +57,15 @@ mvn clean -Dconnector=http-remoting -Dcontext.type=wildfly-naming-client -Dauthe
 Deploy jboss-client.jar from server distribution as dependency to local maven repo
 
 ```
+cd basic
 mvn -f pom-wildfly-client.xml clean install -Dprepare -Dserver.zip.url=url/to/zip/distribution/of/server.zip
 ```
 
 Examples:
 ```
+cd basic
 mvn -f pom-wildfly-client.xml clean install -Dprepare -Dserver.zip.url=file:///path/to/wildfly-28.0.0.Beta1.zip
-mvn -f pom-wildfly-client.xml clean install -Dprepare -Dserver.zip.url=https://github.com/wildfly/wildfly/releases/download/28.0.0.Beta1/wildfly-28.0.0.Beta1.zip
+mvn -f pom-wildfly-client.xml clean install -Dprepare -Dserver.zip.url=https://github.com/wildfly/wildfly/releases/download/30.0.1.Final/wildfly-30.0.1.Final.zip
 ```
 
 ### Start the TS

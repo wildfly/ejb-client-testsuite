@@ -10,18 +10,49 @@ The goal of this TS is to cover various complex scenarios involving EJB client a
 etc.
 
 ## How to run
-To run this, you need to specify the path to the EAP/WF distribution you want to run the test against.
-Also you should specify a particular EAP/WF bom version to mark the correct 
+To run this, you need to specify the path to the server distribution you want to run the test against.
+Also you should specify a particular server bom version to mark the correct 
 EJB client library version you want to use in the test.
 
 Example:
 
-`mvn test -Dserver.zip=/PATH/TO/SERVER.ZIP -Dversion.eap.bom=7.1.0.GA-redhat-2` (look into all-GAVs file for the BOM version)
-
+`mvn test -DspecificModule=multinode -Dserver.zip=/PATH/TO/SERVER.ZIP`
 
 The first time you run this, it will create a fresh unzip for each EAP node (see section "Nodes").
 Unless you run `mvn clean`, subsequent `mvn test` invocations will skip the unzipping process to save a bit of 
 time because the nodes will be there unzipped already (you need to make sure that they are left with a reasonable configuration).
+
+You can also define bom files which should be used by those system properties:
+`groupId.ee.bom`, `artifactId.ee.bom`, `version.ee.bom`, `groupId.ejb.client.bom`, `artifactId.ejb.client.bom`, `version.ejb.client.bom`.
+These properties are described in [readme file for basic client tests](../basic).
+
+## How to run TS with jboss-client.jar from server distribution
+
+### Prepare dependency
+
+Deploy jboss-client.jar from server distribution as dependency to local maven repo
+
+```
+cd multinode
+mvn -f pom-wildfly-client.xml clean install -Dprepare -Dserver.zip.url=url/to/zip/distribution/of/server.zip
+```
+
+Examples:
+```
+cd multinode
+mvn -f pom-wildfly-client.xml clean install -Dprepare -Dserver.zip.url=file:///path/to/wildfly-28.0.0.Beta1.zip
+mvn -f pom-wildfly-client.xml clean install -Dprepare -Dserver.zip.url=https://github.com/wildfly/wildfly/releases/download/30.0.1.Final/wildfly-30.0.1.Final.zip
+```
+
+### Start the TS
+
+`mvn -f pom-wildfly-client.xml test`
+
+Example:
+
+```
+mvn -f pom-wildfly-client.xml test -Dtest=ClusterNodeSelectorTestCase
+```
 
 ## IPv6
 Run the TS in IPv6 mode by activating the profile `-Pipv6`.
