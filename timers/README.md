@@ -9,7 +9,7 @@ Then the tests waits for configurable amount of time and checks the timeouts whi
 
 ## How to run
 
-Temporarily, this TS runs on you local machine using two servers.
+This TS runs on your local machine using two servers.
 You will need to provide a path to them:
 
 Other than that, there is a bunch of parameters the test supports.
@@ -39,4 +39,4 @@ Here is a list of the parameters:
 An example of whole command could be:
 `mvn clean verify -Dnode1.jbossHome=/path/to/node1/server -Dnode2.jbossHome=/path/to/node2/server -DstepSize=50 -DtimerSchedule=5000 -DtestLength=180 -DstepDelay=30 -DmaxExecutionDelay=500`
 
-NOTE: Test assumes two server instances both of which have preconfigured shared DB connection for timers.
+NOTE: Test assumes two server instances, both of which have preconfigured shared DB connection for timers.
