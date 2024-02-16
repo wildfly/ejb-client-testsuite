@@ -83,7 +83,6 @@
         <version.wf.core>20.0.0.Final</version.wf.core>
 
         <!-- MULTINODE -->
-        <maven.test.failure.ignore>true</maven.test.failure.ignore>
         <version.arquillian.protocol>1.7.0.Alpha11</version.arquillian.protocol>
         <version.creaper>2.0.2</version.creaper>
 
