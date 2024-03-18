@@ -48,8 +48,6 @@ import static java.util.stream.Collectors.toList;
  */
 @RunWith(JUnit4.class)
 @RunAsClient
-//FIXME
-@Ignore
 public class MavenDependencyTestCase {
 
     private static Logger logger = Logger.getLogger(MavenDependencyTestCase.class.getName());
