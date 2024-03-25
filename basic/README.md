@@ -58,25 +58,25 @@ Deploy jboss-client.jar from server distribution as dependency to local maven re
 
 ```
 cd basic
-mvn -f pom-wildfly-client.xml clean install -Dprepare -Dserver.zip.url=url/to/zip/distribution/of/server.zip
+mvn -f pom-wildfly-client/pom.xml clean install -Dprepare -Dserver.zip.url=url/to/zip/distribution/of/server.zip
 ```
 
 Examples:
 ```
 cd basic
-mvn -f pom-wildfly-client.xml clean install -Dprepare -Dserver.zip.url=file:///path/to/wildfly-30.0.1.Final.zip
-mvn -f pom-wildfly-client.xml clean install -Dprepare -Dserver.zip.url=https://github.com/wildfly/wildfly/releases/download/30.0.1.Final/wildfly-30.0.1.Final.zip
+mvn -f pom-wildfly-client/pom.xml clean install -Dprepare -Dserver.zip.url=file:///path/to/wildfly-30.0.1.Final.zip
+mvn -f pom-wildfly-client/pom.xml clean install -Dprepare -Dserver.zip.url=https://github.com/wildfly/wildfly/releases/download/30.0.1.Final/wildfly-30.0.1.Final.zip
 ```
 
 ### Start the TS
 
-`mvn -f pom-wildfly-client.xml test $SYSTEM_PROPERTIES` for `authentication.type`, `context.type`, `connector` and `debugServer` parameters
+`mvn -f pom-wildfly-client/pom.xml test $SYSTEM_PROPERTIES` for `authentication.type`, `context.type`, `connector` and `debugServer` parameters
 described in "How to run tests with EJB client artifacts governed by BOM" chapter of this file.
 
 Example:
 
 ```
-mvn -f pom-wildfly-client.xml test -Dtest=WrongProtocolLoggingTestCase
+mvn -f pom-wildfly-client/pom.xml test -Dtest=WrongProtocolLoggingTestCase
 ```
 
 ## Testing with Security Manager enabled

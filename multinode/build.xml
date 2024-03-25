@@ -19,19 +19,19 @@
             </executiondata>
             <structure name="JaCoCo Test Coverage Report - EJB Multi Server Test Suite">
                 <classfiles>
-                    <!-- path to modules directory of one EAP distribution (it does not matter which one) -->
+                    <!-- path to modules directory of one server distribution (it does not matter which one) -->
                     <fileset dir="${modules.path}">
-                        <!-- The files from EAP distro for which want code coverage report generated -->
+                        <!-- The files from server distro for which want code coverage report generated -->
                         <include name="**/wildfly-ejb3*.jar"/>
                     </fileset>
                 </classfiles>
                 <!-- source files, if available -->
                 <!--
                                 <sourcefiles encoding="UTF-8">
-                                    <fileset dir="/home/jmartisk/Workspace/jsr352/jberet-core/src/main/java">
+                                    <fileset dir="/path/to/jsr352/jberet-core/src/main/java">
                                         <include name="**/*.java"/>
                                     </fileset>
-                                    <fileset dir="/home/jmartisk/Workspace/jboss-eap7/batch/extension-jberet/src/main/java">
+                                    <fileset dir="/path/to/wf-git/batch/extension-jberet/src/main/java">
                                         <include name="**/*.java"/>
                                     </fileset>
                                 </sourcefiles>
