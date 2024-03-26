@@ -34,24 +34,24 @@ Deploy jboss-client.jar from server distribution as dependency to local maven re
 
 ```
 cd multinode
-mvn -f pom-wildfly-client.xml clean install -Dprepare -Dserver.zip.url=url/to/zip/distribution/of/server.zip
+mvn -f pom-wildfly-client/pom.xml clean install -Dprepare -Dserver.zip.url=url/to/zip/distribution/of/server.zip
 ```
 
 Examples:
 ```
 cd multinode
-mvn -f pom-wildfly-client.xml clean install -Dprepare -Dserver.zip.url=file:///path/to/wildfly-30.0.1.Final.zip
-mvn -f pom-wildfly-client.xml clean install -Dprepare -Dserver.zip.url=https://github.com/wildfly/wildfly/releases/download/30.0.1.Final/wildfly-30.0.1.Final.zip
+mvn -f pom-wildfly-client/pom.xml clean install -Dprepare -Dserver.zip.url=file:///path/to/wildfly-30.0.1.Final.zip
+mvn -f pom-wildfly-client/pom.xml clean install -Dprepare -Dserver.zip.url=https://github.com/wildfly/wildfly/releases/download/30.0.1.Final/wildfly-30.0.1.Final.zip
 ```
 
 ### Start the TS
 
-`mvn -f pom-wildfly-client.xml test`
+`mvn -f pom-wildfly-client/pom.xml test`
 
 Example:
 
 ```
-mvn -f pom-wildfly-client.xml test -Dtest=ClusterNodeSelectorTestCase
+mvn -f pom-wildfly-client/pom.xml test -Dtest=ClusterNodeSelectorTestCase
 ```
 
 ## IPv6

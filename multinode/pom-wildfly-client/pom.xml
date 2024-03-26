@@ -15,8 +15,8 @@
         <maven.compiler.source>11</maven.compiler.source>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-        <version.arquillian>1.7.0.Alpha14</version.arquillian>
-        <version.arquillian-container>5.0.0.Alpha6</version.arquillian-container>
+        <version.arquillian>1.8.0.Final</version.arquillian>
+        <version.arquillian-container>5.1.0.Beta1</version.arquillian-container>
         <version.creaper>2.0.2</version.creaper>
         <version.jakartaee-api>10.0.0</version.jakartaee-api>
         <version.jboss-ejb3-ext-api>2.3.0.Final</version.jboss-ejb3-ext-api>
@@ -27,12 +27,12 @@
         <version.plugin.antrun.ant>1.8.1</version.plugin.antrun.ant>
         <version.plugin.antrun.contrib>1.0b3</version.plugin.antrun.contrib>
         <version.plugin.compiler>3.11.0</version.plugin.compiler>
-        <version.plugin.enforcer>3.3.0</version.plugin.enforcer>
+        <version.plugin.enforcer>3.4.1</version.plugin.enforcer>
         <version.plugin.install>3.1.1</version.plugin.install>
         <version.plugin.jacoco>0.7.9</version.plugin.jacoco>
         <version.plugin.jar>3.3.0</version.plugin.jar>
         <version.plugin.surefire>3.0.0</version.plugin.surefire>
-        <version.wf.core>20.0.0.Final</version.wf.core>
+        <version.wf.core>23.0.3.Final</version.wf.core>
 
 
         <!-- Path to server zip archive, has to be specified at command line -->
@@ -222,10 +222,10 @@
             <build>
                 <testResources>
                     <testResource>
-                        <directory>${project.basedir}/src/test/java</directory>
+                        <directory>${project.basedir}/../src/test/java</directory>
                     </testResource>
                     <testResource>
-                        <directory>${project.basedir}/src/test/resources</directory>
+                        <directory>${project.basedir}/../src/test/resources</directory>
                     </testResource>
                 </testResources>
                 <plugins>
@@ -291,7 +291,7 @@
             </build>
             <dependencies>
                 <dependency>
-                    <groupId>org.jboss.eap.qe</groupId>
+                    <groupId>org.jboss.ejb-multinode-tests</groupId>
                     <artifactId>jboss-client</artifactId>
                     <version>1.0.0</version>
                     <type>jar</type>
@@ -304,22 +304,22 @@
             <id>jacoco</id>
             <properties>
                 <jacoco.args.node1>
-                    -javaagent:${project.basedir}/jacoco/jacocoagent.jar=destfile=${project.build.directory}/jacoco-node1.exec
+                    -javaagent:${project.basedir}/../jacoco/jacocoagent.jar=destfile=${project.build.directory}/jacoco-node1.exec
                 </jacoco.args.node1>
                 <jacoco.args.node2>
-                    -javaagent:${project.basedir}/jacoco/jacocoagent.jar=destfile=${project.build.directory}/jacoco-node2.exec
+                    -javaagent:${project.basedir}/../jacoco/jacocoagent.jar=destfile=${project.build.directory}/jacoco-node2.exec
                 </jacoco.args.node2>
                 <jacoco.args.cluster1-node1>
-                    -javaagent:${project.basedir}/jacoco/jacocoagent.jar=destfile=${project.build.directory}/jacoco-cluster1-node1.exec
+                    -javaagent:${project.basedir}/../jacoco/jacocoagent.jar=destfile=${project.build.directory}/jacoco-cluster1-node1.exec
                 </jacoco.args.cluster1-node1>
                 <jacoco.args.cluster1-node2>
-                    -javaagent:${project.basedir}/jacoco/jacocoagent.jar=destfile=${project.build.directory}/jacoco-cluster1-node2.exec
+                    -javaagent:${project.basedir}/../jacoco/jacocoagent.jar=destfile=${project.build.directory}/jacoco-cluster1-node2.exec
                 </jacoco.args.cluster1-node2>
                 <jacoco.args.cluster2-node1>
-                    -javaagent:${project.basedir}/jacoco/jacocoagent.jar=destfile=${project.build.directory}/jacoco-cluster2-node1.exec
+                    -javaagent:${project.basedir}/../jacoco/jacocoagent.jar=destfile=${project.build.directory}/jacoco-cluster2-node1.exec
                 </jacoco.args.cluster2-node1>
                 <jacoco.args.cluster2-node2>
-                    -javaagent:${project.basedir}/jacoco/jacocoagent.jar=destfile=${project.build.directory}/jacoco-cluster2-node2.exec
+                    -javaagent:${project.basedir}/../jacoco/jacocoagent.jar=destfile=${project.build.directory}/jacoco-cluster2-node2.exec
                 </jacoco.args.cluster2-node2>
             </properties>
             <build>
@@ -342,7 +342,7 @@
                                         <!-- making path to tested JARs referenceable in build.xml -->
                                         <property name="modules.path"
                                                   value="${directory.node1}/modules"/>
-                                        <ant antfile="${project.basedir}/build.xml">
+                                        <ant antfile="${project.basedir}/../build.xml">
                                             <target name="report"/>
                                         </ant>
                                     </target>
@@ -377,13 +377,13 @@
                                 <configuration>
                                     <fileSets>
                                         <fileSet>
-                                            <directory>${project.basedir}</directory>
+                                            <directory>${project.basedir}/../</directory>
                                             <includes>
                                                 <include>target/*node*.exec</include>
                                             </includes>
                                         </fileSet>
                                     </fileSets>
-                                    <destFile>${project.basedir}/target/jacoco-merged.exec</destFile>
+                                    <destFile>${project.basedir}/../target/jacoco-merged.exec</destFile>
                                 </configuration>
                             </execution>
                         </executions>
@@ -545,6 +545,13 @@
     </dependencies>
 
     <build>
+        <testSourceDirectory>${project.basedir}/../src/test/java</testSourceDirectory>
+        <testResources>
+            <testResource>
+                <directory>${project.basedir}/../src/test/resources</directory>
+            </testResource>
+        </testResources>
+
         <pluginManagement>
             <plugins>
                 <plugin>
