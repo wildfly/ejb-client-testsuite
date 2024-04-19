@@ -16,7 +16,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <version.arquillian>1.8.0.Final</version.arquillian>
-        <version.arquillian-container>5.1.0.Beta1</version.arquillian-container>
+        <version.arquillian-container>5.1.0.Beta2</version.arquillian-container>
         <version.creaper>2.0.2</version.creaper>
         <version.jakartaee-api>10.0.0</version.jakartaee-api>
         <version.jboss-ejb3-ext-api>2.4.0.Final</version.jboss-ejb3-ext-api>
