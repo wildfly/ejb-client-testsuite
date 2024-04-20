@@ -62,7 +62,7 @@
         <version.org.jboss.byteman>4.0.21</version.org.jboss.byteman>
         <version.org.wildfly.common>1.5.1.Final</version.org.wildfly.common>
         <version.org.wildfly.discovery>1.2.1.Final</version.org.wildfly.discovery>
-        <version.org.wildfly.security.elytron>2.4.0.Final</version.org.wildfly.security.elytron>
+        <version.org.wildfly.security.elytron>2.4.1.Final</version.org.wildfly.security.elytron>
 
         <version.plugin.antrun>3.1.0</version.plugin.antrun>
         <version.plugin.antrun.ant>1.8.1</version.plugin.antrun.ant>
