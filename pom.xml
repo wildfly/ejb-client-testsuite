@@ -78,7 +78,7 @@
 
         <!-- before you update arquillian-container version, consider to update wf-core-launcher version as well
          and be sure that wf-core-launcher version works correctly with new arquillian-container -->
-        <version.arquillian-container>5.1.0.Beta1</version.arquillian-container>
+        <version.arquillian-container>5.1.0.Beta2</version.arquillian-container>
         <!-- the following version needs to be >= than version used in arquillian-container dependency -->
         <version.wf.core>23.0.3.Final</version.wf.core>
 
