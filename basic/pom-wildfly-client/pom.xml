@@ -29,7 +29,7 @@
         <version.plugin.compiler>3.11.0</version.plugin.compiler>
         <version.plugin.dependency>3.6.1</version.plugin.dependency>
         <version.plugin.enforcer>3.4.1</version.plugin.enforcer>
-        <version.plugin.install>3.1.1</version.plugin.install>
+        <version.plugin.install>3.1.2</version.plugin.install>
         <version.plugin.jar>3.3.0</version.plugin.jar>
         <version.plugin.surefire>3.0.0</version.plugin.surefire>
         <version.plugin.wildfly>5.0.0.Final</version.plugin.wildfly>
