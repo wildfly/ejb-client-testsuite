@@ -16,6 +16,9 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <version.arquillian>1.9.1.Final</version.arquillian>
+        <version.arquillian.jakarta>10.0.0.Final</version.arquillian.jakarta>
+        <version.shrinkwrap>1.2.6</version.shrinkwrap>
+
         <version.byteman>4.0.21</version.byteman>
         <version.jakartaee-api>10.0.0</version.jakartaee-api>
         <version.junit>4.13.2</version.junit>
@@ -69,6 +72,20 @@
                 <groupId>org.jboss.arquillian</groupId>
                 <artifactId>arquillian-bom</artifactId>
                 <version>${version.arquillian}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.jboss.arquillian.jakarta</groupId>
+                <artifactId>arquillian-jakarta-bom</artifactId>
+                <version>${version.arquillian.jakarta}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.jboss.shrinkwrap</groupId>
+                <artifactId>shrinkwrap-bom</artifactId>
+                <version>${version.shrinkwrap}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
