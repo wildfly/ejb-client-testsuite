@@ -51,70 +51,70 @@ import static org.wildfly.ejbclient.testsuite.integration.multinode.environment.
 @RunAsClient
 public class RemotingOptionsTestCase {
 
-	public static JavaArchive createDeployment() {
-		final JavaArchive jar = ShrinkWrap.create(JavaArchive.class, "long-running-bean.jar");
-		jar.addClasses(LongRunningBean.class, LongRunningBeanStateless.class);
-		return jar;
-	}
+    public static JavaArchive createDeployment() {
+        final JavaArchive jar = ShrinkWrap.create(JavaArchive.class, "long-running-bean.jar");
+        jar.addClasses(LongRunningBean.class, LongRunningBeanStateless.class);
+        return jar;
+    }
 
-	private final JavaArchive DEPLOYMENT = createDeployment();
+    private final JavaArchive DEPLOYMENT = createDeployment();
 
-	@ArquillianResource
-	private ContainerController containerController;
+    @ArquillianResource
+    private ContainerController containerController;
 
-	OnlineManagementClient creaper;
+    OnlineManagementClient creaper;
 
-	@Before
-	public void before() throws Exception {
-		setLoggerPrefix("NODE1", NODE1.homeDirectory, NODE1.configurationXmlFile);
-		containerController.start(NODE1.nodeName);
-		creaper = createCreaper(NODE1.bindAddress, NODE1.managementPort);
-		DeploymentHelpers.deploy(DEPLOYMENT, creaper);
-	}
+    @Before
+    public void before() throws Exception {
+        setLoggerPrefix("NODE1", NODE1.homeDirectory, NODE1.configurationXmlFile);
+        containerController.start(NODE1.nodeName);
+        creaper = createCreaper(NODE1.bindAddress, NODE1.managementPort);
+        DeploymentHelpers.deploy(DEPLOYMENT, creaper);
+    }
 
-	@After
-	public void cleanup() throws Exception {
-		DeploymentHelpers.undeploy(DEPLOYMENT.getName(), creaper);
-		containerController.stop(NODE1.nodeName);
-		setLoggerPrefix("", NODE1.homeDirectory, NODE1.configurationXmlFile);
-	}
+    @After
+    public void cleanup() throws Exception {
+        DeploymentHelpers.undeploy(DEPLOYMENT.getName(), creaper);
+        containerController.stop(NODE1.nodeName);
+        setLoggerPrefix("", NODE1.homeDirectory, NODE1.configurationXmlFile);
+    }
 
-	/**
-	 * The invocation should fail because:
-	 * - the invocation itself takes ~5000 ms
-	 * - the heartbeat interval is 5000 ms
-	 * - the read timeout is 1500 ms
-	 * <p>
-	 * So the read timeout will be reached between two heartbeats, failing the invocation.
-	 */
-	@Test
-	public void readTimeout() throws NamingException {
-		setWildflyConfigXml("read-timeout");
+    /**
+     * The invocation should fail because:
+     * - the invocation itself takes ~5000 ms
+     * - the heartbeat interval is 5000 ms
+     * - the read timeout is 1500 ms
+     * <p>
+     * So the read timeout will be reached between two heartbeats, failing the invocation.
+     */
+    @Test
+    public void readTimeout() throws NamingException {
+        setWildflyConfigXml("read-timeout");
 
-		final Properties properties = new Properties();
-		properties.put(Context.INITIAL_CONTEXT_FACTORY, WildFlyInitialContextFactory.class.getName());
-		final InitialContext ejbCtx = new InitialContext(properties);
-		final LongRunningBean bean = (LongRunningBean) ejbCtx
-				.lookup("ejb:/long-running-bean/" + LongRunningBeanStateless.class.getSimpleName() + "!"
-						+ LongRunningBean.class.getName());
-		try {
-			bean.doWork(5);
-			Assert.fail("Invocation should fail with EJBException caused by ClosedChannelException");
-		} catch (EJBException ex) {
-			Assert.assertEquals("Invocation should fail with EJBException caused by ClosedChannelException",
-					ClosedChannelException.class, ex.getCause().getClass());
-		}
-	}
+        final Properties properties = new Properties();
+        properties.put(Context.INITIAL_CONTEXT_FACTORY, WildFlyInitialContextFactory.class.getName());
+        final InitialContext ejbCtx = new InitialContext(properties);
+        final LongRunningBean bean = (LongRunningBean) ejbCtx
+                .lookup("ejb:/long-running-bean/" + LongRunningBeanStateless.class.getSimpleName() + "!"
+                        + LongRunningBean.class.getName());
+        try {
+            bean.doWork(5);
+            Assert.fail("Invocation should fail with EJBException caused by ClosedChannelException");
+        } catch (EJBException ex) {
+            Assert.assertEquals("Invocation should fail with EJBException caused by ClosedChannelException",
+                    ClosedChannelException.class, ex.getCause().getClass());
+        }
+    }
 
 
-	public void setWildflyConfigXml(String name) {
-		if ( !isIPv6() ) {
-			System.setProperty("wildfly.config.url", ClassLoader.getSystemResource(
-					"org/wildfly/ejbclient/testsuite/integration/multinode/remotingoptions/configs/" + name + ".xml").toString());
-		} else {
-			System.setProperty("wildfly.config.url", ClassLoader.getSystemResource(
-					"org/wildfly/ejbclient/testsuite/integration/multinode/remotingoptions/configs/" + name + "-ipv6.xml").toString());
-		}
-	}
+    public void setWildflyConfigXml(String name) {
+        if ( !isIPv6() ) {
+            System.setProperty("wildfly.config.url", ClassLoader.getSystemResource(
+                    "org/wildfly/ejbclient/testsuite/integration/multinode/remotingoptions/configs/" + name + ".xml").toString());
+        } else {
+            System.setProperty("wildfly.config.url", ClassLoader.getSystemResource(
+                    "org/wildfly/ejbclient/testsuite/integration/multinode/remotingoptions/configs/" + name + "-ipv6.xml").toString());
+        }
+    }
 
 }

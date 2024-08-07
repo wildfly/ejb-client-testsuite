@@ -49,59 +49,59 @@ import org.junit.runner.RunWith;
 @RunAsClient
 public class EarWithMoreThan64EJBSubdeploymentsTestCase {
 
-	public static final Integer SUBDEPLOYMENTS_COUNT = 80;
+    public static final Integer SUBDEPLOYMENTS_COUNT = 80;
 
-	protected InitialContextDirectory ctx;
+    protected InitialContextDirectory ctx;
 
-	@Deployment(testable = false)
-	public static EnterpriseArchive deployment() {
-		final EnterpriseArchive ear = ShrinkWrap.create(EnterpriseArchive.class, "big-ear.ear");
-		for (int i = 0; i < SUBDEPLOYMENTS_COUNT; i++) {
-			final JavaArchive jar = ShrinkWrap.create(JavaArchive.class, "subdeployment-" + i + ".jar");
-			jar.addPackage(EchoBeanRemote.class.getPackage());
-			ear.addAsModule(jar);
-		}
-		return ear;
-	}
+    @Deployment(testable = false)
+    public static EnterpriseArchive deployment() {
+        final EnterpriseArchive ear = ShrinkWrap.create(EnterpriseArchive.class, "big-ear.ear");
+        for (int i = 0; i < SUBDEPLOYMENTS_COUNT; i++) {
+            final JavaArchive jar = ShrinkWrap.create(JavaArchive.class, "subdeployment-" + i + ".jar");
+            jar.addPackage(EchoBeanRemote.class.getPackage());
+            ear.addAsModule(jar);
+        }
+        return ear;
+    }
 
-	@Before
-	public void before() throws NamingException {
-		ctx = new InitialContextDirectory.Supplier().get();
-	}
+    @Before
+    public void before() throws NamingException {
+        ctx = new InitialContextDirectory.Supplier().get();
+    }
 
-	@After
-	public void after() {
-		ctx.close();
-	}
+    @After
+    public void after() {
+        ctx.close();
+    }
 
-	private static Logger logger = Logger.getLogger(EarWithMoreThan64EJBSubdeploymentsTestCase.class.getName());
+    private static Logger logger = Logger.getLogger(EarWithMoreThan64EJBSubdeploymentsTestCase.class.getName());
 
-	@Test(timeout = 180000)
-	public void test() throws Exception {
-		/* reload is necessary to trigger EJBCLIENT-292 because it will force the server
-		   to send a complete deployment list to the client. Otherwise, if any other tests were
-		   run before this one, client would only get incremental updates over time from the server,
-		   and the client would never get a message about 64+ deployments being present, so EJBCLIENT-292
-		   would not be triggered unless this is the first (or only) test case being run from the test suite.
-		 */
-		ManagementOperations.reloadServer(60000L); // don't remove!
-		// FIXME we should find a way to determine when the server is completely started - with this number of deployments
-		// it sometimes happens that we detect that the server is ready (we can already execute
-		// management operations), but the deployments are not deployed yet, for now just give the server some additional time
-		logger.info("Giving the server some time to finish all deployments before starting invocations...");
-		TimeUnit.SECONDS.sleep(30);
-		for(int i = 0; i < SUBDEPLOYMENTS_COUNT; i++) {
-			logger.info("Looking up stateful EJB in subdeployment number " + i);
-			final EchoBeanRemote beanStateful = ctx
-					.lookup("big-ear", "subdeployment-" + i, EchoBeanStateful.class, EchoBeanRemote.class, BeanType.STATEFUL, null);
-			logger.info("Calling stateful EJB in subdeployment number " + i);
-			Assert.assertEquals(8, beanStateful.echo(8));
+    @Test(timeout = 180000)
+    public void test() throws Exception {
+        /* reload is necessary to trigger EJBCLIENT-292 because it will force the server
+           to send a complete deployment list to the client. Otherwise, if any other tests were
+           run before this one, client would only get incremental updates over time from the server,
+           and the client would never get a message about 64+ deployments being present, so EJBCLIENT-292
+           would not be triggered unless this is the first (or only) test case being run from the test suite.
+         */
+        ManagementOperations.reloadServer(60000L); // don't remove!
+        // FIXME we should find a way to determine when the server is completely started - with this number of deployments
+        // it sometimes happens that we detect that the server is ready (we can already execute
+        // management operations), but the deployments are not deployed yet, for now just give the server some additional time
+        logger.info("Giving the server some time to finish all deployments before starting invocations...");
+        TimeUnit.SECONDS.sleep(30);
+        for(int i = 0; i < SUBDEPLOYMENTS_COUNT; i++) {
+            logger.info("Looking up stateful EJB in subdeployment number " + i);
+            final EchoBeanRemote beanStateful = ctx
+                    .lookup("big-ear", "subdeployment-" + i, EchoBeanStateful.class, EchoBeanRemote.class, BeanType.STATEFUL, null);
+            logger.info("Calling stateful EJB in subdeployment number " + i);
+            Assert.assertEquals(8, beanStateful.echo(8));
 
-			logger.info("Looking up stateless EJB in subdeployment number " + i);
-			final EchoBeanRemote beanStateless = ctx
-					.lookup("big-ear", "subdeployment-" + i, EchoBeanStateless.class, EchoBeanRemote.class, BeanType.STATELESS, null);
-			logger.info("Calling stateless EJB in subdeployment number " + i);
-			Assert.assertEquals(8, beanStateless.echo(8));
-		}
-	}
+            logger.info("Looking up stateless EJB in subdeployment number " + i);
+            final EchoBeanRemote beanStateless = ctx
+                    .lookup("big-ear", "subdeployment-" + i, EchoBeanStateless.class, EchoBeanRemote.class, BeanType.STATELESS, null);
+            logger.info("Calling stateless EJB in subdeployment number " + i);
+            Assert.assertEquals(8, beanStateless.echo(8));
+        }
+    }
 }

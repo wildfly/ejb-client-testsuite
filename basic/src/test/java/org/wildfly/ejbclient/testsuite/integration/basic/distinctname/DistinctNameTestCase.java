@@ -50,16 +50,16 @@ public abstract class DistinctNameTestCase {
     public void testRemoteSLSBInvocation() throws Exception {
         // EAR or JAR?
         final Echo bean;
-        
+
         if(!getAppName().isEmpty()){//EAR
             bean = ctxDirectory.lookupStatelessWithDN(getAppName(), getModuleName(), StatelessEcho.class, Echo.class, getDistinctName());
         }else{//JAR, WAR
-            bean = ctxDirectory.lookupStatelessWithDN(getModuleName(), StatelessEcho.class, Echo.class, getDistinctName());          
+            bean = ctxDirectory.lookupStatelessWithDN(getModuleName(), StatelessEcho.class, Echo.class, getDistinctName());
         }
         Assert.assertNotNull("Lookup returned a null bean proxy", bean);
         final String msg = "Hello world from a really remote client!!!";
         final String echo = bean.echo(msg);
-        Assert.assertEquals("Unexpected echo returned from remote stateless bean", msg, echo);        
+        Assert.assertEquals("Unexpected echo returned from remote stateless bean", msg, echo);
     }
 
     /**

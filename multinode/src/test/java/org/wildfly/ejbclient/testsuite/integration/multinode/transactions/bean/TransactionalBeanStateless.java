@@ -17,7 +17,6 @@
 package org.wildfly.ejbclient.testsuite.integration.multinode.transactions.bean;
 
 import java.util.List;
-import jakarta.ejb.Stateful;
 import jakarta.ejb.Stateless;
 import jakarta.ejb.TransactionAttribute;
 import jakarta.ejb.TransactionAttributeType;

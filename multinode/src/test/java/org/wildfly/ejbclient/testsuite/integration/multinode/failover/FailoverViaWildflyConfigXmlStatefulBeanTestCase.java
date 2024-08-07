@@ -268,14 +268,14 @@ public class FailoverViaWildflyConfigXmlStatefulBeanTestCase {
     @Test
     public void testSessionCreationWhenOneNodeIsDown() throws NamingException {
         for(int iteration = 0; iteration < 10; iteration++) {
-			System.out.println("***** starting iteration " + iteration);
+            System.out.println("***** starting iteration " + iteration);
             final Properties properties = new Properties();
             properties.put(Context.INITIAL_CONTEXT_FACTORY, WildFlyInitialContextFactory.class.getName());
             properties.put(EJBClient.CLUSTER_AFFINITY, "ejb");
             final InitialContext ejbCtx = new InitialContext(properties);
             try {
-				// stop one randomly picked node
-				Containers.Container containerToStop = Math.random() > 0.5 ? CLUSTER1_NODE1 : CLUSTER1_NODE2;
+                // stop one randomly picked node
+                Containers.Container containerToStop = Math.random() > 0.5 ? CLUSTER1_NODE1 : CLUSTER1_NODE2;
                 logger.info("Going to shut down " + containerToStop.nodeName + " now...");
                 containerController.stop(containerToStop.nodeName);
 

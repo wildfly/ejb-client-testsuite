@@ -52,170 +52,170 @@ import static org.wildfly.ejbclient.testsuite.integration.multinode.environment.
 @RunAsClient
 public class TransactionsInCluster_SpecifiedNodeAffinity_StatelessBean_TestCase {
 
-	private static final JavaArchive deployment = createDeployment();
-	private static OnlineManagementClient creaper_cluster1node1;
-	private static OnlineManagementClient creaper_cluster1node2;
+    private static final JavaArchive deployment = createDeployment();
+    private static OnlineManagementClient creaper_cluster1node1;
+    private static OnlineManagementClient creaper_cluster1node2;
 
-	private static Logger logger = Logger.getLogger(TransactionsInCluster_SpecifiedNodeAffinity_StatelessBean_TestCase.class.getName());
+    private static Logger logger = Logger.getLogger(TransactionsInCluster_SpecifiedNodeAffinity_StatelessBean_TestCase.class.getName());
 
-	@ArquillianResource
-	private ContainerController containerController;
+    @ArquillianResource
+    private ContainerController containerController;
 
-	public static final String TRANSACTIONAL_BEAN_LOOKUP =
-			"ejb:/transactions/" + TransactionalBeanStateless.class.getSimpleName() + "!"
-					+ TransactionalBeanRemote.class.getName();
+    public static final String TRANSACTIONAL_BEAN_LOOKUP =
+            "ejb:/transactions/" + TransactionalBeanStateless.class.getSimpleName() + "!"
+                    + TransactionalBeanRemote.class.getName();
 
-	public static JavaArchive createDeployment() {
-		final JavaArchive jar = ShrinkWrap.create(JavaArchive.class, "transactions.jar");
-		jar.addClasses(TransactionalBeanStateless.class, TransactionalBeanRemote.class, Person.class);
-		jar.addAsManifestResource(ClassLoader.getSystemResource(
-				"org/wildfly/ejbclient/testsuite/integration/multinode/transactions/persistence.xml"), "persistence.xml");
-		return jar;
-	}
+    public static JavaArchive createDeployment() {
+        final JavaArchive jar = ShrinkWrap.create(JavaArchive.class, "transactions.jar");
+        jar.addClasses(TransactionalBeanStateless.class, TransactionalBeanRemote.class, Person.class);
+        jar.addAsManifestResource(ClassLoader.getSystemResource(
+                "org/wildfly/ejbclient/testsuite/integration/multinode/transactions/persistence.xml"), "persistence.xml");
+        return jar;
+    }
 
-	@Before
-	public void before() throws Exception {
-		setLoggerPrefix("CLUSTER1_NODE1", CLUSTER1_NODE1.homeDirectory, CLUSTER1_NODE1.configurationXmlFile);
-		setLoggerPrefix("CLUSTER1_NODE2", CLUSTER1_NODE2.homeDirectory, CLUSTER1_NODE2.configurationXmlFile);
+    @Before
+    public void before() throws Exception {
+        setLoggerPrefix("CLUSTER1_NODE1", CLUSTER1_NODE1.homeDirectory, CLUSTER1_NODE1.configurationXmlFile);
+        setLoggerPrefix("CLUSTER1_NODE2", CLUSTER1_NODE2.homeDirectory, CLUSTER1_NODE2.configurationXmlFile);
 
-		containerController.start(CLUSTER1_NODE1.nodeName);
-		containerController.start(CLUSTER1_NODE2.nodeName);
+        containerController.start(CLUSTER1_NODE1.nodeName);
+        containerController.start(CLUSTER1_NODE2.nodeName);
 
-		creaper_cluster1node1 = createCreaper(CLUSTER1_NODE1.bindAddress, CLUSTER1_NODE1.managementPort);
-		creaper_cluster1node2 = createCreaper(CLUSTER1_NODE2.bindAddress, CLUSTER1_NODE2.managementPort);
+        creaper_cluster1node1 = createCreaper(CLUSTER1_NODE1.bindAddress, CLUSTER1_NODE1.managementPort);
+        creaper_cluster1node2 = createCreaper(CLUSTER1_NODE2.bindAddress, CLUSTER1_NODE2.managementPort);
 
-		DeploymentHelpers.deploy(deployment, creaper_cluster1node1);
-		DeploymentHelpers.deploy(deployment, creaper_cluster1node2);
-	}
+        DeploymentHelpers.deploy(deployment, creaper_cluster1node1);
+        DeploymentHelpers.deploy(deployment, creaper_cluster1node2);
+    }
 
 
-	@Test
-	public void oneCallPerTransactionAndCommit() throws Exception {
-		for (int iteration = 0; iteration < 10; iteration++) {
-			final Properties properties = new Properties();
-			properties.put(Context.INITIAL_CONTEXT_FACTORY, WildFlyInitialContextFactory.class.getName());
-			properties.put(Context.PROVIDER_URL, CLUSTER1_NODE1.urlOfHttpRemotingConnector);
+    @Test
+    public void oneCallPerTransactionAndCommit() throws Exception {
+        for (int iteration = 0; iteration < 10; iteration++) {
+            final Properties properties = new Properties();
+            properties.put(Context.INITIAL_CONTEXT_FACTORY, WildFlyInitialContextFactory.class.getName());
+            properties.put(Context.PROVIDER_URL, CLUSTER1_NODE1.urlOfHttpRemotingConnector);
 
-			final InitialContext ejbCtx = new InitialContext(properties);
-			try {
-				final TransactionalBeanRemote bean = (TransactionalBeanRemote) ejbCtx
-						.lookup(TRANSACTIONAL_BEAN_LOOKUP);
-				final UserTransaction tx = (UserTransaction) ejbCtx.lookup("txn:UserTransaction");
-				try {
-					tx.begin();
-					bean.createPerson();
-					Assert.assertEquals(iteration + 1, bean.getPersonList().size());
-				} finally {
-					tx.commit();
-				}
-				// to make sure the next call goes to node1 again (TX end disassociates the affinity)
-				EJBClient.setStrongAffinity(bean, new NodeAffinity(CLUSTER1_NODE1.nodeName));
-				Assert.assertEquals(iteration + 1, bean.getPersonList().size());
-			} finally {
-				MiscHelpers.safeCloseEjbClientContext(ejbCtx);
-			}
-		}
-	}
+            final InitialContext ejbCtx = new InitialContext(properties);
+            try {
+                final TransactionalBeanRemote bean = (TransactionalBeanRemote) ejbCtx
+                        .lookup(TRANSACTIONAL_BEAN_LOOKUP);
+                final UserTransaction tx = (UserTransaction) ejbCtx.lookup("txn:UserTransaction");
+                try {
+                    tx.begin();
+                    bean.createPerson();
+                    Assert.assertEquals(iteration + 1, bean.getPersonList().size());
+                } finally {
+                    tx.commit();
+                }
+                // to make sure the next call goes to node1 again (TX end disassociates the affinity)
+                EJBClient.setStrongAffinity(bean, new NodeAffinity(CLUSTER1_NODE1.nodeName));
+                Assert.assertEquals(iteration + 1, bean.getPersonList().size());
+            } finally {
+                MiscHelpers.safeCloseEjbClientContext(ejbCtx);
+            }
+        }
+    }
 
-	@Test
-	public void manyCallsPerTransactionAndCommit() throws Exception {
-		for (int iteration = 0; iteration < 10; iteration++) {
-			final Properties properties = new Properties();
-			properties.put(Context.INITIAL_CONTEXT_FACTORY, WildFlyInitialContextFactory.class.getName());
-			properties.put(Context.PROVIDER_URL, CLUSTER1_NODE1.urlOfHttpRemotingConnector);
+    @Test
+    public void manyCallsPerTransactionAndCommit() throws Exception {
+        for (int iteration = 0; iteration < 10; iteration++) {
+            final Properties properties = new Properties();
+            properties.put(Context.INITIAL_CONTEXT_FACTORY, WildFlyInitialContextFactory.class.getName());
+            properties.put(Context.PROVIDER_URL, CLUSTER1_NODE1.urlOfHttpRemotingConnector);
 
-			final InitialContext ejbCtx = new InitialContext(properties);
-			try {
-				final TransactionalBeanRemote bean = (TransactionalBeanRemote) ejbCtx
-						.lookup(TRANSACTIONAL_BEAN_LOOKUP);
-				final UserTransaction tx = (UserTransaction) ejbCtx.lookup("txn:UserTransaction");
-				try {
-					tx.begin();
-					for (int i = 0; i < 100; i++) {
-						bean.createPerson();
-					}
-					Assert.assertEquals(100 * (iteration + 1), bean.getPersonList().size());
-				} finally {
-					tx.commit();
-				}
-				// to make sure the next call goes to node1 again (TX end disassociates the affinity)
-				EJBClient.setStrongAffinity(bean, new NodeAffinity(CLUSTER1_NODE1.nodeName));
-				Assert.assertEquals(100 * (iteration + 1), bean.getPersonList().size());
-			} finally {
-				MiscHelpers.safeCloseEjbClientContext(ejbCtx);
-			}
-		}
-	}
+            final InitialContext ejbCtx = new InitialContext(properties);
+            try {
+                final TransactionalBeanRemote bean = (TransactionalBeanRemote) ejbCtx
+                        .lookup(TRANSACTIONAL_BEAN_LOOKUP);
+                final UserTransaction tx = (UserTransaction) ejbCtx.lookup("txn:UserTransaction");
+                try {
+                    tx.begin();
+                    for (int i = 0; i < 100; i++) {
+                        bean.createPerson();
+                    }
+                    Assert.assertEquals(100 * (iteration + 1), bean.getPersonList().size());
+                } finally {
+                    tx.commit();
+                }
+                // to make sure the next call goes to node1 again (TX end disassociates the affinity)
+                EJBClient.setStrongAffinity(bean, new NodeAffinity(CLUSTER1_NODE1.nodeName));
+                Assert.assertEquals(100 * (iteration + 1), bean.getPersonList().size());
+            } finally {
+                MiscHelpers.safeCloseEjbClientContext(ejbCtx);
+            }
+        }
+    }
 
-	@Test
-	public void oneCallPerTransactionAndRollback() throws Exception {
-		for (int iteration = 0; iteration < 10; iteration++) {
-			final Properties properties = new Properties();
-			properties.put(Context.INITIAL_CONTEXT_FACTORY, WildFlyInitialContextFactory.class.getName());
-			properties.put(Context.PROVIDER_URL, CLUSTER1_NODE1.urlOfHttpRemotingConnector);
+    @Test
+    public void oneCallPerTransactionAndRollback() throws Exception {
+        for (int iteration = 0; iteration < 10; iteration++) {
+            final Properties properties = new Properties();
+            properties.put(Context.INITIAL_CONTEXT_FACTORY, WildFlyInitialContextFactory.class.getName());
+            properties.put(Context.PROVIDER_URL, CLUSTER1_NODE1.urlOfHttpRemotingConnector);
 
-			final InitialContext ejbCtx = new InitialContext(properties);
-			try {
-				final TransactionalBeanRemote bean = (TransactionalBeanRemote) ejbCtx
-						.lookup(TRANSACTIONAL_BEAN_LOOKUP);
-				final UserTransaction tx = (UserTransaction) ejbCtx.lookup("txn:UserTransaction");
-				try {
-					tx.begin();
-					bean.createPerson();
-				} finally {
-					tx.rollback();
-				}
-				// to make sure the next call goes to node1 again (TX end disassociates the affinity)
-				EJBClient.setStrongAffinity(bean, new NodeAffinity(CLUSTER1_NODE1.nodeName));
-				Assert.assertEquals(0, bean.getPersonList().size());
-			} finally {
-				MiscHelpers.safeCloseEjbClientContext(ejbCtx);
-			}
-		}
-	}
+            final InitialContext ejbCtx = new InitialContext(properties);
+            try {
+                final TransactionalBeanRemote bean = (TransactionalBeanRemote) ejbCtx
+                        .lookup(TRANSACTIONAL_BEAN_LOOKUP);
+                final UserTransaction tx = (UserTransaction) ejbCtx.lookup("txn:UserTransaction");
+                try {
+                    tx.begin();
+                    bean.createPerson();
+                } finally {
+                    tx.rollback();
+                }
+                // to make sure the next call goes to node1 again (TX end disassociates the affinity)
+                EJBClient.setStrongAffinity(bean, new NodeAffinity(CLUSTER1_NODE1.nodeName));
+                Assert.assertEquals(0, bean.getPersonList().size());
+            } finally {
+                MiscHelpers.safeCloseEjbClientContext(ejbCtx);
+            }
+        }
+    }
 
-	@Test
-	public void manyCallsPerTransactionAndRollback() throws Exception {
-		for (int iteration = 0; iteration < 10; iteration++) {
-			final Properties properties = new Properties();
-			properties.put(Context.INITIAL_CONTEXT_FACTORY, WildFlyInitialContextFactory.class.getName());
-			properties.put(Context.PROVIDER_URL, CLUSTER1_NODE1.urlOfHttpRemotingConnector);
+    @Test
+    public void manyCallsPerTransactionAndRollback() throws Exception {
+        for (int iteration = 0; iteration < 10; iteration++) {
+            final Properties properties = new Properties();
+            properties.put(Context.INITIAL_CONTEXT_FACTORY, WildFlyInitialContextFactory.class.getName());
+            properties.put(Context.PROVIDER_URL, CLUSTER1_NODE1.urlOfHttpRemotingConnector);
 
-			final InitialContext ejbCtx = new InitialContext(properties);
-			try {
-				final TransactionalBeanRemote bean = (TransactionalBeanRemote) ejbCtx
-						.lookup(TRANSACTIONAL_BEAN_LOOKUP);
-				final UserTransaction tx = (UserTransaction) ejbCtx.lookup("txn:UserTransaction");
-				try {
-					tx.begin();
-					for(int i = 0; i<100; i++)
-						bean.createPerson();
-				} finally {
-					tx.rollback();
-				}
-				// to make sure the next call goes to node1 again (TX end disassociates the affinity)
-				EJBClient.setStrongAffinity(bean, new NodeAffinity(CLUSTER1_NODE1.nodeName));
-				Assert.assertEquals(0, bean.getPersonList().size());
-			} finally {
-				MiscHelpers.safeCloseEjbClientContext(ejbCtx);
-			}
-		}
-	}
+            final InitialContext ejbCtx = new InitialContext(properties);
+            try {
+                final TransactionalBeanRemote bean = (TransactionalBeanRemote) ejbCtx
+                        .lookup(TRANSACTIONAL_BEAN_LOOKUP);
+                final UserTransaction tx = (UserTransaction) ejbCtx.lookup("txn:UserTransaction");
+                try {
+                    tx.begin();
+                    for(int i = 0; i<100; i++)
+                        bean.createPerson();
+                } finally {
+                    tx.rollback();
+                }
+                // to make sure the next call goes to node1 again (TX end disassociates the affinity)
+                EJBClient.setStrongAffinity(bean, new NodeAffinity(CLUSTER1_NODE1.nodeName));
+                Assert.assertEquals(0, bean.getPersonList().size());
+            } finally {
+                MiscHelpers.safeCloseEjbClientContext(ejbCtx);
+            }
+        }
+    }
 
-	@After
-	public void cleanup() throws Exception {
-		containerController.start(CLUSTER1_NODE1.nodeName);
-		containerController.start(CLUSTER1_NODE2.nodeName);
+    @After
+    public void cleanup() throws Exception {
+        containerController.start(CLUSTER1_NODE1.nodeName);
+        containerController.start(CLUSTER1_NODE2.nodeName);
 
-		DeploymentHelpers.undeploy(deployment.getName(), creaper_cluster1node1);
-		DeploymentHelpers.undeploy(deployment.getName(), creaper_cluster1node2);
+        DeploymentHelpers.undeploy(deployment.getName(), creaper_cluster1node1);
+        DeploymentHelpers.undeploy(deployment.getName(), creaper_cluster1node2);
 
-		containerController.stop(CLUSTER1_NODE1.nodeName);
-		containerController.stop(CLUSTER1_NODE2.nodeName);
+        containerController.stop(CLUSTER1_NODE1.nodeName);
+        containerController.stop(CLUSTER1_NODE2.nodeName);
 
-		setLoggerPrefix("", CLUSTER1_NODE1.homeDirectory, CLUSTER1_NODE1.configurationXmlFile);
-		setLoggerPrefix("", CLUSTER1_NODE2.homeDirectory, CLUSTER1_NODE2.configurationXmlFile);
-	}
+        setLoggerPrefix("", CLUSTER1_NODE1.homeDirectory, CLUSTER1_NODE1.configurationXmlFile);
+        setLoggerPrefix("", CLUSTER1_NODE2.homeDirectory, CLUSTER1_NODE2.configurationXmlFile);
+    }
 
 
 }

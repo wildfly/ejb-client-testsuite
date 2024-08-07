@@ -168,7 +168,7 @@ public class FailoverViaSingleProviderURLStatelessBeanTestCase {
 
         for (int iteration = 0; iteration < 20; iteration++) {
             System.out.printf("Starting iteration %d/20\n", iteration);
-            
+
             final Properties properties = new Properties();
             properties.put(Context.INITIAL_CONTEXT_FACTORY, WildFlyInitialContextFactory.class.getName());
             properties.put(Context.PROVIDER_URL, CLUSTER1_NODE1.urlOfHttpRemotingConnector

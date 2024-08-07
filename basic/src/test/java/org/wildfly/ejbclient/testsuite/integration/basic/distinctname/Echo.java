@@ -20,6 +20,5 @@ package org.wildfly.ejbclient.testsuite.integration.basic.distinctname;
  * @author Jaikiran Pai // deliberately stolen verbatim from AS7 testsuite by jmartisk
  */
 public interface Echo {
-    
     String echo(String msg);
 }

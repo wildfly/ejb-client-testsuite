@@ -21,6 +21,6 @@ import jakarta.ejb.Remote;
 @Remote
 public interface LongProcessingBeanRemote {
 
-	int processAndReturnInstanceHashCode(Integer seconds);
+    int processAndReturnInstanceHashCode(Integer seconds);
 
 }

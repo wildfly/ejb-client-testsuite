@@ -48,84 +48,84 @@ import static org.wildfly.ejbclient.testsuite.integration.multinode.environment.
 @RunWith(Arquillian.class)
 @RunAsClient
 @Ignore("FIXME - I need to look more into this, it fails with stateful beans " +
-		"but I'm not sure if that is a bug or " +
-		"if the test is nonsense")
+        "but I'm not sure if that is a bug or " +
+        "if the test is nonsense")
 public class TransactionAttributes_StatefulBean_TestCase {
 
-	private static final JavaArchive deployment = createDeployment();
-	private static OnlineManagementClient creaper_cluster1node1;
-	private static OnlineManagementClient creaper_cluster1node2;
-	
-	@ArquillianResource
-	private ContainerController containerController;
+    private static final JavaArchive deployment = createDeployment();
+    private static OnlineManagementClient creaper_cluster1node1;
+    private static OnlineManagementClient creaper_cluster1node2;
 
-	public static final String STATEFUL_BEAN_LOOKUP =
-			"ejb:/transactions/" + TransactionalBeanStateful.class.getSimpleName() + "!"
-					+ TransactionalBeanRemote.class.getName() + "?stateful";
+    @ArquillianResource
+    private ContainerController containerController;
 
-	public static JavaArchive createDeployment() {
-		final JavaArchive jar = ShrinkWrap.create(JavaArchive.class, "transactions.jar");
-		jar.addClasses(TransactionalBeanStateful.class, TransactionalBeanRemote.class, Person.class);
-		jar.addAsManifestResource(ClassLoader.getSystemResource(
-				"org/wildfly/ejbclient/testsuite/integration/multinode/transactions/persistence.xml"), "persistence.xml");
-		return jar;
-	}
+    public static final String STATEFUL_BEAN_LOOKUP =
+            "ejb:/transactions/" + TransactionalBeanStateful.class.getSimpleName() + "!"
+                    + TransactionalBeanRemote.class.getName() + "?stateful";
 
-	@Before
-	public void before() throws Exception {
-		setLoggerPrefix("CLUSTER1_NODE1", CLUSTER1_NODE1.homeDirectory, CLUSTER1_NODE1.configurationXmlFile);
-		setLoggerPrefix("CLUSTER1_NODE2", CLUSTER1_NODE2.homeDirectory, CLUSTER1_NODE2.configurationXmlFile);
+    public static JavaArchive createDeployment() {
+        final JavaArchive jar = ShrinkWrap.create(JavaArchive.class, "transactions.jar");
+        jar.addClasses(TransactionalBeanStateful.class, TransactionalBeanRemote.class, Person.class);
+        jar.addAsManifestResource(ClassLoader.getSystemResource(
+                "org/wildfly/ejbclient/testsuite/integration/multinode/transactions/persistence.xml"), "persistence.xml");
+        return jar;
+    }
 
-		containerController.start(CLUSTER1_NODE1.nodeName);
-		containerController.start(CLUSTER1_NODE2.nodeName);
+    @Before
+    public void before() throws Exception {
+        setLoggerPrefix("CLUSTER1_NODE1", CLUSTER1_NODE1.homeDirectory, CLUSTER1_NODE1.configurationXmlFile);
+        setLoggerPrefix("CLUSTER1_NODE2", CLUSTER1_NODE2.homeDirectory, CLUSTER1_NODE2.configurationXmlFile);
 
-		creaper_cluster1node1 = createCreaper(CLUSTER1_NODE1.bindAddress, CLUSTER1_NODE1.managementPort);
-		creaper_cluster1node2 = createCreaper(CLUSTER1_NODE2.bindAddress, CLUSTER1_NODE2.managementPort);
+        containerController.start(CLUSTER1_NODE1.nodeName);
+        containerController.start(CLUSTER1_NODE2.nodeName);
 
-		DeploymentHelpers.deploy(deployment, creaper_cluster1node1);
-		DeploymentHelpers.deploy(deployment, creaper_cluster1node2);
-	}
+        creaper_cluster1node1 = createCreaper(CLUSTER1_NODE1.bindAddress, CLUSTER1_NODE1.managementPort);
+        creaper_cluster1node2 = createCreaper(CLUSTER1_NODE2.bindAddress, CLUSTER1_NODE2.managementPort);
 
-	@Test
-	public void begin_mandatoryMethod_notsupportedMethod_commit() throws Exception {
-		for(int iteration = 0; iteration < 10; iteration++) {
+        DeploymentHelpers.deploy(deployment, creaper_cluster1node1);
+        DeploymentHelpers.deploy(deployment, creaper_cluster1node2);
+    }
 
-			final Properties properties = new Properties();
-			properties.put(Context.INITIAL_CONTEXT_FACTORY, WildFlyInitialContextFactory.class.getName());
-			properties.put(Context.PROVIDER_URL, CLUSTER1_NODE1.urlOfHttpRemotingConnector);
+    @Test
+    public void begin_mandatoryMethod_notsupportedMethod_commit() throws Exception {
+        for(int iteration = 0; iteration < 10; iteration++) {
 
-			final InitialContext ejbCtx = new InitialContext(properties);
-			try {
-				final TransactionalBeanRemote bean = (TransactionalBeanRemote) ejbCtx
-						.lookup(STATEFUL_BEAN_LOOKUP);
-				final UserTransaction tx = (UserTransaction) ejbCtx.lookup("txn:UserTransaction");
-				try {
-					tx.begin();
-//					bean.createPerson(); // MANDATORY
-					bean.dummyMethodWithNotSupportedTransactions();    // NOT_SUPPORTED
-				} finally {
-					tx.commit();
-				}
-			} finally {
-				MiscHelpers.safeCloseEjbClientContext(ejbCtx);
-			}
-		}
-	}
+            final Properties properties = new Properties();
+            properties.put(Context.INITIAL_CONTEXT_FACTORY, WildFlyInitialContextFactory.class.getName());
+            properties.put(Context.PROVIDER_URL, CLUSTER1_NODE1.urlOfHttpRemotingConnector);
 
-	@After
-	public void cleanup() throws Exception {
-		containerController.start(CLUSTER1_NODE1.nodeName);
-		containerController.start(CLUSTER1_NODE2.nodeName);
+            final InitialContext ejbCtx = new InitialContext(properties);
+            try {
+                final TransactionalBeanRemote bean = (TransactionalBeanRemote) ejbCtx
+                        .lookup(STATEFUL_BEAN_LOOKUP);
+                final UserTransaction tx = (UserTransaction) ejbCtx.lookup("txn:UserTransaction");
+                try {
+                    tx.begin();
+//                    bean.createPerson(); // MANDATORY
+                    bean.dummyMethodWithNotSupportedTransactions();    // NOT_SUPPORTED
+                } finally {
+                    tx.commit();
+                }
+            } finally {
+                MiscHelpers.safeCloseEjbClientContext(ejbCtx);
+            }
+        }
+    }
 
-		DeploymentHelpers.undeploy(deployment.getName(), creaper_cluster1node1);
-		DeploymentHelpers.undeploy(deployment.getName(), creaper_cluster1node2);
+    @After
+    public void cleanup() throws Exception {
+        containerController.start(CLUSTER1_NODE1.nodeName);
+        containerController.start(CLUSTER1_NODE2.nodeName);
 
-		containerController.stop(CLUSTER1_NODE1.nodeName);
-		containerController.stop(CLUSTER1_NODE2.nodeName);
+        DeploymentHelpers.undeploy(deployment.getName(), creaper_cluster1node1);
+        DeploymentHelpers.undeploy(deployment.getName(), creaper_cluster1node2);
 
-		setLoggerPrefix("", CLUSTER1_NODE1.homeDirectory, CLUSTER1_NODE1.configurationXmlFile);
-		setLoggerPrefix("", CLUSTER1_NODE2.homeDirectory, CLUSTER1_NODE2.configurationXmlFile);
-	}
+        containerController.stop(CLUSTER1_NODE1.nodeName);
+        containerController.stop(CLUSTER1_NODE2.nodeName);
+
+        setLoggerPrefix("", CLUSTER1_NODE1.homeDirectory, CLUSTER1_NODE1.configurationXmlFile);
+        setLoggerPrefix("", CLUSTER1_NODE2.homeDirectory, CLUSTER1_NODE2.configurationXmlFile);
+    }
 
 
 }

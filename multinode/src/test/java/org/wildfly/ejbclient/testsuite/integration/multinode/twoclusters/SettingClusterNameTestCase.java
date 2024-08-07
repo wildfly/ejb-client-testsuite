@@ -45,43 +45,43 @@ import static org.wildfly.ejbclient.testsuite.integration.multinode.environment.
 @Ignore("unignore this manually to run the reproducer, we don't want this to run by default because it hangs the TS")
 public class SettingClusterNameTestCase {
 
-	private static OnlineManagementClient creaper_cluster1node1;
-	private static ModelNodeResult oldValueResult;
+    private static OnlineManagementClient creaper_cluster1node1;
+    private static ModelNodeResult oldValueResult;
 
-	@ArquillianResource
-	private ContainerController containerController;
+    @ArquillianResource
+    private ContainerController containerController;
 
-	@BeforeClass
-	public static void prepare() throws IOException {
-		creaper_cluster1node1 = ManagementHelpers.createCreaper(CLUSTER1_NODE1.bindAddress, CLUSTER1_NODE1.managementPort);
-	}
+    @BeforeClass
+    public static void prepare() throws IOException {
+        creaper_cluster1node1 = ManagementHelpers.createCreaper(CLUSTER1_NODE1.bindAddress, CLUSTER1_NODE1.managementPort);
+    }
 
-	@AfterClass
-	public static void afterClass() {
-		ManagementHelpers.safeClose(creaper_cluster1node1);
-	}
+    @AfterClass
+    public static void afterClass() {
+        ManagementHelpers.safeClose(creaper_cluster1node1);
+    }
 
-	@Test
-	public void reproducer() throws Exception {
-		containerController.start(CLUSTER1_NODE1.nodeName);
-		oldValueResult = new Operations(creaper_cluster1node1).readResource(JGROUPS_EE_CHANNEL_RESOURCE);
-		for (int i2 = 0; i2 < 500000; i2++) {
-			final String clusterName = "cluster" + new Random().nextInt();
-			new Operations(creaper_cluster1node1)
-					.headers(Headers.allowResourceServiceRestart())
-					.writeAttribute(JGROUPS_EE_CHANNEL_RESOURCE, "cluster", clusterName);
-			System.out.println(i2);
-		}
-		containerController.stop(CLUSTER1_NODE1.nodeName);
-	}
+    @Test
+    public void reproducer() throws Exception {
+        containerController.start(CLUSTER1_NODE1.nodeName);
+        oldValueResult = new Operations(creaper_cluster1node1).readResource(JGROUPS_EE_CHANNEL_RESOURCE);
+        for (int i2 = 0; i2 < 500000; i2++) {
+            final String clusterName = "cluster" + new Random().nextInt();
+            new Operations(creaper_cluster1node1)
+                    .headers(Headers.allowResourceServiceRestart())
+                    .writeAttribute(JGROUPS_EE_CHANNEL_RESOURCE, "cluster", clusterName);
+            System.out.println(i2);
+        }
+        containerController.stop(CLUSTER1_NODE1.nodeName);
+    }
 
 
-	@After
-	public void cleanup() throws Exception {
-		containerController.start(CLUSTER1_NODE1.nodeName);
-		new Operations(creaper_cluster1node1)
-				.writeAttribute(JGROUPS_EE_CHANNEL_RESOURCE, "cluster", oldValueResult.get("cluster").asStringOrNull());
-		ContainerHelpers.stopContainers(containerController, CLUSTER1_NODE1.nodeName);
-	}
+    @After
+    public void cleanup() throws Exception {
+        containerController.start(CLUSTER1_NODE1.nodeName);
+        new Operations(creaper_cluster1node1)
+                .writeAttribute(JGROUPS_EE_CHANNEL_RESOURCE, "cluster", oldValueResult.get("cluster").asStringOrNull());
+        ContainerHelpers.stopContainers(containerController, CLUSTER1_NODE1.nodeName);
+    }
 
 }

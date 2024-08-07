@@ -26,13 +26,13 @@ import jakarta.ejb.Stateless;
 @PermitAll
 public class WhoAmIStateless implements WhoAmIRemote {
 
-	@Resource
-	private SessionContext ctx;
+    @Resource
+    private SessionContext ctx;
 
-	@Override
-	@RolesAllowed("users")
-	public String whoAmI() {
-		return ctx.getCallerPrincipal().getName();
-	}
+    @Override
+    @RolesAllowed("users")
+    public String whoAmI() {
+        return ctx.getCallerPrincipal().getName();
+    }
 
 }

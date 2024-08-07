@@ -16,9 +16,6 @@
 
 package org.wildfly.ejbclient.testsuite.integration.basic.tx;
 
-import java.util.Properties;
-import javax.naming.Context;
-import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import jakarta.transaction.HeuristicMixedException;
 import jakarta.transaction.HeuristicRollbackException;

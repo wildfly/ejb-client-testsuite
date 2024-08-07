@@ -21,6 +21,6 @@ import jakarta.ejb.Remote;
 @Remote
 public interface WhoAmIRemote {
 
-	String whoAmI();
+    String whoAmI();
 
 }
