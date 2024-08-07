@@ -26,7 +26,7 @@ import org.junit.runner.RunWith;
 import org.xnio.XnioWorker;
 
 /**
- * 
+ *
  * @author <a href="mailto:manovotn@redhat.com">Matej Novotny</a>
  */
 @RunWith(Arquillian.class)
@@ -42,7 +42,7 @@ public class XnioOptionsWorkerNameTest extends AbstractXnioTest {
     public void testWorkerName() throws NamingException {
         // perform some actual EJB call
         pingEjbBean();
-        
+
         Assert.assertEquals("TestWorker", XnioWorker.getContextManager().getGlobalDefault().getName());
     }
 }

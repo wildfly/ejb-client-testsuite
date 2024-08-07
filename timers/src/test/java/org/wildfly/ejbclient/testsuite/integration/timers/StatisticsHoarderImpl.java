@@ -44,7 +44,7 @@ public class StatisticsHoarderImpl implements StatisticsHoarder {
 
     private Map<String, TimerWrapper> allTimers;
     private long timerInterval;
-    
+
     @PostConstruct
     public void init() {
         allTimers = new HashMap<>();

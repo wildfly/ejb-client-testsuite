@@ -27,12 +27,12 @@ import org.jboss.ejb3.annotation.SecurityDomain;
 @Stateless
 public class SecuredBean implements SecuredBeanRemote {
 
-	@Resource
-	private SessionContext ctx;
+    @Resource
+    private SessionContext ctx;
 
-	@RolesAllowed("users")
-	public String whoAmI() {
-		return ctx.getCallerPrincipal().getName() + "@" + System.getProperty("jboss.node.name");
-	}
+    @RolesAllowed("users")
+    public String whoAmI() {
+        return ctx.getCallerPrincipal().getName() + "@" + System.getProperty("jboss.node.name");
+    }
 
 }

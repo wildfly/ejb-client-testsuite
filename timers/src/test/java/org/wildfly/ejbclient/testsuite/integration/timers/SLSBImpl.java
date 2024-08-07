@@ -15,7 +15,6 @@
  */
 package org.wildfly.ejbclient.testsuite.integration.timers;
 
-import jakarta.annotation.PostConstruct;
 import jakarta.annotation.Resource;
 import jakarta.ejb.EJB;
 import jakarta.ejb.Stateless;

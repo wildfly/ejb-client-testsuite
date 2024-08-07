@@ -42,7 +42,7 @@ public class XnioOptionsIoThreadsTest extends AbstractXnioTest {
     public void testIoThreadCount() throws NamingException {
         // perform some actual EJB call
         pingEjbBean();
-        
+
         Assert.assertEquals(5, XnioWorker.getContextManager().getGlobalDefault().getIoThreadCount());
     }
 }

@@ -61,99 +61,99 @@ import static org.wildfly.ejbclient.testsuite.integration.multinode.environment.
 @RunAsClient
 public class OverrideSecuritySettingsInWildflyConfigTestCase {
 
-	public static JavaArchive createDeployment() {
-		final JavaArchive jar = ShrinkWrap.create(JavaArchive.class, "security.jar");
-		jar.addClasses(WhoAmIRemote.class, WhoAmIStateless.class);
-		return jar;
-	}
+    public static JavaArchive createDeployment() {
+        final JavaArchive jar = ShrinkWrap.create(JavaArchive.class, "security.jar");
+        jar.addClasses(WhoAmIRemote.class, WhoAmIStateless.class);
+        return jar;
+    }
 
-	private final JavaArchive DEPLOYMENT = createDeployment();
+    private final JavaArchive DEPLOYMENT = createDeployment();
 
-	@ArquillianResource
-	private ContainerController containerController;
+    @ArquillianResource
+    private ContainerController containerController;
 
-	OnlineManagementClient creaper;
+    OnlineManagementClient creaper;
 
-	@Before
-	public void before() throws Exception {
-		setLoggerPrefix("NODE1", NODE1.homeDirectory, NODE1.configurationXmlFile);
-		createTestingUsers(NODE1.homeDirectory);
-		containerController.start(NODE1.nodeName);
-		creaper = createCreaper(NODE1.bindAddress, NODE1.managementPort);
-		DeploymentHelpers.deploy(DEPLOYMENT, creaper);
-	}
+    @Before
+    public void before() throws Exception {
+        setLoggerPrefix("NODE1", NODE1.homeDirectory, NODE1.configurationXmlFile);
+        createTestingUsers(NODE1.homeDirectory);
+        containerController.start(NODE1.nodeName);
+        creaper = createCreaper(NODE1.bindAddress, NODE1.managementPort);
+        DeploymentHelpers.deploy(DEPLOYMENT, creaper);
+    }
 
-	@After
-	public void cleanup() throws Exception {
-		DeploymentHelpers.undeploy(DEPLOYMENT.getName(), creaper);
-		containerController.stop(NODE1.nodeName);
-		setLoggerPrefix("", NODE1.homeDirectory, NODE1.configurationXmlFile);
-		removeTestingUsers(NODE1.homeDirectory);
-	}
+    @After
+    public void cleanup() throws Exception {
+        DeploymentHelpers.undeploy(DEPLOYMENT.getName(), creaper);
+        containerController.stop(NODE1.nodeName);
+        setLoggerPrefix("", NODE1.homeDirectory, NODE1.configurationXmlFile);
+        removeTestingUsers(NODE1.homeDirectory);
+    }
 
-	/**
-	 * There is an authentication context with a username/password configured.
-	 * Add SECURITY_PRINCIPAL and SECURITY_CREDENTIALS properties when creating InitialContext.
-	 * These properties should override the credentials from the authentication context.
-	 *
-	 * TODO similar test which uses wildfly-config.xml instead of programmatic ctx
-	 */
-	@Test
-	public void invokeUsingAuthCtxAndThenUsingProperty() throws NamingException {
-		Security.addProvider(new WildFlyElytronProvider());
-		setWildflyConfigXml("secured");
+    /**
+     * There is an authentication context with a username/password configured.
+     * Add SECURITY_PRINCIPAL and SECURITY_CREDENTIALS properties when creating InitialContext.
+     * These properties should override the credentials from the authentication context.
+     *
+     * TODO similar test which uses wildfly-config.xml instead of programmatic ctx
+     */
+    @Test
+    public void invokeUsingAuthCtxAndThenUsingProperty() throws NamingException {
+        Security.addProvider(new WildFlyElytronProvider());
+        setWildflyConfigXml("secured");
 
-		AuthenticationConfiguration userConf = AuthenticationConfiguration.empty()
-				.useDefaultProviders()
-				.setSaslMechanismSelector(SaslMechanismSelector.fromString("DIGEST-MD5"))
-				.useName("joe")
-				.usePassword("joeIsAwesome2013!");
-		AuthenticationContext ctx = AuthenticationContext.empty().with(MatchRule.ALL, userConf);
-		AuthenticationContext.getContextManager().setGlobalDefault(ctx);
+        AuthenticationConfiguration userConf = AuthenticationConfiguration.empty()
+                .useDefaultProviders()
+                .setSaslMechanismSelector(SaslMechanismSelector.fromString("DIGEST-MD5"))
+                .useName("joe")
+                .usePassword("joeIsAwesome2013!");
+        AuthenticationContext ctx = AuthenticationContext.empty().with(MatchRule.ALL, userConf);
+        AuthenticationContext.getContextManager().setGlobalDefault(ctx);
 
-		// without explicit credentials, AuthenticationContext should be used
-		{
-			final Properties properties_justFactory = new Properties();
-			properties_justFactory.put(Context.INITIAL_CONTEXT_FACTORY, WildFlyInitialContextFactory.class.getName());
-			final InitialContext ejbCtx = new InitialContext(properties_justFactory);
-			try {
-				final WhoAmIRemote bean = (WhoAmIRemote) ejbCtx
-						.lookup("ejb:/security/" + WhoAmIStateless.class.getSimpleName() + "!"
-								+ WhoAmIRemote.class.getName());
-				Assert.assertEquals("joe", bean.whoAmI());
-			} finally {
-				MiscHelpers.safeCloseEjbClientContext(ejbCtx);
-			}
-		}
+        // without explicit credentials, AuthenticationContext should be used
+        {
+            final Properties properties_justFactory = new Properties();
+            properties_justFactory.put(Context.INITIAL_CONTEXT_FACTORY, WildFlyInitialContextFactory.class.getName());
+            final InitialContext ejbCtx = new InitialContext(properties_justFactory);
+            try {
+                final WhoAmIRemote bean = (WhoAmIRemote) ejbCtx
+                        .lookup("ejb:/security/" + WhoAmIStateless.class.getSimpleName() + "!"
+                                + WhoAmIRemote.class.getName());
+                Assert.assertEquals("joe", bean.whoAmI());
+            } finally {
+                MiscHelpers.safeCloseEjbClientContext(ejbCtx);
+            }
+        }
 
-		// now with explicit credentials
-		{
-			final Properties properties = new Properties();
-			properties.put(Context.INITIAL_CONTEXT_FACTORY, WildFlyInitialContextFactory.class.getName());
-			properties.put(Context.SECURITY_PRINCIPAL, "joe2");
-			properties.put(Context.SECURITY_CREDENTIALS, "joeIsAwesome2014!");
-			final InitialContext ejbCtx = new InitialContext(properties);
-			try {
-				final WhoAmIRemote bean = (WhoAmIRemote) ejbCtx
-						.lookup("ejb:/security/" + WhoAmIStateless.class.getSimpleName() + "!"
-								+ WhoAmIRemote.class.getName());
-				Assert.assertEquals("joe2", bean.whoAmI());
-			} finally {
-				MiscHelpers.safeCloseEjbClientContext(ejbCtx);
-			}
-		}
-	}
+        // now with explicit credentials
+        {
+            final Properties properties = new Properties();
+            properties.put(Context.INITIAL_CONTEXT_FACTORY, WildFlyInitialContextFactory.class.getName());
+            properties.put(Context.SECURITY_PRINCIPAL, "joe2");
+            properties.put(Context.SECURITY_CREDENTIALS, "joeIsAwesome2014!");
+            final InitialContext ejbCtx = new InitialContext(properties);
+            try {
+                final WhoAmIRemote bean = (WhoAmIRemote) ejbCtx
+                        .lookup("ejb:/security/" + WhoAmIStateless.class.getSimpleName() + "!"
+                                + WhoAmIRemote.class.getName());
+                Assert.assertEquals("joe2", bean.whoAmI());
+            } finally {
+                MiscHelpers.safeCloseEjbClientContext(ejbCtx);
+            }
+        }
+    }
 
 
-	public void setWildflyConfigXml(String name) {
-		if ( !isIPv6() ) {
-			System.setProperty("wildfly.config.url", ClassLoader.getSystemResource(
-					"org/wildfly/ejbclient/testsuite/integration/multinode/security/" + name + ".xml").toString());
-		} else {
-			System.setProperty("wildfly.config.url", ClassLoader.getSystemResource(
-					"org/wildfly/ejbclient/testsuite/integration/multinode/security/" + name + "-ipv6.xml").toString());
-		}
-	}
+    public void setWildflyConfigXml(String name) {
+        if ( !isIPv6() ) {
+            System.setProperty("wildfly.config.url", ClassLoader.getSystemResource(
+                    "org/wildfly/ejbclient/testsuite/integration/multinode/security/" + name + ".xml").toString());
+        } else {
+            System.setProperty("wildfly.config.url", ClassLoader.getSystemResource(
+                    "org/wildfly/ejbclient/testsuite/integration/multinode/security/" + name + "-ipv6.xml").toString());
+        }
+    }
 
 
 }

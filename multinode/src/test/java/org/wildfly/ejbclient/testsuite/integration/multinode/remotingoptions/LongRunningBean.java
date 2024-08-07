@@ -21,9 +21,9 @@ import jakarta.ejb.Remote;
 @Remote
 public interface LongRunningBean {
 
-	/**
-	 * Waits for a specified number of seconds and then returns.
-	 */
-	void doWork(int seconds);
+    /**
+     * Waits for a specified number of seconds and then returns.
+     */
+    void doWork(int seconds);
 
 }

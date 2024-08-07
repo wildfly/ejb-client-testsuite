@@ -25,7 +25,7 @@ import org.jboss.logging.Logger;
 public class IntermediaryBeanStateless implements IntermediaryBeanRemote {
 
     private static Logger logger = Logger.getLogger(IntermediaryBeanStateless.class.getName());
-    
+
     @EJB(lookup = "ejb:/bean-target/TargetBeanStateful!org.wildfly.ejbclient.testsuite.integration.multinode.wfly8524.beans.TargetBeanRemote?stateful")
     private TargetBeanRemote remote;
 

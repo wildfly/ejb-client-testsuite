@@ -18,13 +18,10 @@ package org.wildfly.ejbclient.testsuite.integration.basic.addressbinding.bean.cl
 
 import org.wildfly.ejbclient.testsuite.integration.basic.addressbinding.bean.server.IpSourceAddressReturningBeanRemote;
 
-import jakarta.ejb.EJB;
 import jakarta.ejb.Stateful;
 import jakarta.ejb.TransactionAttribute;
 import javax.naming.Context;
 import javax.naming.InitialContext;
-import javax.naming.NamingException;
-import java.io.IOException;
 import java.util.Properties;
 
 import static jakarta.ejb.TransactionAttributeType.NOT_SUPPORTED;

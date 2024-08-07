@@ -19,7 +19,6 @@ package org.wildfly.ejbclient.testsuite.integration.basic.utils.jndi;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
-import org.wildfly.ejbclient.testsuite.integration.basic.utils.jndi.InitialContextDirectoryGlobal;
 import org.wildfly.ejbclient.testsuite.integration.basic.utils.EJBClientContextType;
 import org.wildfly.ejbclient.testsuite.integration.basic.utils.TestEnvironment;
 

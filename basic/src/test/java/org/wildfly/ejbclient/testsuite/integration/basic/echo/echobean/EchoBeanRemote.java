@@ -83,6 +83,8 @@ public interface EchoBeanRemote {
         return value;
     }
 
-    default String echo(String value) { return value; }
+    default String echo(String value) {
+        return value;
+    }
 
 }

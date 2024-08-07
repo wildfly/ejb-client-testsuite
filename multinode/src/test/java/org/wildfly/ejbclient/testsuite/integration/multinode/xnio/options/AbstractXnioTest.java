@@ -58,12 +58,12 @@ public abstract class AbstractXnioTest {
 
     protected void setWildflyConfigXmlProperty(String name) {
         if ( !isIPv6() ) {
-			System.setProperty("wildfly.config.url", ClassLoader.getSystemResource(
+            System.setProperty("wildfly.config.url", ClassLoader.getSystemResource(
             "org/wildfly/ejbclient/testsuite/integration/multinode/xnio/options/configs/" + name + ".xml").toString());
-		} else {
+        } else {
             System.setProperty("wildfly.config.url", ClassLoader.getSystemResource(
             "org/wildfly/ejbclient/testsuite/integration/multinode/xnio/options/configs/" + name + "-ipv6.xml").toString());
-		}
+        }
     }
 
     protected void pingEjbBean() throws NamingException {
@@ -77,10 +77,10 @@ public abstract class AbstractXnioTest {
     }
 
     /**
-     * All subclasses implement this to supplement name of XML config they use 
+     * All subclasses implement this to supplement name of XML config they use
      */
     public abstract String getConfigName();
-    
+
     @Before
     public void before() throws Exception {
         setWildflyConfigXmlProperty(getConfigName());

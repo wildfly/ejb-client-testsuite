@@ -22,7 +22,6 @@ import javax.naming.NamingException;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.container.test.api.RunAsClient;
 import org.jboss.arquillian.junit.Arquillian;
-import org.wildfly.ejbclient.testsuite.integration.basic.utils.ConnectorType;
 import org.wildfly.ejbclient.testsuite.integration.basic.utils.EJBClientContextType;
 import org.wildfly.ejbclient.testsuite.integration.basic.utils.jndi.InitialContextDirectory;
 import org.wildfly.ejbclient.testsuite.integration.basic.utils.ServerAuthenticationType;

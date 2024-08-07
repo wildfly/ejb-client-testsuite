@@ -6,8 +6,6 @@ import jakarta.ejb.SessionContext;
 import jakarta.ejb.Stateful;
 import jakarta.ejb.TransactionAttribute;
 
-import java.util.concurrent.CountDownLatch;
-
 import static jakarta.ejb.TransactionAttributeType.NOT_SUPPORTED;
 
 @Stateful

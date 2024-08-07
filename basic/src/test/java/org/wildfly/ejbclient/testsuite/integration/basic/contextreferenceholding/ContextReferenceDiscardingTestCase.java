@@ -69,7 +69,7 @@ public class ContextReferenceDiscardingTestCase {
         // FIXME
         Assert.assertFalse("Tests for stateful beans currently skipped because they cause hangs",
                 TestEnvironment.getConnectorType().equals(ConnectorType.HTTP));
-        
+
         final InitialContextDirectory directory = new InitialContextDirectory.Supplier().get();
         final StatefulCounter bean = directory
                 .lookupStateful("echo-contextref", StatefulCounterBean.class, StatefulCounter.class);

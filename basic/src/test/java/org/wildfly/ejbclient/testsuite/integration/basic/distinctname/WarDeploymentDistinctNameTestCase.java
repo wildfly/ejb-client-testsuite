@@ -45,7 +45,7 @@ public class WarDeploymentDistinctNameTestCase extends DistinctNameTestCase {
         final JavaArchive jar = ShrinkWrap.create(JavaArchive.class, "ejb3.jar");
         jar.addPackage(JarDeploymentDistinctNameTestCase.class.getPackage());
         jar.addAsManifestResource("distinctname/jboss-ejb3.xml", "jboss-ejb3.xml");
-        
+
         final WebArchive war = ShrinkWrap.create(WebArchive.class, MODULE_NAME + ".war");
         war.addAsLibrary(jar);
         war.addAsWebResource("distinctname/jboss-web.xml", "WEB-INF/jboss-web.xml");

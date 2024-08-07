@@ -18,7 +18,6 @@ package org.wildfly.ejbclient.testsuite.integration.basic.echo.async.echobean;
 
 import java.util.concurrent.Future;
 import jakarta.ejb.AsyncResult;
-import jakarta.ejb.Asynchronous;
 import jakarta.ejb.Remote;
 
 /**

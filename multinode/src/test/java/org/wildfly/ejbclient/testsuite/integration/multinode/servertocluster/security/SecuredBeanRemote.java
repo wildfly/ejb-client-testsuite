@@ -21,6 +21,6 @@ import jakarta.ejb.Remote;
 @Remote
 public interface SecuredBeanRemote {
 
-	String whoAmI();
+    String whoAmI();
 
 }
