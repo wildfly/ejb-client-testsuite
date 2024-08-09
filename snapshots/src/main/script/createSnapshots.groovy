@@ -28,10 +28,6 @@ WILDFLY_NAME = "wildfly"
 WILDFLY_REPOSITORY = "https://github.com/wildfly/wildfly"
 WILDFLY_REPOSITORY_PROPERTY = "wildfly.repository"
 WILDFLY_BRANCH_PROPERTY = "wildfly.branch"
-BOMS_NAME = "boms"
-BOMS_REPOSITORY = "https://github.com/wildfly/boms.git"
-BOMS_REPOSITORY_PROPERTY = "boms.repository"
-BOMS_BRANCH_PROPERTY = "boms.branch"
 TESTSUITE_VERSION = "EJB-CLIENT-TESTSUITE"
 MVN_BUILD_OPTIONS = "-DskipTests=true"
 
@@ -55,14 +51,12 @@ def wildFlyDir = new File(TARGET_DIR, WILDFLY_NAME)
 cloneProject(WILDFLY_REPOSITORY_PROPERTY, WILDFLY_BRANCH_PROPERTY, WILDFLY_REPOSITORY, WILDFLY_NAME)
 changeDependencyVersion(EJB_CLIENT_VERSION_NAME, TESTSUITE_VERSION, wildFlyDir)
 changeDependencyVersion(HTTP_CLIENT_VERSION_NAME, TESTSUITE_VERSION, wildFlyDir)
+setProjectVersion(TESTSUITE_VERSION, wildFlyDir)
+// testsuite/test-product-conf has hard-coded version value, that should not be overridden, but it is in previous command. So we need to skip this TS section in this WF build.
+// https://github.com/wildfly/wildfly/blob/main/testsuite/test-product-conf/pom.xml
+executeCmd("sed -i s|<module>test-product-conf</module>||g testsuite/pom.xml", null, wildFlyDir, false)
 buildProject(wildFlyDir, "-Dts.noSmoke")
 renameWildFlyBuildDirectory(getProjectVersion(wildFlyDir), wildFlyDir)
-
-def bomDir = new File(TARGET_DIR, BOMS_NAME)
-cloneProject(BOMS_REPOSITORY_PROPERTY, BOMS_BRANCH_PROPERTY, BOMS_REPOSITORY, BOMS_NAME)
-setProjectVersion(TESTSUITE_VERSION, bomDir)
-changeDependencyVersion("version.server", getProjectVersion(wildFlyDir), bomDir)
-buildProject(bomDir)
 
 
 def executeCmd(command, env, dir, verbose) {
