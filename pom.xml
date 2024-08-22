@@ -77,7 +77,7 @@
         <version.plugin.enforcer>3.3.0</version.plugin.enforcer>
         <version.plugin.jacoco>0.7.9</version.plugin.jacoco>
         <version.plugin.jar>3.3.0</version.plugin.jar>
-        <version.plugin.maven-checkstyle-plugin>3.4.0</version.plugin.maven-checkstyle-plugin>
+        <version.plugin.maven-checkstyle-plugin>3.5.0</version.plugin.maven-checkstyle-plugin>
         <version.plugin.surefire>3.0.0</version.plugin.surefire>
         <version.plugin.wildfly>5.0.0.Final</version.plugin.wildfly>
 
