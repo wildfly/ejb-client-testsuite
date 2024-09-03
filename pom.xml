@@ -335,6 +335,7 @@
                     <version>${version.plugin.surefire}</version>
                     <configuration>
                         <forkNode implementation="org.apache.maven.plugin.surefire.extensions.SurefireForkNodeFactory"/>
+                        <runOrder>alphabetical</runOrder>
                     </configuration>
                 </plugin>
                 <plugin>
