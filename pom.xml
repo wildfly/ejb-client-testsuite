@@ -88,7 +88,7 @@
         <version.wf.core>25.0.2.Final</version.wf.core>
 
         <!-- MULTINODE -->
-        <version.creaper>2.0.2</version.creaper>
+        <version.creaper>2.0.3</version.creaper>
 
         <version.plugin.groovy>2.1.1</version.plugin.groovy>
     </properties>
