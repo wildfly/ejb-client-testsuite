@@ -21,7 +21,7 @@
 
         <server.zip>${project.basedir}/../snapshots/target/wildfly/build/target/wildfly-EJB-CLIENT-TESTSUITE.zip</server.zip>
 
-        <version.creaper>2.0.2</version.creaper>
+        <version.creaper>2.0.3</version.creaper>
         
         <!--Node settings-->
         <node1.contextPath>http://127.0.0.1:8080</node1.contextPath>
