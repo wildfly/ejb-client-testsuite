@@ -27,6 +27,7 @@ import org.jboss.arquillian.container.test.api.ContainerController;
 import org.jboss.arquillian.container.test.api.RunAsClient;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.test.api.ArquillianResource;
+import org.junit.Ignore;
 import org.wildfly.ejbclient.testsuite.integration.multinode.common.beans.whereami.WhereAmI;
 import org.wildfly.ejbclient.testsuite.integration.multinode.common.beans.whereami.WhereAmIStateless;
 import org.wildfly.ejbclient.testsuite.integration.multinode.environment.ContainerHelpers;
@@ -133,6 +134,7 @@ public class ClientInvokingTwoClustersStatelessBeanTestCase {
 
 
     @Test
+    @Ignore("https://issues.redhat.com/browse/WFLY-19909")
     public void testInvokingTwoClustersAlternately() throws Exception {
         final Properties propertiesCluster1 = new Properties();
         propertiesCluster1.put(Context.INITIAL_CONTEXT_FACTORY, WildFlyInitialContextFactory.class.getName());
@@ -170,6 +172,7 @@ public class ClientInvokingTwoClustersStatelessBeanTestCase {
     }
 
     @Test
+    @Ignore("https://issues.redhat.com/browse/WFLY-19909")
     public void testInvokingTwoClustersOneAfterAnother() throws Exception {
         logger.info("WILL NOW START INVOKING ON CLUSTER1");
         final Properties propertiesCluster1 = new Properties();
