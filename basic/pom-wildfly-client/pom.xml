@@ -22,7 +22,7 @@
         <version.byteman>4.0.21</version.byteman>
         <version.jakartaee-api>10.0.0</version.jakartaee-api>
         <version.junit>4.13.2</version.junit>
-        <version.reload4j>1.2.25</version.reload4j>
+        <version.reload4j>1.2.26</version.reload4j>
         <version.jboss-ejb3-ext-api>2.4.0.Final</version.jboss-ejb3-ext-api>
         <version.org.wildfly.checkstyle-config>1.0.8.Final</version.org.wildfly.checkstyle-config>
         <version.shrinkwrap.resolvers>3.3.3</version.shrinkwrap.resolvers>
