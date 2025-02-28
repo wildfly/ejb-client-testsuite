@@ -43,7 +43,7 @@ setProjectVersion(TESTSUITE_VERSION, ejbClientDir)
 buildProject(ejbClientDir)
 
 def httpClientDir = new File(TARGET_DIR, HTTP_CLIENT_NAME)
-cloneProject(HTTP_CLIENT_REPOSITORY_PROPERTY, HTTP_CLIENT_BRANCH_PROPERTY, HTTP_CLIENT_REPOSITORY, HTTP_CLIENT_NAME)
+cloneProject(HTTP_CLIENT_REPOSITORY_PROPERTY, HTTP_CLIENT_BRANCH_PROPERTY, HTTP_CLIENT_REPOSITORY, HTTP_CLIENT_NAME, "2.0")
 setProjectVersion(TESTSUITE_VERSION, httpClientDir)
 buildProject(httpClientDir)
 
@@ -70,9 +70,9 @@ def executeCmd(command, env, dir, verbose) {
     }
 }
 
-def cloneProject(String repositoryProperty, String branchProperty, String defaultRepository, String projectName) {
+def cloneProject(String repositoryProperty, String branchProperty, String defaultRepository, String projectName, String defaultBranch = "main") {
     def repository = System.getProperty(repositoryProperty, defaultRepository)
-    def branch = System.getProperty(branchProperty, "main")
+    def branch = System.getProperty(branchProperty, defaultBranch)
     executeCmd("git clone -b ${branch}  --depth=1 --single-branch ${repository} ${projectName}", null, TARGET_DIR, true)
 }
 
