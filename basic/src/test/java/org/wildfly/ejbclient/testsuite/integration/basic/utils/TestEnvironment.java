@@ -23,6 +23,9 @@ import org.jboss.as.controller.client.helpers.ClientConstants;
 import org.jboss.dmr.ModelNode;
 import org.jboss.ejb.client.Version;
 
+
+
+
 /**
  * @author Jan Martiska
  */
@@ -73,20 +76,22 @@ public class TestEnvironment {
 
     public static int getServerPort() {
         switch (connectorType) {
-        case HTTP_REMOTING:
-            return 8080;
-        case HTTPS_REMOTING:
-            return 8443;
-        case REMOTING:
-            return 4447;
-        case REMOTING_SSL:
-            return 4448;
-        case HTTP:
-            return 8080;
-        case HTTPS:
-            return 8443;
-        default:
-            throw new Error("Meh.");
+            case HTTP_REMOTING:
+                return 8080;
+            case HTTPS_REMOTING:
+                return 8443;
+            case REMOTING:
+                return 4447;
+            case REMOTING_SSL:
+                return 4448;
+            case REMOTE_TLS:
+                return 4449;
+            case HTTP:
+                return 8080;
+            case HTTPS:
+                return 8443;
+            default:
+                throw new Error("Meh.");
         }
     }
 
