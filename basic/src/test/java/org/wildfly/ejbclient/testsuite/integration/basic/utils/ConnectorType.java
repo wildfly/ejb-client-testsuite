@@ -27,7 +27,8 @@ public enum ConnectorType {
     REMOTING("remoting", "remote"),
     REMOTING_SSL("remoting-ssl", "remote"),
     HTTP("http", "http"),
-    HTTPS("https", "https");
+    HTTPS("https", "https"),
+    REMOTE_TLS("remote+tls", "remote+tls");
 
     private final String str;
     private final String scheme;
