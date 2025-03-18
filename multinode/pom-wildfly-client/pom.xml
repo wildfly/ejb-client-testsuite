@@ -19,7 +19,7 @@
         <version.arquillian.jakarta>10.0.0.Final</version.arquillian.jakarta>
         <version.shrinkwrap>1.2.6</version.shrinkwrap>
 
-        <version.arquillian-container>5.1.0.Beta9</version.arquillian-container>
+        <version.arquillian-container>5.1.0.Beta10</version.arquillian-container>
         <version.creaper>2.0.3</version.creaper>
         <version.jakartaee-api>10.0.0</version.jakartaee-api>
         <version.jboss-ejb3-ext-api>2.4.0.Final</version.jboss-ejb3-ext-api>
