@@ -49,7 +49,7 @@
         <artifactId.ejb.client.bom>wildfly-ejb-client-bom</artifactId.ejb.client.bom>
         <version.ejb.client.bom>EJB-CLIENT-TESTSUITE</version.ejb.client.bom>
 
-        <version.arquillian>1.9.3.Final</version.arquillian>
+        <version.arquillian>1.9.4.Final</version.arquillian>
         <version.arquillian.jakarta>10.0.0.Final</version.arquillian.jakarta>
         <version.shrinkwrap>1.2.6</version.shrinkwrap>
 
