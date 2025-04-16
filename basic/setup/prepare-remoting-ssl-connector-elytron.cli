@@ -28,6 +28,14 @@ if (outcome == failed) of /subsystem=remoting/connector=remoting-ssl-connector:r
     /subsystem=remoting/connector=remoting-ssl-connector:add(socket-binding=remoting-ssl-sb, sasl-authentication-factory=application-sasl-authentication, ssl-context=remoting-ssl-context)
 end-if
 
+if (outcome == failed) of /socket-binding-group=standard-sockets/socket-binding=remoting-tls:read-resource
+    /socket-binding-group=standard-sockets/socket-binding=remoting-tls:add(port=4449)
+end-if
+
+if (outcome == failed) of /subsystem=remoting/connector=remoting-tls-connector:read-resource
+    /subsystem=remoting/connector=remoting-tls-connector:add(socket-binding=remoting-tls, sasl-authentication-factory=application-sasl-authentication, ssl-context=remoting-ssl-context, protocol=remote+tls)
+end-if
+
 if (outcome == success) of /core-service=management/security-realm=ApplicationRealm/server-identity=ssl:read-resource
     echo "Server by default uses an auto-generated self-signed SSL certificate for ApplicationRealm, we need to get rid of this"
     /core-service=management/security-realm=ApplicationRealm/server-identity=ssl:remove

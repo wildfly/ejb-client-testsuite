@@ -489,9 +489,9 @@
                                         </requireProperty>
                                         <requireProperty>
                                             <property>connector</property>
-                                            <regex>(http-remoting|https-remoting|remoting|remoting-ssl|http|https)</regex>
+					    <regex>(http-remoting|https-remoting|remoting|remoting-ssl|remote\+tls|http|https)</regex>
                                             <message>-Dconnector must be "http-remoting", "https-remoting",
-                                                "remoting", "http" or "https"
+                                                "remote+tls","remoting", "http" or "https"
                                             </message>
                                         </requireProperty>
                                     </rules>
