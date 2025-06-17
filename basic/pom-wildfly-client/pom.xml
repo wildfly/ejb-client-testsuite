@@ -20,7 +20,7 @@
         <version.shrinkwrap>1.2.6</version.shrinkwrap>
 
         <version.byteman>4.0.21</version.byteman>
-        <version.jakartaee-api>10.0.0</version.jakartaee-api>
+        <version.jakartaee-api>11.0.0</version.jakartaee-api>
         <version.junit>4.13.2</version.junit>
         <version.reload4j>1.2.26</version.reload4j>
         <version.jboss-ejb3-ext-api>2.4.0.Final</version.jboss-ejb3-ext-api>
