@@ -21,7 +21,7 @@
 
         <version.arquillian-container>5.1.0.Beta11</version.arquillian-container>
         <version.creaper>2.0.3</version.creaper>
-        <version.jakartaee-api>10.0.0</version.jakartaee-api>
+        <version.jakartaee-api>11.0.0</version.jakartaee-api>
         <version.jboss-ejb3-ext-api>2.4.0.Final</version.jboss-ejb3-ext-api>
         <version.junit>4.13.2</version.junit>
         <version.org.wildfly.checkstyle-config>1.0.8.Final</version.org.wildfly.checkstyle-config>
