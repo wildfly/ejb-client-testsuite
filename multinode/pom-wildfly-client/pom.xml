@@ -38,6 +38,7 @@
         <version.plugin.maven-checkstyle-plugin>3.6.0</version.plugin.maven-checkstyle-plugin>
         <version.plugin.surefire>3.0.0</version.plugin.surefire>
         <version.wf.core>26.0.1.Final</version.wf.core>
+        <version.wf.launcher>1.0.2.Final</version.wf.launcher>
 
 
         <!-- Path to server zip archive, has to be specified at command line -->
@@ -503,6 +504,10 @@
                     <groupId>org.wildfly.core</groupId>
                     <artifactId>wildfly-launcher</artifactId>
                 </exclusion>
+                <exclusion>
+                    <groupId>org.wildfly.launcher</groupId>
+                    <artifactId>wildfly-launcher</artifactId>
+                </exclusion>
             </exclusions>
         </dependency>
         <dependency>
@@ -512,9 +517,9 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>org.wildfly.core</groupId>
+            <groupId>org.wildfly.launcher</groupId>
             <artifactId>wildfly-launcher</artifactId>
-            <version>${version.wf.core}</version>
+            <version>${version.wf.launcher}</version>
             <scope>test</scope>
         </dependency>
         <dependency>

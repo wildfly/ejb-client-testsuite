@@ -85,7 +85,8 @@
          and be sure that wf-core-launcher version works correctly with new arquillian-container -->
         <version.arquillian-container>5.1.0.Final</version.arquillian-container>
         <!-- the following version needs to be >= than version used in arquillian-container dependency -->
-        <version.wf.core>25.0.2.Final</version.wf.core>
+        <version.wf.core>28.0.1.Final</version.wf.core>
+        <version.wf.launcher>1.0.2.Final</version.wf.launcher>
 
         <!-- MULTINODE -->
         <version.creaper>2.0.3</version.creaper>
@@ -285,9 +286,9 @@
                 <version>${version.arquillian-container}</version>
             </dependency>
             <dependency>
-                <groupId>org.wildfly.core</groupId>
+                <groupId>org.wildfly.launcher</groupId>
                 <artifactId>wildfly-launcher</artifactId>
-                <version>${version.wf.core}</version>
+                <version>${version.wf.launcher}</version>
             </dependency>
             <dependency>
                 <groupId>org.wildfly.extras.creaper</groupId>
