@@ -62,7 +62,7 @@
 
         <version.io.undertow>2.1.1.Final</version.io.undertow>
 
-        <version.org.jboss.byteman>4.0.21</version.org.jboss.byteman>
+        <version.org.jboss.byteman>4.0.26</version.org.jboss.byteman>
         <version.org.wildfly.checkstyle-config>1.0.8.Final</version.org.wildfly.checkstyle-config>
         <version.org.wildfly.common>1.5.1.Final</version.org.wildfly.common>
         <version.org.wildfly.discovery>1.2.1.Final</version.org.wildfly.discovery>
