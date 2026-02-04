@@ -72,7 +72,7 @@
         <version.plugin.antrun.ant>1.8.1</version.plugin.antrun.ant>
         <version.plugin.antrun.contrib>1.0b3</version.plugin.antrun.contrib>
         <version.plugin.clean>3.2.0</version.plugin.clean>
-        <version.plugin.compiler>3.11.0</version.plugin.compiler>
+        <version.plugin.compiler>3.15.0</version.plugin.compiler>
         <version.plugin.dependency>3.5.0</version.plugin.dependency>
         <version.plugin.enforcer>3.3.0</version.plugin.enforcer>
         <version.plugin.jacoco>0.7.9</version.plugin.jacoco>
