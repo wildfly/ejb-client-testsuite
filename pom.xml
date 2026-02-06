@@ -85,7 +85,7 @@
          and be sure that wf-core-launcher version works correctly with new arquillian-container -->
         <version.arquillian-container>5.1.0.Final</version.arquillian-container>
         <!-- the following version needs to be >= than version used in arquillian-container dependency -->
-        <version.wf.core>31.0.1.Final</version.wf.core>
+        <version.wf.core>31.0.2.Final</version.wf.core>
         <version.wf.launcher>1.0.2.Final</version.wf.launcher>
 
         <!-- MULTINODE -->
