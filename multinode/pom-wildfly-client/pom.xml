@@ -34,7 +34,7 @@
         <version.plugin.enforcer>3.6.0</version.plugin.enforcer>
         <version.plugin.install>3.1.4</version.plugin.install>
         <version.plugin.jacoco>0.8.14</version.plugin.jacoco>
-        <version.plugin.jar>3.3.0</version.plugin.jar>
+        <version.plugin.jar>3.5.0</version.plugin.jar>
         <version.plugin.maven-checkstyle-plugin>3.6.0</version.plugin.maven-checkstyle-plugin>
         <version.plugin.surefire>3.0.0</version.plugin.surefire>
         <version.wf.core>31.0.1.Final</version.wf.core>
