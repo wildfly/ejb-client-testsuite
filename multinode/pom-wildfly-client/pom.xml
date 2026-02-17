@@ -30,13 +30,13 @@
         <version.plugin.antrun>3.1.0</version.plugin.antrun>
         <version.plugin.antrun.ant>1.8.1</version.plugin.antrun.ant>
         <version.plugin.antrun.contrib>1.0b3</version.plugin.antrun.contrib>
-        <version.plugin.compiler>3.11.0</version.plugin.compiler>
-        <version.plugin.enforcer>3.6.0</version.plugin.enforcer>
+        <version.plugin.compiler>3.15.0</version.plugin.compiler>
+        <version.plugin.enforcer>3.6.2</version.plugin.enforcer>
         <version.plugin.install>3.1.4</version.plugin.install>
         <version.plugin.jacoco>0.8.14</version.plugin.jacoco>
-        <version.plugin.jar>3.3.0</version.plugin.jar>
+        <version.plugin.jar>3.5.0</version.plugin.jar>
         <version.plugin.maven-checkstyle-plugin>3.6.0</version.plugin.maven-checkstyle-plugin>
-        <version.plugin.surefire>3.0.0</version.plugin.surefire>
+        <version.plugin.surefire>3.5.4</version.plugin.surefire>
         <version.wf.core>31.0.1.Final</version.wf.core>
         <version.wf.launcher>1.0.2.Final</version.wf.launcher>
 
