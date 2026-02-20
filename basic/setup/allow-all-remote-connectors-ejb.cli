@@ -1,1 +1,1 @@
-/subsystem=ejb3/service=remote:write-attribute(name=connectors,value=[http-remoting-connector,https-remoting-connector,remoting-connector,remoting-ssl-connector])
+/subsystem=ejb3/service=remote:write-attribute(name=connectors,value=[http-remoting-connector,https-remoting-connector,remoting-connector,remoting-ssl-connector,remoting-tls-connector])
