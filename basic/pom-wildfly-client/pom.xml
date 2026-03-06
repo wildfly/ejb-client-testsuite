@@ -36,7 +36,7 @@
         <version.plugin.install>3.1.4</version.plugin.install>
         <version.plugin.jar>3.5.0</version.plugin.jar>
         <version.plugin.maven-checkstyle-plugin>3.6.0</version.plugin.maven-checkstyle-plugin>
-        <version.plugin.surefire>3.5.4</version.plugin.surefire>
+        <version.plugin.surefire>3.5.5</version.plugin.surefire>
         <version.plugin.wildfly>5.1.5.Final</version.plugin.wildfly>
 
         <!-- before you update arquillian-container version, consider to update wf-core-launcher version as well
