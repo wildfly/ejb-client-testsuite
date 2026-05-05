@@ -89,7 +89,7 @@
         <version.wf.launcher>1.0.3.Final</version.wf.launcher>
 
         <!-- MULTINODE -->
-        <version.creaper>2.0.3</version.creaper>
+        <version.creaper>3.0.0</version.creaper>
 
         <version.plugin.groovy>2.1.1</version.plugin.groovy>
     </properties>
