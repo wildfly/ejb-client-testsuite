@@ -477,10 +477,7 @@
         <profile>
             <id>security-manager-client</id>
             <activation>
-                <!--<activeByDefault>true</activeByDefault>-->
-                <!-- activeByDefault doesn't work for some reason - in that case the property
-                     overridings in this profile don't take effect.. so let's use a bit of a hack -->
-                <file><missing>THIS_FILE_WILL_NEVER_EXIST</missing></file>
+                <jdk>[,23]</jdk>
             </activation>
             <properties>
                 <security.manager.client.args>-Djava.security.manager
