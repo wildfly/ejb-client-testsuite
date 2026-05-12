@@ -58,7 +58,7 @@
         <version.reload4j>1.2.26</version.reload4j>
         <version.shrinkwrap>1.2.6</version.shrinkwrap>
         <version.shrinkwrap.resolvers>3.3.6</version.shrinkwrap.resolvers>
-        <version.xom>1.3.9</version.xom>
+        <version.xom>1.4.1</version.xom>
 
         <version.io.undertow>2.1.1.Final</version.io.undertow>
 
@@ -66,7 +66,7 @@
         <version.org.wildfly.checkstyle-config>1.0.8.Final</version.org.wildfly.checkstyle-config>
         <version.org.wildfly.common>1.5.1.Final</version.org.wildfly.common>
         <version.org.wildfly.discovery>1.2.1.Final</version.org.wildfly.discovery>
-        <version.org.wildfly.security.elytron>2.8.3.Final</version.org.wildfly.security.elytron>
+        <version.org.wildfly.security.elytron>2.9.0.Final</version.org.wildfly.security.elytron>
 
         <version.plugin.antrun>3.1.0</version.plugin.antrun>
         <version.plugin.antrun.ant>1.8.1</version.plugin.antrun.ant>
@@ -89,7 +89,7 @@
         <version.wf.launcher>1.0.3.Final</version.wf.launcher>
 
         <!-- MULTINODE -->
-        <version.creaper>2.0.3</version.creaper>
+        <version.creaper>3.0.0</version.creaper>
 
         <version.plugin.groovy>2.1.1</version.plugin.groovy>
     </properties>

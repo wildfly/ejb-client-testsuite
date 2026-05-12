@@ -26,7 +26,7 @@
         <version.jboss-ejb3-ext-api>2.4.0.Final</version.jboss-ejb3-ext-api>
         <version.org.wildfly.checkstyle-config>1.0.8.Final</version.org.wildfly.checkstyle-config>
         <version.shrinkwrap.resolvers>3.3.5</version.shrinkwrap.resolvers>
-        <version.xom>1.3.9</version.xom>
+        <version.xom>1.4.1</version.xom>
 
         <version.plugin.antrun>3.2.0</version.plugin.antrun>
         <version.plugin.clean>3.5.0</version.plugin.clean>
@@ -43,7 +43,7 @@
              and be sure that wf-core-launcher version works correctly with new arquillian-container -->
         <version.arquillian-container>5.1.0.Final</version.arquillian-container>
         <!-- the following version needs to be >= than version used in arquillian-container dependency -->
-        <version.wf.core>31.0.3.Final</version.wf.core>
+        <version.wf.core>32.0.0.Final</version.wf.core>
 
         <!-- "user" means auth using a password, "local" means local auth -->
         <authentication.type>user</authentication.type>
@@ -639,10 +639,7 @@
         <profile>
             <id>security-manager-client</id>
             <activation>
-                <!--<activeByDefault>true</activeByDefault>-->
-                <!-- activeByDefault doesn't work for some reason - in that case the property
-                     overridings in this profile don't take effect.. so let's use a bit of a hack -->
-                <file><missing>THIS_FILE_WILL_NEVER_EXIST</missing></file>
+                <jdk>[,23]</jdk>
             </activation>
             <properties>
                 <security.manager.client.args>-Djava.security.manager
