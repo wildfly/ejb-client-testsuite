@@ -38,7 +38,7 @@
         <version.plugin.maven-checkstyle-plugin>3.6.0</version.plugin.maven-checkstyle-plugin>
         <version.plugin.surefire>3.5.5</version.plugin.surefire>
         <version.wf.core>32.0.0.Final</version.wf.core>
-        <version.wf.launcher>1.0.2.Final</version.wf.launcher>
+        <version.wf.launcher>1.0.3.Final</version.wf.launcher>
 
 
         <!-- Path to server zip archive, has to be specified at command line -->
