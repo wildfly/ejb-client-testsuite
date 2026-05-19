@@ -20,7 +20,7 @@
         <version.shrinkwrap>1.2.6</version.shrinkwrap>
 
         <version.arquillian-container>5.1.0.Final</version.arquillian-container>
-        <version.creaper>2.0.3</version.creaper>
+        <version.creaper>3.0.0</version.creaper>
         <version.jakartaee-api>11.0.0</version.jakartaee-api>
         <version.jboss-ejb3-ext-api>2.4.0.Final</version.jboss-ejb3-ext-api>
         <version.junit>4.13.2</version.junit>
@@ -37,7 +37,7 @@
         <version.plugin.jar>3.5.0</version.plugin.jar>
         <version.plugin.maven-checkstyle-plugin>3.6.0</version.plugin.maven-checkstyle-plugin>
         <version.plugin.surefire>3.5.5</version.plugin.surefire>
-        <version.wf.core>31.0.3.Final</version.wf.core>
+        <version.wf.core>32.0.0.Final</version.wf.core>
         <version.wf.launcher>1.0.3.Final</version.wf.launcher>
 
 
