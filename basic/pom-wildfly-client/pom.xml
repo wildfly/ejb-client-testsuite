@@ -23,7 +23,7 @@
         <version.jakartaee-api>11.0.0</version.jakartaee-api>
         <version.junit>4.13.2</version.junit>
         <version.reload4j>1.2.26</version.reload4j>
-        <version.jboss-ejb3-ext-api>2.5.0.Final</version.jboss-ejb3-ext-api>
+        <version.jboss-ejb3-ext-api>2.4.0.Final</version.jboss-ejb3-ext-api>
         <version.org.wildfly.checkstyle-config>1.0.8.Final</version.org.wildfly.checkstyle-config>
         <version.shrinkwrap.resolvers>3.3.7</version.shrinkwrap.resolvers>
         <version.xom>1.4.5</version.xom>
@@ -43,7 +43,7 @@
              and be sure that wf-core-launcher version works correctly with new arquillian-container -->
         <version.arquillian-container>5.1.0.Final</version.arquillian-container>
         <!-- the following version needs to be >= than version used in arquillian-container dependency -->
-        <version.wf.core>33.0.1.Final</version.wf.core>
+        <version.wf.core>33.0.0.Final</version.wf.core>
 
         <!-- "user" means auth using a password, "local" means local auth -->
         <authentication.type>user</authentication.type>
