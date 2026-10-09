@@ -17,7 +17,7 @@
 
         <version.arquillian>1.10.2.Final</version.arquillian>
         <version.arquillian.jakarta>10.0.0.Final</version.arquillian.jakarta>
-        <version.shrinkwrap>1.2.6</version.shrinkwrap>
+        <version.shrinkwrap>2.0.0.Final</version.shrinkwrap>
 
         <version.arquillian-container>5.1.0.Final</version.arquillian-container>
         <version.creaper>3.0.0</version.creaper>
